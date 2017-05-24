@@ -5,3 +5,12 @@
 \contentsline {subsubsection}{\numberline {1.1.3}17 May : Wednesday}{2}{subsubsection.1.1.3}
 \contentsline {subsubsection}{\numberline {1.1.4}18 May : Thursday}{2}{subsubsection.1.1.4}
 \contentsline {subsubsection}{\numberline {1.1.5}19 May : Friday}{3}{subsubsection.1.1.5}
+\contentsline {subsubsection}{\numberline {1.1.6}20 May : Saturday}{3}{subsubsection.1.1.6}
+\contentsline {subsubsection}{\numberline {1.1.7}21 May : Sunday}{3}{subsubsection.1.1.7}
+\contentsline {subsection}{\numberline {1.2}Week 22 May to 28 May}{3}{subsection.1.2}
+\contentsline {subsubsection}{\numberline {1.2.1}22 May : Monday}{3}{subsubsection.1.2.1}
+\contentsline {subsubsection}{\numberline {1.2.2}23 May : Tuesday}{3}{subsubsection.1.2.2}
+\contentsline {subsubsection}{\numberline {1.2.3}24 May : Wednesday}{4}{subsubsection.1.2.3}
+\contentsline {section}{\numberline {2}Weekly Progress}{4}{section.2}
+\contentsline {subsection}{\numberline {2.1}Week 1}{4}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Week 2}{4}{subsection.2.2}
