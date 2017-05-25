@@ -11,6 +11,7 @@
 \contentsline {subsubsection}{\numberline {1.2.1}22 May : Monday}{3}{subsubsection.1.2.1}
 \contentsline {subsubsection}{\numberline {1.2.2}23 May : Tuesday}{3}{subsubsection.1.2.2}
 \contentsline {subsubsection}{\numberline {1.2.3}24 May : Wednesday}{4}{subsubsection.1.2.3}
+\contentsline {subsubsection}{\numberline {1.2.4}25 May : Thursday}{4}{subsubsection.1.2.4}
 \contentsline {section}{\numberline {2}Weekly Progress}{4}{section.2}
 \contentsline {subsection}{\numberline {2.1}Week 1}{4}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}Week 2}{4}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.2}Week 2}{5}{subsection.2.2}

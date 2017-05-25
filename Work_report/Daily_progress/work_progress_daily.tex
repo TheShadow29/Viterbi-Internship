@@ -126,6 +126,29 @@ Target:
 \item Get Places-CNN working on laptop. Train if required. See github for reference (site is also up).
 \end{itemize}
 
+Accomplished:
+\begin{itemize}
+\item Reality is harsher. It takes a lot of time to extract the relevant folders. Damn only if there was any way to make this process a bit more faster.
+\item Not feasible to train on the whole Places dataset. Will take enormous amount of time. More beneficial to use that time for testing purposes.
+\item Finally set up the PC here for caffe. Took a lot less time than it did on my computer.
+\item Tried the flickr\_finetuning tutorial. The results as seen on Thursday were extremely bad. I have posted on caffe-users, but the community is not very responsive for some reason. Not exactly sure where the problem is. But still got a hang of fine tuning at least.
+\item Caffe documentation is seriously bad. Need some good tutorials for this. But still got a decent hang of caffe now. Need to start with the medifor dataset at the earliest.
+\item Seems like did a lot of not-so-really-useful-things today.
+\end{itemize}
+
+\subsubsection{25 May : Thursday}
+Target :
+\begin{itemize}
+\item Try to get Places-CNN testing running some or the other way. Get a hold of the MediFor dataset. It will perhaps take time to preprocess.
+\item See CS231n for reference in the mean time, may get some useful ideas.
+\end{itemize}
+
+Accomplished :
+\begin{itemize}
+\item Damn, there seems to be some caution that needs to be taken care for External hard-disk. Note to self : in the future, if you are trying to untar, donot use the direct archive method. The problem isn't exactly keep on storing (writing) the data. In fact, if there is some trouble in the process of untaring, there is practically nothing one can do. I had to remove the Hard-disk from the PC. But then it threw the error that the disk is corrupted. My guess is that, while untaring, it still wanted to write some data, which it was not able to do so. I had to go windows and run chkdsk (probably short for check disk), most likely because it is an ntfs partition. At the very least, chkdsk solved the problem pretty quickly. Now trying to unzip using winRAR, and at the very least it shows ETA. For about 4.4GB test data set of the Places365 dataset, it is taking about 4 hours. Lets see how it goes. 
+\end{itemize}
+
+
 
 \section{Weekly Progress}
 \subsection{Week 1}
@@ -143,4 +166,6 @@ Target :
 \item Read papers on the image geolocalization topic.
 \item Try to replicate the Places-CNN paper results at the earliest.
 \end{itemize}
+
+
 \end{document}
