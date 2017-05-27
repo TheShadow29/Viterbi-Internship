@@ -1,5 +1,9 @@
 *Work_report/Random_ideas
 *.caffemodel
+*.tar*
+*.jpg
+*.png
+*#
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
