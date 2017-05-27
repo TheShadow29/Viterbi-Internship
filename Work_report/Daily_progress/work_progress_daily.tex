@@ -145,9 +145,22 @@ Target :
 
 Accomplished :
 \begin{itemize}
-\item Damn, there seems to be some caution that needs to be taken care for External hard-disk. Note to self : in the future, if you are trying to untar, donot use the direct archive method. The problem isn't exactly keep on storing (writing) the data. In fact, if there is some trouble in the process of untaring, there is practically nothing one can do. I had to remove the Hard-disk from the PC. But then it threw the error that the disk is corrupted. My guess is that, while untaring, it still wanted to write some data, which it was not able to do so. I had to go windows and run chkdsk (probably short for check disk), most likely because it is an ntfs partition. At the very least, chkdsk solved the problem pretty quickly. Now trying to unzip using winRAR, and at the very least it shows ETA. For about 4.4GB test data set of the Places365 dataset, it is taking about 4 hours. Lets see how it goes. 
+\item Damn, there seems to be some caution that needs to be taken care for External hard-disk. Note to self : in the future, if you are trying to untar, donot use the direct archive method. The problem isn't exactly keep on storing (writing) the data. In fact, if there is some trouble in the process of untaring, there is practically nothing one can do. I had to remove the Hard-disk from the PC. But then it threw the error that the disk is corrupted. My guess is that, while untaring, it still wanted to write some data, which it was not able to do so. I had to go windows and run chkdsk (probably short for check disk), most likely because it is an ntfs partition. At the very least, chkdsk solved the problem pretty quickly. Now trying to unzip using winRAR, and at the very least it shows ETA. For about 4.4GB test data set of the Places365 dataset, it is taking about 4 hours. Lets see how it goes.
+\item I am an idiot. I was trying to untar it on the hard disk. Untaring it on the SDD was like 1min or so. I seriously wasted the whole morning.
+\item I am once again reminded of the need to read the documentation. Read the complete caffe documentation, now I feel like I can do something. 
 \end{itemize}
 
+\subsubsection{26 May : Friday}
+Target : 
+\begin{itemize}
+\item I think, I should go step by step. First I will try to read the existing caffe model, and try to run that on the places365 dataset. I should try to see the test results, and see if it is meeting the expected benchmarks.
+\item Parallely I will try to create some dataset related to the localization. Let's see how it goes from there on.
+\end{itemize}
+
+Accomplished :
+\begin{itemize}
+\item Got places365 to get working. 
+\end{itemize}
 
 
 \section{Weekly Progress}
