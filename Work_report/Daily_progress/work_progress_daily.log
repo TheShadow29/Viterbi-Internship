@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.8.17)  26 MAY 2017 16:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.8.17)  29 MAY 2017 10:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -665,22 +665,22 @@ File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 29.
  [2] [3] [4]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 184.
-
 [5]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 184.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 214.
+ [6]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 214.
  (./work_progress_daily.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 184.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 184.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 214.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 214.
 Package rerunfilecheck Info: File `work_progress_daily.out' has not changed.
-(rerunfilecheck)             Checksum: 03A22CEE4EDD29CFB24B2EF7DB77DE3C;1260.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 184.
+(rerunfilecheck)             Checksum: A5041BABCAA2FD54C9643B67EBAF55E4;1618.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 214.
  ) 
 Here is how much of TeX's memory you used:
- 7215 strings out of 494953
- 104892 string characters out of 6180977
+ 7226 strings out of 494953
+ 105078 string characters out of 6180977
  195800 words of memory out of 5000000
- 10410 multiletter control sequences out of 15000+600000
+ 10415 multiletter control sequences out of 15000+600000
  7895 words of font info for 28 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  29i,6n,32p,953b,367s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -690,10 +690,10 @@ e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on work_progress_daily.pdf (5 pages, 87066 bytes).
+Output written on work_progress_daily.pdf (6 pages, 90044 bytes).
 PDF statistics:
- 151 PDF objects out of 1000 (max. 8388607)
- 136 compressed objects within 2 object streams
- 25 named destinations out of 1000 (max. 500000)
- 145 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 181 PDF objects out of 1000 (max. 8388607)
+ 165 compressed objects within 2 object streams
+ 31 named destinations out of 1000 (max. 500000)
+ 185 words of extra memory for PDF output out of 10000 (max. 10000000)
 
