@@ -177,6 +177,23 @@ Target :
 \item Try to parse everything from the Nimble Challenge Dataset, and try to use Places365 model on it.
 \item Manually try to evaluate the results.
 \end{itemize}
+
+% Planning the next task :
+Notes to self : 
+\begin{itemize}
+\item I need to work on the Nimble dataset. Professor suggested that my task would be on, weather the two images are the same.
+\item To achive that, one of the ideas would be to take a direct inner product between the feature vectors. I also need to think, weather to directly take the softmax probabilities or take the direct values from the previous layer, hoping that it would have captured some or the other thing relating to the semantics of the scene in question.
+\item Another thing I would need to work on is the image geolocalization.
+\item For both of these tasks, I would need to know which are the discriminative features, and which are not. For example, even though there are trees in both the images, but they may not be of the same tree. In fact, they may be completely different scenery. Need to clarify as to how to categorize them.
+\item For the image geolocalization problem, it is more crucial to know what the discriminative features are.
+\item I have decided to work primarily on caffe, and in case, I am not able to figure out what to do I shall shift to TensorFlow. As such I should be proficient in both TensorFlow as well as Caffe. In Caffe, the coding is mainly in the protobuff file, and mostly not much pains should occur.
+\item For prototyping, I think it would be advisable to work with AlexNet, but I should also try the ResNet once, to see how much memory it is occupying and all.
+\end{itemize}
+
+Accomplished :
+\begin{itemize}
+\item Parsed everything from Nimble dataset, and places365 model works on it. But the metric and results are very confouding.
+\end{itemize}
 \section{Weekly Progress}
 \subsection{Week 1}
 Accomplished:
