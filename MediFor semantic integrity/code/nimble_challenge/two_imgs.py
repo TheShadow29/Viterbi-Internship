@@ -10,21 +10,27 @@ def are_the_two_imgs_same(img1_path, img2_path):
     # Metrics to try:
     ##Absolute Distance between the two fv
     ##Angle between the two fv
-    are_same = cmp_fv(fv1,fv2,metric='sad')#sum of absolute distance
-    # are_same = cmp_fv(fv1,fv2,metric='ip')#inner product
+    are_same0 = cmp_fv(fv1,fv2,metric='ssd')#sum of squared distance
+    are_same1 = cmp_fv(fv1,fv2,metric='sad')#sum of absolute distance
+    are_same2 = cmp_fv(fv1,fv2,metric='ip')#inner product
     ##Only Inner Product ?? => Only Valid for FCN??
     
     
-    return are_same
+    return are_same0, are_same1, are_same2
 
-def cmp_fv(fv1,fv2,metric='sad'):
+def cmp_fv(fv1,fv2,metric='ssd'):
     if metric == 'sad':
         return {
             'metric' : metric,
-            'sub' : np.sum(np.absolute(np.subtract(fv1,fv2)),axis=0),
+            'sad' : np.sum(np.absolute(np.subtract(fv1,fv2))),
             # '|fv1|' : np.sum(np.absolute(fv1),axis=0),
             # '|fv2|' : np.sum(np.absolute(fv2),axis=0)
     }
+    elif metric == 'ssd':
+        return {
+            'metric' : metric,
+            'ssd' : np.sqrt(np.sum(np.square(np.subtract(fv1,fv2))))
+        }
     elif metric == 'ip':
         return {
             'metric' : metric,
