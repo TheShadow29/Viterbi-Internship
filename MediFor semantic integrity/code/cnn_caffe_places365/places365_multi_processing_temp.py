@@ -3,21 +3,13 @@ import matplotlib.pyplot as plt
 import caffe
 import pickle
 import sys
-# from multiprocessing import Process
-import multiprocessing as mp
-Pros = []
+from multiprocessing import Process
 
-def all_test_imgs(descriptor_path, weights_path, test_img_top_dir_path,labels_file, ilsvrc_mean_path,val_ground_truth):
-    net = caffe.Net(descriptor_path, weights_path, caffe.TEST)
+import pdb
 
-    #transformer
-    transformer = caffe.io.Transformer({'data': net.blobs['data'].data.shape})
-    transformer.set_mean('data', np.load(ilsvrc_mean_path).mean(1).mean(1))
 
-    transformer.set_transpose('data',(2,0,1))
-    transformer.set_channel_swap('data',(2,1,0))
-    transformer.set_raw_scale('data', 255.0)
-
+def test_some_images(test_img_top_dir_path,val_ground_truth,labels_file, net, transformer):
+    caffe.set_mode_gpu()
     g = open(val_ground_truth,'rb')
     num_corr_pred = 0
     total_num = 0;
@@ -54,24 +46,36 @@ def all_test_imgs(descriptor_path, weights_path, test_img_top_dir_path,labels_fi
     
 
 if __name__ == '__main__':
-    caffe.set_gpu_mode()
+    caffe.set_mode_gpu()
     caffe_model_dir = '../../data/caffe_model/alexnet365/'
     descriptor_path = caffe_model_dir + 'deploy_alexnet_places365.prototxt'
     weights_path = caffe_model_dir + 'alexnet_places365.caffemodel'
     # test_img_top_dir_path  = '/arka_data/places_data/test_256/'
     test_img_top_dir_path = '/arka_data/places_data/val_256/'
-    val_ground_truth = '/arka_data/places_data/filelist_places365-standard/places365_val_' + sys.argv[1] + '.txt'
+    # val_ground_truth = '/arka_data/places_data/filelist_places365-standard/places365_val_' + sys.argv[1] + '.txt'
+    val_ground_truth = '/arka_data/places_data/filelist_places365-standard/places365_val.txt'
     labels_file = '../../data/labels.pkl'
     ilsvrc_mean_path = '/home/arka_s/Caffe/caffe/python/caffe/imagenet/ilsvrc_2012_mean.npy'
-    print(all_test_imgs(descriptor_path,weights_path,test_img_top_dir_path,labels_file,ilsvrc_mean_path,val_ground_truth))
-    
-    for i in range(10):
-        print ("Thread " + str(i) + " started")
-        p = mp.Process(target = all_test_imgs, args = (descriptor_path,weights_path,test_img_top_dir_path,labels_file,ilsvrc_mean_path,val_ground_truth + str(i) + '.txt'))
-        Pros.append(p)
-        p.start()
+    # print(all_test_imgs(descriptor_path,weights_path,test_img_top_dir_path,labels_file,ilsvrc_mean_path,val_ground_truth))
 
-    for t in Pros:
-        t.join()
+    net = caffe.Net(descriptor_path, weights_path, caffe.TEST)
+    #transformer
+    transformer = caffe.io.Transformer({'data': net.blobs['data'].data.shape})
+    transformer.set_mean('data', np.load(ilsvrc_mean_path).mean(1).mean(1))
+
+    transformer.set_transpose('data',(2,0,1))
+    transformer.set_channel_swap('data',(2,1,0))
+    transformer.set_raw_scale('data', 255.0)
+
+    
+    # for i in range(1,2):
+        # print ("Thread " + str(i) + " started")
+        # p = mp.Process(target = all_test_imgs, args = (descriptor_path,weights_path,test_img_top_dir_path,labels_file,ilsvrc_mean_path,val_ground_truth + str(i) + '.txt'))
+    # print(test_some_images(test_img_top_dir_path,val_ground_truth,labels_file,net,transformer))
+    # Pros = []
+    p = Process(target = test_some_images, args = (test_img_top_dir_path, val_ground_truth, labels_file,net,transformer))
+    # Pros.append(p)
+    p.start()
+    p.join()
 
     

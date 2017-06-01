@@ -21,11 +21,11 @@ def are_the_two_imgs_same(img1_path, img2_path):
     are_same1 = cmp_fv( fv1, fv2, metric='sad' )#sum of absolute distance
     are_same2 = cmp_fv( fv1, fv2, metric='ip' )#inner product
     are_same3 = cmp_fv( fv1, fv2, metric='ncc')#normalize cross correlation
-    are_same4 = cmp_fv( fv1, fv2, metric='ct')#census transform
+    # are_same4 = cmp_fv( fv1, fv2, metric='ct')#census transform
     ##Only Inner Product ?? => Only Valid for FCN??
     
     
-    return are_same0, are_same1, are_same2,are_same3
+    return fv1,fv2,are_same0, are_same1, are_same2,are_same3
 
 def cmp_fv(fv1,fv2,metric='ssd'):
     #note: corr here is normalized cross correlation using pearson's coefficient

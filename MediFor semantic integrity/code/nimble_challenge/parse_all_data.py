@@ -77,25 +77,26 @@ class nimble_references:
     # field_names = f.readline()
     # data = f.readlines()
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # parse_index_file('manipulation')
-    man_index_file = '/arka_data/NC2016_Test0613/indexes/NC2016-manipulation-index_new.csv'
-    rem_index_file = '/arka_data/NC2016_Test0613/indexes/NC2016-removal-index_new.csv'
-    splice_index_file = '/arka_data/NC2016_Test0613/indexes/NC2016-splice-index_new.csv'
-    man_nimble_indices = nimble_indices(man_index_file)
-    man_nimble_indices.populate_data()
-    rem_nimble_indices = nimble_indices(rem_index_file)
-    rem_nimble_indices.populate_data()
-    splice_nimble_indices = nimble_indices(splice_index_file)
-    splice_nimble_indices.populate_data()
+man_index_file = '/arka_data/NC2016_Test0613/indexes/NC2016-manipulation-index_new.csv'
+rem_index_file = '/arka_data/NC2016_Test0613/indexes/NC2016-removal-index_new.csv'
+splice_index_file = '/arka_data/NC2016_Test0613/indexes/NC2016-splice-index_new.csv'
+# man_nimble_indices = nimble_indices(man_index_file)
+# man_nimble_indices.populate_data()
+# rem_nimble_indices = nimble_indices(rem_index_file)
+# rem_nimble_indices.populate_data()
+# splice_nimble_indices = nimble_indices(splice_index_file)
+# splice_nimble_indices.populate_data()
 
-    man_ref_file = '/arka_data/NC2016_Test0613/reference/manipulation/NC2016-manipulation-ref_new.csv'
-    rem_ref_file = '/arka_data/NC2016_Test0613/reference/removal/NC2016-removal-ref_new.csv'
-    splice_ref_file = '/arka_data/NC2016_Test0613/reference/splice/NC2016-splice-ref_new.csv'
+man_ref_file = '/arka_data/NC2016_Test0613/reference/manipulation/NC2016-manipulation-ref_new.csv'
+rem_ref_file = '/arka_data/NC2016_Test0613/reference/removal/NC2016-removal-ref_new.csv'
+splice_ref_file = '/arka_data/NC2016_Test0613/reference/splice/NC2016-splice-ref_new.csv'
 
-    man_nimble_ref = nimble_references(man_ref_file)
-    man_nimble_ref.populate_data()
-    rem_nimble_ref = nimble_references(rem_ref_file)
-    rem_nimble_ref.populate_data()
-    splice_nimble_ref = nimble_references(splice_ref_file)
-    splice_nimble_ref.populate_data()
+# man_nimble_ref = nimble_references(man_ref_file)
+# man_nimble_ref.populate_data()
+# rem_nimble_ref = nimble_references(rem_ref_file)
+# rem_nimble_ref.populate_data()
+# splice_nimble_ref = nimble_references(splice_ref_file)
+# splice_nimble_ref.populate_data()
+    

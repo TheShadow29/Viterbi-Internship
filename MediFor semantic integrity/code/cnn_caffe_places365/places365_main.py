@@ -5,8 +5,8 @@ import pickle
 import sys
 # from multiprocessing import Process
 import multiprocessing as mp
-Pros = []
-
+# Pros = []
+import time
 def all_test_imgs(descriptor_path, weights_path, test_img_top_dir_path,labels_file, ilsvrc_mean_path,val_ground_truth):
     net = caffe.Net(descriptor_path, weights_path, caffe.TEST)
 
@@ -32,8 +32,8 @@ def all_test_imgs(descriptor_path, weights_path, test_img_top_dir_path,labels_fi
         net.blobs['data'].data[:,:,:] = transformer.preprocess('data',im)
 
         out = net.forward()
-        if (total_num % 100 == 0):
-            print ('Iter ' + str(total_num))
+        # if (total_num % 100 == 0):
+        print ('Iter ' + str(total_num))
 
         top_k = net.blobs['prob'].data[0].flatten().argsort()[-1:-6:-1]
         if gt_label in top_k:
@@ -54,6 +54,7 @@ def all_test_imgs(descriptor_path, weights_path, test_img_top_dir_path,labels_fi
     
 
 if __name__ == '__main__':
+    start_time = time.time()
     caffe_model_dir = '../../data/caffe_model/alexnet365/'
     descriptor_path = caffe_model_dir + 'deploy_alexnet_places365.prototxt'
     weights_path = caffe_model_dir + 'alexnet_places365.caffemodel'
@@ -63,7 +64,7 @@ if __name__ == '__main__':
     labels_file = '../../data/labels.pkl'
     ilsvrc_mean_path = '/home/arka_s/Caffe/caffe/python/caffe/imagenet/ilsvrc_2012_mean.npy'
     print(all_test_imgs(descriptor_path,weights_path,test_img_top_dir_path,labels_file,ilsvrc_mean_path,val_ground_truth))
-    
+    print("--- %s seconds ---" % (time.time() - start_time))
     # for i in range(10):
     #     print ("Thread " + str(i) + " started")
     #     p = mp.Process(target = all_test_imgs, args = (descriptor_path,weights_path,test_img_top_dir_path,labels_file,ilsvrc_mean_path,val_ground_truth + str(i) + '.txt'))

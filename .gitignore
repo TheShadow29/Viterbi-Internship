@@ -10,3 +10,4 @@
 *.toc
 *my_proj
 *.npy
+*data/
