@@ -10,59 +10,56 @@ import time
 import pdb
 from multiprocessing import Process, Queue, JoinableQueue, cpu_count
 
-# def all_test_imgs(descriptor_path, weights_path, test_img_top_dir_path,labels_file, ilsvrc_mean_path,val_ground_truth):
-#     net = caffe.Net(descriptor_path, weights_path, caffe.TEST)
+def all_test_imgs(descriptor_path, weights_path, test_img_top_dir_path,labels_file, ilsvrc_mean_path,val_ground_truth):
+    net = caffe.Net(descriptor_path, weights_path, caffe.TEST)
 
-#     #transformer
-#     transformer = caffe.io.Transformer({'data': net.blobs['data'].data.shape})
-#     transformer.set_mean('data', np.load(ilsvrc_mean_path).mean(1).mean(1))
+    #transformer
+    transformer = caffe.io.Transformer({'data': net.blobs['data'].data.shape})
+    transformer.set_mean('data', np.load(ilsvrc_mean_path).mean(1).mean(1))
 
-#     transformer.set_transpose('data',(2,0,1))
-#     transformer.set_channel_swap('data',(2,1,0))
-#     transformer.set_raw_scale('data', 255.0)
+    transformer.set_transpose('data',(2,0,1))
+    transformer.set_channel_swap('data',(2,1,0))
+    transformer.set_raw_scale('data', 255.0)
 
-#     g = open(val_ground_truth,'rb')
-#     num_corr_pred = 0
-#     total_num = 0;
-#     # pdb.set_trace()
-#     batch_size = 1
-#     net.blobs['data'].reshape(batch_size,3,227,227)
-#     # inputs = []
-#     # for line_val_file in g:
+    g = open(val_ground_truth,'rb')
+    num_corr_pred = 0
+    total_num = 0;
+    # pdb.set_trace()
+    net.blobs['data'].reshape(1,3,227,227)
+    # inputs = []
+    # for line_val_file in g:
 
-#     #     # img_str = 'Places365_test_' + "%08d"%2 +'.jpg'
-#     #     str_list = line_val_file.split(" ")
-#     #     img_str = str_list[0]
-#     #     gt_label = int(str_list[1].split('\n')[0])
-#     #     im = caffe.io.load_image(test_img_top_dir_path + img_str)
-#     #     inputs.append(transformer.preprocess('data',im))
-#         # pdb.set_trace()
-#     # pdb.set_trace()
-
-#     for idx in range(len(queue)):
-#         for didx in range(batch_size):
-#             im, gt = queue.get()
-#             net.blobs['data'].data[didx,:,:,:] = im
-            
-#             out = net.forward()
-#             # if (total_num % 100 == 0):
-#             print ('Iter ' + str(total_num))
-            
-#             top_k = net.blobs['prob'].data[0].flatten().argsort()[-1:-6:-1]
-#             if gt_label in top_k:
-#                 num_corr_pred += 1
-#             total_num += 1
+    #     # img_str = 'Places365_test_' + "%08d"%2 +'.jpg'
+    #     str_list = line_val_file.split(" ")
+    #     img_str = str_list[0]
+    #     gt_label = int(str_list[1].split('\n')[0])
+    #     im = caffe.io.load_image(test_img_top_dir_path + img_str)
+    #     inputs.append(transformer.preprocess('data',im))
+        # pdb.set_trace()
+    # pdb.set_trace()
+    for idx in range(len(queue)):
+        im, gt = queue.get()
+        net.blobs['data'].data[:,:,:,:] = im
+    
+        out = net.forward()
+        # if (total_num % 100 == 0):
+        print ('Iter ' + str(total_num))
+        
+        top_k = net.blobs['prob'].data[0].flatten().argsort()[-1:-6:-1]
+        if gt_label in top_k:
+            num_corr_pred += 1
+        total_num += 1
 
 
         
-#     # with open(labels_file, 'rb') as f:
-#     #     labels = pickle.load(f)
-#     #     top_k = net.blobs['prob'].data[0].flatten().argsort()[-1:-6:-1]
-#     #     for i,k in enumerate(top_k):
-#     #         print i, labels[k]
-#     print ("Num corr pred: " + str(num_corr_pred))
-#     print ("Total num: " + str(total_num))
-#     return num_corr_pred, total_num
+    # with open(labels_file, 'rb') as f:
+    #     labels = pickle.load(f)
+    #     top_k = net.blobs['prob'].data[0].flatten().argsort()[-1:-6:-1]
+    #     for i,k in enumerate(top_k):
+    #         print i, labels[k]
+    print ("Num corr pred: " + str(num_corr_pred))
+    print ("Total num: " + str(total_num))
+    return num_corr_pred, total_num
 
 def worker_task(lines_all,transformer):
     backoff = 0.1
@@ -124,8 +121,7 @@ if __name__ == '__main__':
     num_corr_pred = 0
     total_num = 0;
     # pdb.set_trace()
-    batch_size = 10
-    net.blobs['data'].reshape(batch_size,3,227,227)
+    net.blobs['data'].reshape(1,3,227,227)
     # inputs = []
     # for line_val_file in g:
 
@@ -140,22 +136,17 @@ if __name__ == '__main__':
     num_corr_pred = 0
     total_num = 0
     while total_num < 3650:
-        gt_label_list = []
-        for didx in range(batch_size):
-            im, gt_label = queue.get()
-            net.blobs['data'].data[didx,:,:,:] = im
-            total_num += 1
-            gt_label_list.append(gt_label)
+        im, gt_label = queue.get()
+        net.blobs['data'].data[:,:,:] = im
+    
         out = net.forward()
         # if (total_num % 100 == 0):
         print ('Iter ' + str(total_num))
         
-        # top_k = net.blobs['prob'].data[0].flatten().argsort()[-1:-6:-1]
-        for didx in range(batch_size):
-            top_k = net.blobs['prob'].data[didx].flatten().argsort()[-1:-6:-1]
-            if gt_label_list[didx] in top_k:
-                num_corr_pred += 1
-
+        top_k = net.blobs['prob'].data[0].flatten().argsort()[-1:-6:-1]
+        if gt_label in top_k:
+            num_corr_pred += 1
+        total_num += 1
     print ("Num corr pred: " + str(num_corr_pred))
     print ("Total num: " + str(total_num))
     print("--- %s seconds ---" % (time.time() - start_time))

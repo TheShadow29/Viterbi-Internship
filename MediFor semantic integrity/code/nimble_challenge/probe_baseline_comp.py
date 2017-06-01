@@ -1,6 +1,9 @@
 import two_imgs
 import os
 import pdb
+
+# def cmp_tw
+
 if __name__ == '__main__':
     
     img_top_dir = '../../data/nimble_data/manipulated/'
