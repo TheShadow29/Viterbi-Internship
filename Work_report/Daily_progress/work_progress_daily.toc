@@ -23,6 +23,6 @@
 \contentsline {section}{\numberline {2}Weekly Progress}{7}{section.2}
 \contentsline {subsection}{\numberline {2.1}Week 1}{7}{subsection.2.1}
 \contentsline {subsection}{\numberline {2.2}Week 2}{7}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}Week 3}{7}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.3}Week 3}{8}{subsection.2.3}
 \contentsline {section}{\numberline {3}Month}{8}{section.3}
 \contentsline {subsection}{\numberline {3.1}Month : May}{8}{subsection.3.1}

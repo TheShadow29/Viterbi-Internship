@@ -66,10 +66,11 @@ from multiprocessing import Process, Queue, JoinableQueue, cpu_count
 
 def worker_task(lines_all,transformer):
     backoff = 0.1
-    global count
+    # global count
     while True:
         if queue.qsize() < 100:
             # line_val_file = val_ground_truth_file.readline()
+            count = q2.get()
             line_val_file = lines_all[count]
             count += 1
             str_list = line_val_file.split(" ")
@@ -87,6 +88,8 @@ def worker_task(lines_all,transformer):
     
 
 if __name__ == '__main__':
+    ###TO DO 
+    
     start_time = time.time()
     caffe_model_dir = '../../data/caffe_model/alexnet365/'
     descriptor_path = caffe_model_dir + 'deploy_alexnet_places365.prototxt'
@@ -105,7 +108,10 @@ if __name__ == '__main__':
     caffe.set_device(0)
     num_process = cpu_count() - 1
     queue = Queue()
-    count = 0
+    # count = 0
+    q2 = Queue()
+    for i in range(len(lines_all)):
+        q2.put(i)
     # pdb.set_trace()
     net = caffe.Net(descriptor_path, weights_path, caffe.TEST)
 
@@ -121,8 +127,8 @@ if __name__ == '__main__':
     for w in workers:
         w.start()
     # g = open(val_ground_truth,'rb')
-    num_corr_pred = 0
-    total_num = 0;
+    # num_corr_pred = 0
+    # total_num = 0;
     # pdb.set_trace()
     batch_size = 10
     net.blobs['data'].reshape(batch_size,3,227,227)
