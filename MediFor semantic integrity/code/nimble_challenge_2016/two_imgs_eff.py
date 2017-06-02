@@ -6,6 +6,9 @@ import sys
 import pdb
 import scipy
 import os
+import skimage
+# from PIL import ImageFile
+# ImageFile.LOAD_TRUNCATED_IMAGES = True
 # from scipy.stats.stats import pearsonr   
 
 
@@ -67,6 +70,8 @@ def cmp_fv(fv1,fv2,metric='ssd'):
 #     return feature_vector
 
 def get_direct_prob(img1_path, img2_path):
+    # caffe.io.use_plugin('matplotlib')
+
     im1 = caffe.io.load_image(img1_path)
     im2 = caffe.io.load_image(img2_path)
 
@@ -95,7 +100,7 @@ if __name__ == '__main__':
     weights_path = caffe_model_dir + 'alexnet_places365.caffemodel'
     ilsvrc_mean_path = '/home/arka_s/Caffe/caffe/python/caffe/imagenet/ilsvrc_2012_mean.npy'
     net = caffe.Net(descriptor_path, weights_path, caffe.TEST)
-
+    skimage.io.use_plugin('matplotlib')
     #transformer
     transformer = caffe.io.Transformer({'data': net.blobs['data'].data.shape})
     transformer.set_mean('data', np.load(ilsvrc_mean_path).mean(1).mean(1))
