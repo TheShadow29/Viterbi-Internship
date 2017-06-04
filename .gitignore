@@ -11,3 +11,5 @@
 *my_proj
 *.npy
 *data/
+*.pkl
+*.pyc

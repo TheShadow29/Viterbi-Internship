@@ -274,10 +274,34 @@ Target :
 \item Also try to graph the output if possible possibly using matplotlib.
 \end{itemize}
 
+
 Notes to self:
 \begin{itemize}
 \item Include everything from June 1 notes to self.
 \item In addition to that, remember to split the images into two and then into four and check if there is at least some increase in accuracy.
+\end{itemize}
+
+Accomplished :
+\begin{itemize}
+\item Got some good results from using the fc8 layer. Also tried the splicing thing, and as expected the results were much better than those before.
+\item Also converted the troublesome jpg files to png. Was quite easy tbh.
+\item Tried the code on the Nimble Dataset 17 (with parsing and all done). Tried on the manipulated set, but it contained only 65 positive images. Need to also run it on the splice as well as the provenance set. Apparently the provenance set has quite a few examples.
+\item Next on the agenda would be to get the false positives as well, and get some kind of graphical relationship. Then I can try it on the bigger datasets like the one mentioned by the Professor, or the one that is Rama currently working on.
+\end{itemize}
+
+\subsubsection{3 June : Saturday}
+Target :
+\begin{itemize}
+\item Finally working on a saturday. But for starters the target will be a bit low.
+\item Run the program on the provenance images. Though first may need to increase the disk space (may be).
+\item Also store the feature vectors into a .npy file, will be easier to get everything in the future.
+\item Then try to get the number of false positives.
+\item Also complete the NN course as much as possible.
+\end{itemize}
+
+Notes to self:
+\begin{itemize}
+\item To get the false negatives I would first need to store all the world feature vectors into a .npy file, so that I don't have to do the computations every time. For this, I should create a class which will store the file id along with the feature vector.
 \end{itemize}
 \section{Weekly Progress}
 \subsection{Week 1}

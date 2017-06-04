@@ -1,4 +1,3 @@
-import two_imgs_eff
 import os
 import pdb
 import multiprocessing as mp
@@ -6,21 +5,8 @@ import time
 import caffe
 import numpy as np
 import skimage
-# def cmp_tw
-def img_paths(img_folder_num, img_top_dir):
-    img_dir = img_top_dir + str(img_folder_num)
-    im_paths = []
-    for d in os.listdir(img_dir):
-        if d[-3:] == 'jpg' or d[-3:] == 'png':
-            im_paths.append(img_dir + '/' + d)
-            # return im_paths[0], im_paths[1]
-    if len(im_paths) == 2:
-        return im_paths[0], im_paths[1]
-    else:
-        return -1
-
+import pickle
 def slice_img(img, slice_id):
-
     assert img.shape[2] == 3
     if (slice_id== 0):#Height/2
         im_new1 = img[:img.shape[0]/2,:,:]
@@ -29,6 +15,7 @@ def slice_img(img, slice_id):
         im_new1 = img[:,:img.shape[1]/2,:]
         im_new2 = img[:,img.shape[1]/2:,:]
     return im_new1, im_new2
+
 def worker_task(img_top_dir,transformer,slice_id):
     # global count
     #Convention followed :
@@ -37,25 +24,19 @@ def worker_task(img_top_dir,transformer,slice_id):
     backoff = 0.1
     while True:
         if q1.qsize() < 100:
-            # time.sleep(backoff)
-            count = q2.get()
-            img_folder_num = img_dirs[count]
-            # count[0] += 1            
-            img1_path, img2_path = img_paths(img_folder_num, img_top_dir)
-            img1 = caffe.io.load_image(img1_path)
-            # img1 = caffe.io.resize(img1,(227,227,3))
-            img2 = caffe.io.load_image(img2_path)
-            # img2 = caffe.io.load_image(img2, (227,227,3))
-
+            img_file_name = q2.get()
+            # img1_path, img2_path = img_paths(img_folder_num, img_top_dir)
+            img1 = caffe.io.load_image(img_top_dir + img_file_name)
             img1_s1, img1_s2 = slice_img(img1,slice_id)
-            img2_s1, img2_s2 = slice_img(img2,slice_id)
-            
+            # img2_s1, img2_s2 = slice_img(img2,slice_id)
+            im1 = transformer.preprocess('data',img1)
             im1_s1 = transformer.preprocess('data', img1_s1)
             im1_s2 = transformer.preprocess('data', img1_s2)
-            im2_s1 = transformer.preprocess('data', img2_s1)
-            im2_s2 = transformer.preprocess('data', img2_s2)
+            # im2_s1 = transformer.preprocess('data', img2_s1)
+            # im2_s2 = transformer.preprocess('data', img2_s2)
             
-            q1.put(((im1_s1,im2_s1),(im1_s2,im2_s2),img_folder_num))
+            # q1.put(((im1_s1,im2_s1),(im1_s2,im2_s2),img_folder_num))
+            q1.put((im1_s1, im1_s2,im1, img_file_name))
                 # q1.put(())
                 # except Exception as e:
                 # print 'img_folder_num ' + str(img_folder_num)
@@ -67,15 +48,23 @@ def worker_task(img_top_dir,transformer,slice_id):
         else:
             backoff *= 2
             # time.sleep(backoff)
-            
-def get_cmp(fv1,fv2):
-    are_same0 = two_imgs_eff.cmp_fv( fv1, fv2, metric='ssd' )#sum of squared distance
-    are_same1 = two_imgs_eff.cmp_fv( fv1, fv2, metric='sad' )#sum of absolute distance
-    are_same2 = two_imgs_eff.cmp_fv( fv1, fv2, metric='ip' )#inner product
-    are_same3 = two_imgs_eff.cmp_fv( fv1, fv2, metric='ncc')#normalize cross correlation
 
-    return (are_same0, are_same1, are_same2, are_same3)
+class info_storer:
+    def __init__(self,_fid,_layer,_fv1,_fv2,_fv3):
+        # self.fol = _fol
+        self.fid = _fid
+        self.layer = _layer
+        self.fv1 = _fv1
+        self.fv2 = _fv2
+        self.fv3 = _fv3
 
+class info_storer_all:
+    def __init__(self,_fol):
+        self.folder_name = _fol
+        self.data = []
+    def add_one_info(self,info_storer):
+        self.data.append(info_storer)
+        
 if __name__ == '__main__':
     start_time = time.time()
     # img_path_name = lambda x : '../../data/nimble17_data/NC2016_' + str(x) + '.jpg'
@@ -97,42 +86,45 @@ if __name__ == '__main__':
     # batch_size = 1
     slice_id = 0
     #changing batch size from 2 to 4, because there are 4 slices.
-    net.blobs['data'].reshape(4,3,227,227)
+    net.blobs['data'].reshape(3,3,227,227)
     q1 = mp.Queue()
     q2 = mp.Queue()
     # img_top_dir = '../../data/nimble_data/manipulated/'
     # img_top_dir = '../../data/nimble17_data/manipulated/' #
     # img_top_dir = '../../data/nimble17_data/spliced/' #
-    img_top_dir = '../../data/nimble17_data/provenance/'
+    # img_top_dir = '../../data/nimble17_data/provenance/'
+    img_top_dir = '/arka_data/NC2017_Dev1_Beta4/world/'
     folder_name = img_top_dir.split('/')[-2]
-    res = ''
-    img_dirs = os.listdir(img_top_dir)
+    # res = ''
+    store_all = info_storer_all(folder_name)
+    img_file_names = os.listdir(img_top_dir)
     skimage.io.use_plugin('matplotlib')
-    for subdir in img_dirs:
-        if img_paths(subdir, img_top_dir) == -1:
-            img_dirs.remove(subdir)
+    # for subdir in img_dirs:
+    #     if img_paths(subdir, img_top_dir) == -1:
+    #         img_dirs.remove(subdir)
             
     num_process = mp.cpu_count() - 1
     # count = [0]
-    for i in range(len(img_dirs)):
+    for i in img_file_names:
         q2.put(i)
         # pdb.set_trace()
     workers = [mp.Process(target = worker_task, args = (img_top_dir,transformer,slice_id)) for i in range(num_process)]
     for w in workers:
         w.start()
         total_num = 0
-    while total_num < len(img_dirs):
+    while total_num < len(img_file_names):
         # while True:
         # for didx in range(batch_size):
         try:
             #im_tuple1 : im1_s1, im2_s1
             #im_tuple2 : im1_s2, im2_s2
-            im_tuple1,im_tuple2,im_f_n = q1.get()
-            net.blobs['data'].data[0,:,:,:] = im_tuple1[0]
-            net.blobs['data'].data[1,:,:,:] = im_tuple1[1]
-            net.blobs['data'].data[2,:,:,:] = im_tuple2[0]
-            net.blobs['data'].data[3,:,:,:] = im_tuple2[1]
-            
+            # im_tuple1,im_tuple2,im_f_n = q1.get()
+            im_s1, im_s2, im1, im_file_name = q1.get()
+            net.blobs['data'].data[0,:,:,:] = im_s1
+            net.blobs['data'].data[1,:,:,:] = im_s2
+            net.blobs['data'].data[2,:,:,:] = im1
+            # net.blobs['data'].data[3,:,:,:] = im_tuple2[1]
+            # 
             out = net.forward()
             # layer = 'prob'
             # layer = 'fc7'
@@ -141,28 +133,21 @@ if __name__ == '__main__':
             fv1 = net.blobs[layer].data[0].flatten()
             fv2 = net.blobs[layer].data[1].flatten()
             fv3 = net.blobs[layer].data[2].flatten()
-            fv4 = net.blobs[layer].data[3].flatten()
-
-            to_pr = get_cmp(fv1,fv2)
-            to_pr2 = get_cmp(fv3,fv4)
-
-            with open(img_top_dir + str(im_f_n) + '/eval_' + str(layer) + '_slicing' + str(slice_id) + '.txt','wb') as f:
-                f.write(str(to_pr))
-                f.write('\n')
-                f.write(str(to_pr2))
-                f.close()
-                # res +=  str(to_pr)
-            res += str(im_f_n) +' ' + str(to_pr[3]['pear_ncc']) + ' ' + str(to_pr2[3]['pear_ncc']) + '\n'
+            in1 = info_storer(im_file_name,layer, fv1, fv2, fv3)
+            store_all.add_one_info(in1)
         except Exception as e:
-            # pass
-            # raise e
-            # pdb.set_trace()
             print (e)
         total_num += 1
-        print ('Total Num Completed: ' + str(total_num) + ' img_dir_num ' + str(im_f_n) +' ' + str(to_pr[3]['pear_ncc']) + ' ' +
-               str(to_pr2[3]['pear_ncc']))
+        # print ('Total Num Completed: ' + str(total_num) + ' img_dir_num ' + str(im_f_n) +' ' + str(to_pr[3]['pear_ncc']) + ' ' +
+               # str(to_pr2[3]['pear_ncc']))
+        print ('Total Num Completed: ' + str(total_num))
             
-    g = open('../../data/nimble17_data/results/pb_comp_'+folder_name + layer + '_slice' +str(slice_id) + '.txt','w')
-    g.write(res)
+    # g = open('../../data/nimble17_data/results/pb_comp_'+folder_name + layer + '_slice' +str(slice_id) + '.txt','w')
+    # g.write(res)
+    # g.close()
+
+
+    g = open('../../data/nimble17_data/' + folder_name + '.pkl','w')
+    pickle.dump(store_all, g)
     g.close()
     print("--- %s seconds ---" % (time.time() - start_time))
