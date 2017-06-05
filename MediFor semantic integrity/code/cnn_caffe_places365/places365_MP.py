@@ -1,14 +1,15 @@
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import caffe
-import pickle
-import sys
+# import pickle
+# import sys
 import time
 # from multiprocessing import Process
 # import multiprocessing as mp
 # Pros = []
-import pdb
-from multiprocessing import Process, Queue, JoinableQueue, cpu_count
+# import pdb
+from multiprocessing import Process, Queue, cpu_count
+
 
 # def all_test_imgs(descriptor_path, weights_path, test_img_top_dir_path,labels_file, ilsvrc_mean_path,val_ground_truth):
 #     net = caffe.Net(descriptor_path, weights_path, caffe.TEST)
@@ -43,18 +44,16 @@ from multiprocessing import Process, Queue, JoinableQueue, cpu_count
 #         for didx in range(batch_size):
 #             im, gt = queue.get()
 #             net.blobs['data'].data[didx,:,:,:] = im
-            
+
 #             out = net.forward()
 #             # if (total_num % 100 == 0):
 #             print ('Iter ' + str(total_num))
-            
+
 #             top_k = net.blobs['prob'].data[0].flatten().argsort()[-1:-6:-1]
 #             if gt_label in top_k:
 #                 num_corr_pred += 1
 #             total_num += 1
 
-
-        
 #     # with open(labels_file, 'rb') as f:
 #     #     labels = pickle.load(f)
 #     #     top_k = net.blobs['prob'].data[0].flatten().argsort()[-1:-6:-1]
@@ -64,7 +63,8 @@ from multiprocessing import Process, Queue, JoinableQueue, cpu_count
 #     print ("Total num: " + str(total_num))
 #     return num_corr_pred, total_num
 
-def worker_task(lines_all,transformer):
+
+def worker_task(lines_all, transformer):
     backoff = 0.1
     # global count
     while True:
@@ -78,18 +78,16 @@ def worker_task(lines_all,transformer):
             gt_label = int(str_list[1].split('\n')[0])
             # pdb.set_trace()
             im = caffe.io.load_image(test_img_top_dir_path + img_str)
-            im2 = transformer.preprocess('data',im)
+            im2 = transformer.preprocess('data', im)
             queue.put((im2, gt_label))
         else:
             # time.sleep(backoff)
             backoff *= 2
-    return 
-            
-    
+    return
+
 
 if __name__ == '__main__':
-    ###TO DO 
-    
+    # TO DO
     start_time = time.time()
     caffe_model_dir = '../../data/caffe_model/alexnet365/'
     descriptor_path = caffe_model_dir + 'deploy_alexnet_places365.prototxt'
