@@ -3,6 +3,9 @@
 import pickle
 import two_imgs_eff
 import numpy as np
+import os
+# import sys
+import shutil
 from get_all_feature_vecs17 import info_storer, info_storer_all
 from parse_all_data_nimble17 import nimble_references, nimble_prov_reference, prov_ref_file
 import pdb
@@ -47,10 +50,26 @@ if __name__ == '__main__':
         act_cor = two_imgs_eff.cmp_fv(fv_probe, w_base.fv3, 'ncc')['pear_ncc']
         print ("probe file ", p_dat.provenance_probe_file_id)
         print ("expected base file", p_dat.base_browser_file_name, "expected corr: ", act_cor)
-        
+        dest_top_dir = '../../data/nimble17_data/tmp_folder/'
+        dest_path = dest_top_dir + str(itern)
+        if not os.path.isdir(dest_path):
+            os.mkdir(dest_path)
+        src_p = '/arka_data/NC2017_Dev1_Beta4/probe/' + p_dat.provenance_probe_file_id + '.jpg'
+        shutil.copy2(src_p, dest_path + '/probe_img.jpg')
         ids = id_array[top_k].astype(int)
-        for i in ids:
+        for ind, i in enumerate(ids):
+            src = '/arka_data/NC2017_Dev1_Beta4/world/' + world_all_info.data[i].fid
+            if (src[-4:] == '.jpg'):
+                shutil.copy2(src, dest_path + '/w' + str(ind) + '.jpg')
+            else:
+                shutil.copy2(src, dest_path + '/w' + str(ind) + '.png')
             print (world_all_info.data[i].fid)
+        src_base = '/arka_data/NC2017_Dev1_Beta4/world/' + p_dat.base_browser_file_name
+        if (src_base[-4:] == '.jpg'):
+            shutil.copy2(src_base, dest_path + '/w_exp.jpg')
+        else:
+            shutil.copy2(src_base, dest_path + '/w_exp.png')
+            
         for i in range(k):
             if p_dat.base_browser_file_name in world_all_info.data[top_k[i]].fid:
                 num_corr += 1
