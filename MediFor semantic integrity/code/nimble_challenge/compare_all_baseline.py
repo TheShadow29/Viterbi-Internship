@@ -9,6 +9,10 @@ import shutil
 from get_all_feature_vecs17 import info_storer, info_storer_all
 from parse_all_data_nimble17 import nimble_references, nimble_prov_reference, prov_ref_file
 import pdb
+import disp_img
+
+
+
 if __name__ == '__main__':
     probe_file = open('../../data/nimble17_data/probe.pkl', 'rb')
     probe_all_info = pickle.load(probe_file)
@@ -71,10 +75,13 @@ if __name__ == '__main__':
             shutil.copy2(src_base, dest_path + '/w_exp.png')
             
         for i in range(k):
-            if p_dat.base_browser_file_name in world_all_info.data[top_k[i]].fid:
+            if p_dat.base_browser_file_name in world_all_info.data[ids[i]].fid:
                 num_corr += 1
                 # print
                 break
+        l1 = ['world/' + world_all_info.data[ids[i]].fid for i in range(5)]
+        # disp_img.show_img(l1)
+        # pdb.set_trace()
         total_num += 1
 
     print (num_corr, total_num)

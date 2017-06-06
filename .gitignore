@@ -13,3 +13,5 @@
 *data/
 *.pkl
 *.pyc
+*_.pdf
+*_.tex
