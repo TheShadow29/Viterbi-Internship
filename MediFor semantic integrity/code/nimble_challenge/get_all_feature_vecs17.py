@@ -97,18 +97,21 @@ if __name__ == '__main__':
     folder_name = img_top_dir.split('/')[-2]
     # res = ''
     store_all = info_storer_all(folder_name)
-    img_file_names = os.listdir(img_top_dir)
+    # img_file_names = os.listdir(img_top_dir)
     skimage.io.use_plugin('matplotlib')
     # for subdir in img_dirs:
     #     if img_paths(subdir, img_top_dir) == -1:
     #         img_dirs.remove(subdir)
-            
+    img_file_names = []
+    for files in os.listdir(img_top_dir):
+        if files[-4:] == '.jpg' or files[-4:] == '.png':
+            img_file_names.append(files)
     num_process = mp.cpu_count() - 1
     # count = [0]
     for i in img_file_names:
         q2.put(i)
         # pdb.set_trace()
-    workers = [mp.Process(target = worker_task, args = (img_top_dir,transformer,slice_id)) for i in range(num_process)]
+    workers = [mp.Process(target = worker_task, args = (img_top_dir, transformer, slice_id)) for i in range(num_process)]
     for w in workers:
         w.start()
         total_num = 0
@@ -116,8 +119,8 @@ if __name__ == '__main__':
         # while True:
         # for didx in range(batch_size):
         try:
-            #im_tuple1 : im1_s1, im2_s1
-            #im_tuple2 : im1_s2, im2_s2
+            # im_tuple1 : im1_s1, im2_s1
+            # im_tuple2 : im1_s2, im2_s2
             # im_tuple1,im_tuple2,im_f_n = q1.get()
             im_s1, im_s2, im1, im_file_name = q1.get()
             net.blobs['data'].data[0,:,:,:] = im_s1

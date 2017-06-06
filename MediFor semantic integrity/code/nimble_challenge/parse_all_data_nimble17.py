@@ -144,8 +144,8 @@ class nimble_references:
         self.file_name = _file_name
         
     def populate_data(self):
-        g = open(self.file_name)
-        csv_reader = csv.reader(g,delimiter='|')
+        g = open(self.file_name,'rb')
+        csv_reader = csv.reader(g, delimiter='|')
         self.field_names = csv_reader.next()
         self.data = []
         if "manip" in self.file_name:
@@ -160,7 +160,7 @@ class nimble_references:
             for dat in csv_reader:
                 ni = nimble_prov_reference(dat)
                 self.data.append(ni)
-                g.close()
+        g.close()
 
 
 # def parse_index_file(file_type):
