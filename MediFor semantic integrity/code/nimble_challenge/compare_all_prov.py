@@ -32,6 +32,7 @@ if __name__ == '__main__':
 
     num_corr = 0
     total_num = 0
+    goods = 0
     bad_nums = []
     # k = 10
     for itern, p_node in enumerate(prov_data.nodes[:]):
@@ -85,9 +86,13 @@ if __name__ == '__main__':
             if world_all_info.data[ids[i]].fid[:-4] in p_node.wfids:
                 num_corr += 1
                 guess = True
+                if (guess):
+                    if (temp_array[top_k[i]] > 0.95):
+                        goods += 1
                 # print
                 break
             # if (guess):
+        # print
         print ('Itern is ' + str(guess))
         if not guess:
             bad_nums.append(itern)
@@ -102,7 +107,9 @@ if __name__ == '__main__':
             # l1.append(wfids_to_print)
             disp_img.show_img(l1)
             pdb.set_trace()
+        
         total_num += 1
 
     print (num_corr, total_num)
     print bad_nums
+    print goods

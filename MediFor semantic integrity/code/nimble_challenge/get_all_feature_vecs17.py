@@ -111,6 +111,7 @@ if __name__ == '__main__':
     for i in img_file_names:
         q2.put(i)
         # pdb.set_trace()
+    # pdb.set_trace()
     workers = [mp.Process(target = worker_task, args = (img_top_dir, transformer, slice_id)) for i in range(num_process)]
     for w in workers:
         w.start()
@@ -139,7 +140,8 @@ if __name__ == '__main__':
             in1 = info_storer(im_file_name,layer, fv1, fv2, fv3)
             store_all.add_one_info(in1)
         except Exception as e:
-            print (e)
+            raise e
+            # print (e)
         total_num += 1
         # print ('Total Num Completed: ' + str(total_num) + ' img_dir_num ' + str(im_f_n) +' ' + str(to_pr[3]['pear_ncc']) + ' ' +
                # str(to_pr2[3]['pear_ncc']))
