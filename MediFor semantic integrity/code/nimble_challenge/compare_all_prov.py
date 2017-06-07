@@ -34,6 +34,7 @@ if __name__ == '__main__':
     total_num = 0
     goods = 0
     bad_nums = []
+    lol = 0
     # k = 10
     for itern, p_node in enumerate(prov_data.nodes[:]):
         # pdb.set_trace()
@@ -48,10 +49,13 @@ if __name__ == '__main__':
         k = 1
         for idx, w in enumerate(world_all_info.data):
             if pfid not in w.fid:
+                # pdb.set_trace()
+                # lol += 1
                 corr = two_imgs_eff.cmp_fv(fv_probe, w.fv3, 'ncc')['pear_ncc']
                 temp_array = np.append(temp_array, corr)
                 id_array = np.append(id_array, idx)
-
+            else:
+                lol += 1
         top_k = temp_array.argsort()[-k:]
         top_k = list(reversed(top_k))
         print (temp_array[top_k])

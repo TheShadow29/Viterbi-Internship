@@ -3,7 +3,7 @@
 import pickle
 import two_imgs_eff
 import numpy as np
-# import os
+import os
 # import sys
 import shutil
 import prov_ref_node_creator as prnc
@@ -38,7 +38,8 @@ if __name__ == '__main__':
     total_num = 0
     goods = 0
     bad_nums = []
-    all_data = np.array([np.ones(365,)])
+    all_data_dict = dict()
+    # all_data = np.array([np.ones(365,)])
     all_dict = dict()
     count = 0
     for itern, p_node in enumerate(prov_data.nodes[:]):
@@ -53,9 +54,8 @@ if __name__ == '__main__':
         # k = 1
         # all_data = np.array([[fv_probe]])
 
-        ########THIS is incorrect##################
-        #########I am giving more weight to the probe image which is wrong########
-        all_data = np.append(all_data, [fv_probe], axis=0)
+        # all_data = np.append(all_data, [fv_probe], axis=0)
+        all_data_dict[pfid] = fv_probe
         all_dict[pfid] = count
         # pdb.set_trace()
         count += 1
@@ -64,16 +64,20 @@ if __name__ == '__main__':
             try:
                 w_node_id = dict_world[wfid]
                 w_info = world_all_info.data[w_node_id]
-                all_data = np.append(all_data, [w_info.fv3], axis=0)
+                # all_data = np.append(all_data, [w_info.fv3], axis=0)
                 all_dict[wfid] = count
+                all_data_dict[wfid] = w_info.fv3
                 # pdb.set_trace()
                 count += 1
             except Exception as e:
                 print ("World node not found: ", wfid)
                 pass
             total_num += 1
-
+    all_data = np.array([np.ones(365,)])
+    for k, v in all_data_dict.items():
+        all_data = np.append(all_data, [v], axis=0)
     all_data = all_data[1:, ...]
+    keys = all_data_dict.keys()
     # all_data = np.transpose(all_data)
     # print (num_corr, total_num)
     # print bad_nums
@@ -87,7 +91,21 @@ if __name__ == '__main__':
     kmeans = KMeans(init='k-means++', n_clusters=65, n_init=10)
     # kmeans.fit(reduced_data)
     kmeans.fit(all_data)
-    
+    src_tdir = '/arka_data/NC2017_Dev1_Beta4/world/'
+    dest_tdir = '../../data/nimble17_data/cluster_folder/'
+    files_in_src = os.listdir(src_tdir)
+    for i, l in enumerate(kmeans.labels_):
+        dest_path = dest_tdir + str(l)
+        if not os.path.isdir(dest_path):
+            os.mkdir(dest_path)
+        key = keys[i]
+        for fname in files_in_src:
+            if key in fname:
+                break
+        
+        src = src_tdir + fname
+        shutil.copy2(src, dest_path)
+        print ('Files done: ', i)
     # h = .02     # point in the mesh [x_min, x_max]x[y_min, y_max].
 
     # Plot the decision boundary. For that, we will assign a color to each
