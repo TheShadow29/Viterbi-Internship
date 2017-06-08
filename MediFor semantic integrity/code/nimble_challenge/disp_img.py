@@ -30,3 +30,7 @@ def show_img(l1):
         plt.title('world_img ' + str(ind))
 
     plt.show()
+
+def show_all_imgs(l1):
+    io.imread_collection(l1)
+    io.imshow_collection(l1)

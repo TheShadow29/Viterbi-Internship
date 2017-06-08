@@ -88,7 +88,7 @@ if __name__ == '__main__':
     # reduced_data = PCA(n_components=2).fit_transform(all_data)
     # reduced_data = X
     # kmeans = KMeans(n_clusters=2, random_state=0).fit(X)
-    kmeans = KMeans(init='k-means++', n_clusters=65, n_init=10)
+    kmeans = KMeans(init='k-means++', n_clusters=65, n_init=1000)
     # kmeans.fit(reduced_data)
     kmeans.fit(all_data)
     src_tdir = '/arka_data/NC2017_Dev1_Beta4/world/'
@@ -100,7 +100,7 @@ if __name__ == '__main__':
             os.mkdir(dest_path)
         key = keys[i]
         for fname in files_in_src:
-            if key in fname:
+            if key in fname and (fname[-4:] == '.jpg' or fname[-4:] == '.png'):
                 break
         
         src = src_tdir + fname
