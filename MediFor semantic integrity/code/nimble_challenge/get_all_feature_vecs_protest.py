@@ -19,17 +19,23 @@ def slice_img(img, slice_id):
     return im_new1, im_new2
 
 
-def worker_task(img_top_dir, transformer, slice_id):
+def worker_task(img_top_dir, transformer, slice_id, bbox_dict='none'):
     # global count
     # Convention followed :
     # before preprocess : img
     # after preprocess : im
+    # if (bbox_dict == 'none'):
     backoff = 0.1
+    
     while True:
         if q1.qsize() < 100:
             img_file_name = q2.get()
             # img1_path, img2_path = img_paths(img_folder_num, img_top_dir)
             img1 = caffe.io.load_image(img_top_dir + img_file_name)
+            if (bbox_dict != 'none'):
+                pts = bbox_dict[img_file_name[:-4]]
+                img1 = img1[pts[1]:pts[3], pts[0]:pts[2]]
+                skimage.io.imshow(img1)
             img1_s1, img1_s2 = slice_img(img1, slice_id)
             # img2_s1, img2_s2 = slice_img(img2,slice_id)
             im1 = transformer.preprocess('data', img1)
@@ -44,15 +50,15 @@ def worker_task(img_top_dir, transformer, slice_id):
             # except Exception as e:
             # print 'img_folder_num ' + str(img_folder_num)
             # raise e
-            
+
             # pdb.set_trace()
             # raise e
             # pass
         else:
-            backoff *= 2
-            # time.sleep(backoff)
+                backoff *= 2
+                # time.sleep(backoff)
 
-            
+                
 class info_storer:
     def __init__(self, _fid, _layer, _fv1, _fv2, _fv3):
         # self.fol = _fol
@@ -62,7 +68,7 @@ class info_storer:
         self.fv2 = _fv2
         self.fv3 = _fv3
 
-        
+
 class info_storer_all:
     def __init__(self, _fol):
         self.folder_name = _fol
@@ -105,6 +111,9 @@ if __name__ == '__main__':
     img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL/'
     folder_name = img_top_dir.split('/')[-2]
     # res = ''
+    dict_npy_file = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/mod_fine_labels.npy'
+    bbox_dict_npy = np.load(dict_npy_file)
+    bbox_dict = bbox_dict_npy.item()
     store_all = info_storer_all(folder_name)
     # img_file_names = os.listdir(img_top_dir)
     skimage.io.use_plugin('matplotlib')
@@ -121,7 +130,7 @@ if __name__ == '__main__':
         q2.put(i)
         # pdb.set_trace()
     # pdb.set_trace()
-    workers = [mp.Process(target=worker_task, args=(img_top_dir, transformer, slice_id)) for i in range(num_process)]
+    workers = [mp.Process(target=worker_task, args=(img_top_dir, transformer, slice_id, bbox_dict)) for i in range(num_process)]
     for w in workers:
         w.start()
         total_num = 0
@@ -159,8 +168,8 @@ if __name__ == '__main__':
     # g = open('../../data/nimble17_data/results/pb_comp_'+folder_name + layer + '_slice' +str(slice_id) + '.txt','w')
     # g.write(res)
     # g.close()
-
-    g = open('../../data/protest_data/' + folder_name + '.pkl', 'w')
+    
+    g = open('../../data/protest_data/' + folder_name + '_bbox.pkl', 'w')
     info_storer_all.__module__ = "get_all_feature_vecs_protest"
     pickle.dump(store_all, g)
     g.close()

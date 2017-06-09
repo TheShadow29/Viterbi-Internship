@@ -10,7 +10,7 @@ fname = '/arka_data/NC2017_Dev1_Beta4/'
 io.use_plugin('matplotlib')
 
 
-def show_img_protest(l1):
+def show_img_protest(l1, corr_arr='none'):
     plt.figure(1)
     probe_img = io.imread(l1[0])
     plt.subplot(3, 2, 1)
@@ -21,7 +21,10 @@ def show_img_protest(l1):
         img = io.imread(f)
         plt.subplot(3, 2, ind + 2)
         plt.imshow(img)
-        plt.title('World Image ' + str(ind))
+        if corr_arr == 'none':
+            plt.title('World Image ' + str(ind))
+        else:
+            plt.title('World Image ' + str(ind) + ' ' + str(corr_arr[ind]))
     plt.show()
 
     

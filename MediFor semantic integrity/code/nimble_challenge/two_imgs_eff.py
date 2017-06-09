@@ -71,12 +71,14 @@ def cmp_fv(fv1,fv2,metric='ssd'):
 
 def get_direct_prob(img1_path, img2_path):
     # caffe.io.use_plugin('matplotlib')
-
-    im1 = caffe.io.load_image(img1_path)
-    im2 = caffe.io.load_image(img2_path)
-
-    net.blobs['data'].data[0,:,:,:] = transformer.preprocess('data',im1)
-    net.blobs['data'].data[1,:,:,:] = transformer.preprocess('data',im2)
+    if (type(img1_path) == str):
+        im1 = caffe.io.load_image(img1_path)
+        im2 = caffe.io.load_image(img2_path)
+    else:
+        im1 = img1_path
+        im2 = img2_path
+    net.blobs['data'].data[0, :, :, :] = transformer.preprocess('data', im1)
+    net.blobs['data'].data[1, :, :, :] = transformer.preprocess('data', im2)
     out = net.forward()
     # pdb.set_trace()
     fv1 = net.blobs['prob'].data[0].flatten()
