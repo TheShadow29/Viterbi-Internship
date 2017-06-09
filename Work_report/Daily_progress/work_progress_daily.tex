@@ -381,7 +381,28 @@ Notes to self :
 \item Then I should try to understand the real problem and try to get the underlying bottleneck, and only then I should work on it.
 \end{itemize}
 
+Accomplished :
+\begin{itemize}
+\item Results are pretty bad for the protest dataset. In fact 0/10. I have no clue why.
+\item Trying with the histogram equalization, but I am quite skeptical that it will still be awful results, since the correlation between the two images was still quite low. And the problem is that I have no actual clue as to why it isn't working. The only distant explanation I can give is that after getting the rightful bbox, the neural net tries to capture the background information, which is what is causing the problem in some sense. This is a really wild and pathetic guess though. I wish I could gain some more insight.
+\item I am now trying to use kind of histogram equalization for comparison. I am around $80\%$ sure that the algo is not illumination invariant. Another thing I will probably try is to do mean subtraction from the image as well, but I will have to calmly think as to how to go about that. But the preliminary results with histogram equalization were not too impressive.
+\end{itemize}
 
+\subsubsection{June 9 : Friday}
+Target :
+\begin{itemize}
+\item Read the paper by ISI.
+\item Test with the hist equalization method, and any other tweaks to get the img correlation working.
+\item If time permits also download the NC2017 Dev Beta 3 version for evaluation on the larger dataset.
+\end{itemize}
+
+Notes to self :
+\begin{itemize}
+\item I have noticed that I am spending slightly more time on github, which I shouldn't do really. I need to be more focussed. I need to take the work more seriously. Time is extremely limited.
+\item First and foremost get the matching results using hist equalized images.
+\item After that try to shift on to the new eval set.
+\item Get time to read upon the paper as well.
+\end{itemize}
 \section{Weekly Progress}
 \subsection{Week 1}
 Accomplished:

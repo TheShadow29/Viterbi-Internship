@@ -15,9 +15,11 @@ import disp_img
 
 if __name__ == '__main__':
     # probe_file = open('../../data/protest_data/Modified_Images_ProtestL.pkl', 'rb')
-    probe_file = open('../../data/protest_data/Modified_Images_ProtestL_bbox.pkl', 'rb')
+    # probe_file = open('../../data/protest_data/Modified_Images_ProtestL_bbox.pkl', 'rb')
+    probe_file = open('../../data/protest_data/Modified_Images_ProtestL_hist_eq.pkl')
     probe_all_info = pickle.load(probe_file)
-    world_file = open('../../data/protest_data/Pruned_Protest_YFCCImages.pkl', 'rb')
+    # world_file = open('../../data/protest_data/Pruned_Protest_YFCCImages.pkl', 'rb')
+    world_file = open('../../data/protest_data/Pruned_Protest_YFCCImages_hist_eq.pkl', 'rb')
     world_all_info = pickle.load(world_file)
 
     world_tdir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Pruned_Protest_YFCCImages/'

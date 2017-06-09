@@ -32,10 +32,13 @@ def worker_task(img_top_dir, transformer, slice_id, bbox_dict='none'):
             img_file_name = q2.get()
             # img1_path, img2_path = img_paths(img_folder_num, img_top_dir)
             img1 = caffe.io.load_image(img_top_dir + img_file_name)
-            if (bbox_dict != 'none'):
+            if (bbox_dict != 'none' and bbox_dict != 'hist_eq'):
                 pts = bbox_dict[img_file_name[:-4]]
                 img1 = img1[pts[1]:pts[3], pts[0]:pts[2]]
-                skimage.io.imshow(img1)
+                # skimage.io.imshow(img1)
+            elif (bbox_dict == 'hist_eq'):
+                img1 = skimage.exposure.equalize_hist(img1)
+                
             img1_s1, img1_s2 = slice_img(img1, slice_id)
             # img2_s1, img2_s2 = slice_img(img2,slice_id)
             im1 = transformer.preprocess('data', img1)
@@ -108,12 +111,15 @@ if __name__ == '__main__':
     # img_top_dir = '../../data/nimble17_data/provenance/'
     # img_top_dir = '/arka_data/NC2017_Dev1_Beta4/world/'
     # img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Pruned_Protest_YFCCImages/'
-    img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL/'
-    folder_name = img_top_dir.split('/')[-2]
+    img_top_dir = '../../data/protest_data/cropped/direct_cropped/'
+    # img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL/'
+    # folder_name = img_top_dir.split('/')[-2]
+    folder_name = 'Modified_Images_ProtestL'
     # res = ''
     dict_npy_file = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/mod_fine_labels.npy'
     bbox_dict_npy = np.load(dict_npy_file)
     bbox_dict = bbox_dict_npy.item()
+    bbox_dict = 'hist_eq'
     store_all = info_storer_all(folder_name)
     # img_file_names = os.listdir(img_top_dir)
     skimage.io.use_plugin('matplotlib')
@@ -169,7 +175,7 @@ if __name__ == '__main__':
     # g.write(res)
     # g.close()
     
-    g = open('../../data/protest_data/' + folder_name + '_bbox.pkl', 'w')
+    g = open('../../data/protest_data/' + folder_name + '_hist_eq.pkl', 'w')
     info_storer_all.__module__ = "get_all_feature_vecs_protest"
     pickle.dump(store_all, g)
     g.close()

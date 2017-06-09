@@ -15,3 +15,5 @@
 *.pyc
 *_.pdf
 *_.tex
+*.ipynb_checkpoints
+*.el
