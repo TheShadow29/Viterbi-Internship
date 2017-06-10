@@ -23,7 +23,8 @@ if __name__ == '__main__':
     world_all_info = pickle.load(world_file)
 
     world_tdir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Pruned_Protest_YFCCImages/'
-    probe_tdir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL/'
+    # probe_tdir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL/'
+    probe_tdir = '../../data/protest_data/cropped/hist_equalized/'
     num_corr = 0
     total_num = 0
     k = 5
@@ -34,25 +35,34 @@ if __name__ == '__main__':
         pfid = p_dat.fid
         gt_label = int(pfid.split('.')[0].split('_')[-1])
         all_corr = np.array([])
+        
         for w in world_all_info.data:
             fv_world = w.fv3
             corr = two_imgs_eff.cmp_fv(fv_probe, fv_world, 'ncc')['pear_ncc']
             all_corr = np.append(all_corr, corr)
+            # print (w.fid.split('.')[0].split('_')[-1])
+            # w_gt = w
+            # w_exp_corr = corr
+            if int(w.fid.split('.')[0].split('_')[-1]) == gt_label:
+                w_gt = w
+                w_exp_corr = corr
         top_ids = all_corr.argsort()[::-1]
         top_k_ids = top_ids[:k]
         top_corr = all_corr[top_k_ids]
         print(top_corr)
-        
         l1 = []
         guess = False
         guess_id = 10
         l1.append(probe_tdir + pfid)
+        wfid_arr = []
         print ('GT label is ', gt_label)
+        gt_tuple = (world_tdir + w_gt.fid, w_exp_corr)
         for it, id1 in enumerate(top_k_ids):
             w1 = world_all_info.data[id1].fid
             l1.append(world_tdir + w1)
             w_label = int(w1.split('.')[0].split('_')[-1])
             print ('W label is ', w_label)
+            wfid_arr.append(w_label)
             if w_label == gt_label:
                 guess = True
                 guess_id = it
@@ -61,7 +71,8 @@ if __name__ == '__main__':
             print ('Correct guess in top ' + it)
         else:
             print ('No correct result in top 5')
-        disp_img.show_img_protest(l1, top_corr)
+        
+        disp_img.show_img_protest(l1, gt_tuple, wfid_arr, top_corr)
         total_num += 1
 
     print (num_corr, total_num)

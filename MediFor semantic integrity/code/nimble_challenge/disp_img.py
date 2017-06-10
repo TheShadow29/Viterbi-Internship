@@ -10,24 +10,31 @@ fname = '/arka_data/NC2017_Dev1_Beta4/'
 io.use_plugin('matplotlib')
 
 
-def show_img_protest(l1, corr_arr='none'):
+def show_img_protest(l1, gt, wfid_arr='none', corr_arr='none'):
     plt.figure(1)
     probe_img = io.imread(l1[0])
-    plt.subplot(3, 2, 1)
+    plt.subplot(4, 2, 1)
     plt.imshow(probe_img)
-    plt.title('Probe Image')
-
+    pfid = l1[0].split('.')[-2].split('/')[-1]
+    plt.title('Probe Image ' + str(pfid))
+    plt.subplot(4, 2, 2)
+    plt.imshow(io.imread(gt[0]))
+    w_exp_label = gt[0].split('.')[-2].split('/')[-1]
+    plt.title('Expected World Image ' + w_exp_label + ' ' + str(gt[1]))
+    
     for ind, f in enumerate(l1[1:]):
         img = io.imread(f)
-        plt.subplot(3, 2, ind + 2)
+        plt.subplot(4, 2, ind + 3)
         plt.imshow(img)
         if corr_arr == 'none':
             plt.title('World Image ' + str(ind))
         else:
-            plt.title('World Image ' + str(ind) + ' ' + str(corr_arr[ind]))
+            plt.title('World Image ' + str(ind) + ' ' + str(wfid_arr[ind]) +
+                      ' ' + str(corr_arr[ind]))
+    plt.tight_layout()
     plt.show()
 
-    
+
 def show_img(l1):
     plt.figure(1)
     # plt.subplot()

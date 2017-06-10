@@ -111,7 +111,7 @@ if __name__ == '__main__':
     # img_top_dir = '../../data/nimble17_data/provenance/'
     # img_top_dir = '/arka_data/NC2017_Dev1_Beta4/world/'
     # img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Pruned_Protest_YFCCImages/'
-    img_top_dir = '../../data/protest_data/cropped/direct_cropped/'
+    img_top_dir = '../../data/protest_data/cropped/hist_equalized/'
     # img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL/'
     # folder_name = img_top_dir.split('/')[-2]
     folder_name = 'Modified_Images_ProtestL'
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     dict_npy_file = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/mod_fine_labels.npy'
     bbox_dict_npy = np.load(dict_npy_file)
     bbox_dict = bbox_dict_npy.item()
-    bbox_dict = 'hist_eq'
+    bbox_dict = 'none'
     store_all = info_storer_all(folder_name)
     # img_file_names = os.listdir(img_top_dir)
     skimage.io.use_plugin('matplotlib')
