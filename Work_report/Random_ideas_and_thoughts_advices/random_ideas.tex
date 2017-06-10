@@ -51,11 +51,20 @@
   \end{itemize}
 \end{itemize}
 \subsection{MediFor}
+\subsubsection{Approach 1}
 \begin{itemize}
 \item One thing that could be done is to divide the problem into two halves.
 \item The first is to get the annotations about the image. Something describing some kind of action being performed.
 \item Next is to use those annotations to make out if there is anything semantically incorrect.
 \end{itemize}
+
+\subsubsection{Approach 2}
+\begin{itemize}
+\item Can try to use an inpainting based approach. Once the bbox is identified, use a black box around it, and ask the cnn to complete it.
+\item Not a very interesting idea though.
+\end{itemize}
+
+
 \section{Important Tips : By Prof. Ram Nevatia}
 \begin{itemize}
 \item Whatever written in the paper, is written very nicely. Do not change the work flow for poster, or even the content or representation. Has happened with the prof said that pains in changing the course plan from one assignment to another. 
