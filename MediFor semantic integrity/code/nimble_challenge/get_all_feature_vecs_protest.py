@@ -86,9 +86,11 @@ if __name__ == '__main__':
     # img_path_name = lambda x : '../../data/nimble17_data/NC2016_' + str(x) + '.jpg'
     # img_path_orig = lambda x,y : '/arka_data/NC2016_Test0613/' + str(x) + '/NC2016_' + '%04d' %y + '.jpg'
     # img_path_1 = lambda x : '../../data/nimble_data/manipulated/' + str(x)
-    caffe_model_dir = '../../data/caffe_model/alexnet365/'
-    descriptor_path = caffe_model_dir + 'deploy_alexnet_places365.prototxt'
-    weights_path = caffe_model_dir + 'alexnet_places365.caffemodel'
+    # caffe_model_dir = '../../data/caffe_model/alexnet365/'
+    caffe_model_dir = '/home/arka_s/Caffe/caffe/models/bvlc_alexnet/'
+    descriptor_path = caffe_model_dir + 'deploy.prototxt'
+    weights_path = caffe_model_dir + 'bvlc_alexnet.caffemodel'
+    net_name = caffe_model_dir.split('/')[-2]
     ilsvrc_mean_path = '/home/arka_s/Caffe/caffe/python/caffe/imagenet/ilsvrc_2012_mean.npy'
     net = caffe.Net(descriptor_path, weights_path, caffe.TEST)
 
@@ -111,7 +113,7 @@ if __name__ == '__main__':
     # img_top_dir = '../../data/nimble17_data/provenance/'
     # img_top_dir = '/arka_data/NC2017_Dev1_Beta4/world/'
     # img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Pruned_Protest_YFCCImages/'
-    img_top_dir = '../../data/protest_data/cropped/hist_equalized/'
+    img_top_dir = '../../data/protest_data/cropped/direct_cropped/'
     # img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL/'
     # folder_name = img_top_dir.split('/')[-2]
     folder_name = 'Modified_Images_ProtestL'
@@ -175,7 +177,8 @@ if __name__ == '__main__':
     # g.write(res)
     # g.close()
     
-    g = open('../../data/protest_data/' + folder_name + '_hist_eq.pkl', 'w')
+    # g = open('../../data/protest_data/' + folder_name + '_hist_eq.pkl', 'w')
+    g = open('../../data/nimble17_data/' + net_name + '_' + folder_name + '.pkl', 'w')
     info_storer_all.__module__ = "get_all_feature_vecs_protest"
     pickle.dump(store_all, g)
     g.close()

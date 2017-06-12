@@ -13,9 +13,11 @@ import pdb
 import disp_img
 
 if __name__ == '__main__':
-    probe_file = open('../../data/nimble17_data/probe.pkl', 'rb')
+    # probe_file = open('../../data/nimble17_data/probe.pkl', 'rb')
+    probe_file = open('../../data/nimble17_data/bvlc_alexnet_probe.pkl', 'rb')
     probe_all_info = pickle.load(probe_file)
-    world_file = open('../../data/nimble17_data/world.pkl', 'rb')
+    # world_file = open('../../data/nimble17_data/world.pkl', 'rb')
+    world_file = open('../../data/nimble17_data/bvlc_alexnet_world.pkl', 'rb')
     world_all_info = pickle.load(world_file)
 
     # prov_data = nimble_references(prov_ref_file)
