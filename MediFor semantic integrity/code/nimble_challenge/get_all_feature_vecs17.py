@@ -73,7 +73,9 @@ if __name__ == '__main__':
     # caffe_model_dir = '../../data/caffe_model/alexnet365/'
     caffe_model_dir = '/home/arka_s/Caffe/caffe/models/bvlc_alexnet/'
     descriptor_path = caffe_model_dir + 'deploy.prototxt'
+    # descriptor_path = caffe_model_dir + 'deploy_alexnet_places365.prototxt'
     weights_path = caffe_model_dir + 'bvlc_alexnet.caffemodel'
+    # weights_path = caffe_model_dir + 'alexnet_places365.caffemodel'
     net_name = caffe_model_dir.split('/')[-2]
     ilsvrc_mean_path = '/home/arka_s/Caffe/caffe/python/caffe/imagenet/ilsvrc_2012_mean.npy'
     net = caffe.Net(descriptor_path, weights_path, caffe.TEST)
@@ -95,7 +97,9 @@ if __name__ == '__main__':
     # img_top_dir = '../../data/nimble17_data/manipulated/' #
     # img_top_dir = '../../data/nimble17_data/spliced/' #
     # img_top_dir = '../../data/nimble17_data/provenance/'
-    img_top_dir = '/arka_data/NC2017_Dev1_Beta4/probe/'
+    # img_top_dir = '/arka_data/NC2017_Dev1_Beta4/probe/'
+    # img_top_dir = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/world/'
+    img_top_dir = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/probe/'
     folder_name = img_top_dir.split('/')[-2]
     # res = ''
     store_all = info_storer_all(folder_name)
@@ -155,7 +159,7 @@ if __name__ == '__main__':
     # g.write(res)
     # g.close()
     
-    g = open('../../data/nimble17_data/' + net_name + '_' + folder_name + '.pkl', 'w')
+    g = open('../../data/nimble17_data/dev3/' + net_name + '_' + folder_name + '.pkl', 'w')
     pickle.dump(store_all, g)
     g.close()
     print("--- %s seconds ---" % (time.time() - start_time))

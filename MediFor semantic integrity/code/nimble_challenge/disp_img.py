@@ -4,7 +4,8 @@ from skimage import io
 import pdb
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-fname = '/arka_data/NC2017_Dev1_Beta4/'
+# fname = '/arka_data/NC2017_Dev1_Beta4/'
+fname = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/'
 # l1 = sys.argv[1:]
 # img = skimage.io()
 io.use_plugin('matplotlib')

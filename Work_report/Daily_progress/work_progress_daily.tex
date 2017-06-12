@@ -424,6 +424,26 @@ Target :
 \item Then get the results on the new dataset. I seriously hope that the results are at least somewhat decent.
 \end{itemize}
 
+Notes to self :
+\begin{itemize}
+\item With the relatively decent results, there are a few ways to go to the next task.
+  \begin{itemize}
+  \item First would be to get a provenance graph. This could be through the minimum spanning tree (need to read a bit more about it).
+  \item Second would be to tackle the donor detection (perhaps getting the bbox as well as matching the donor) would be the next step.
+  \item Third would be to get started on the grounding (Rama's project). The only problem I can remotely see is that I would need to use the older version of TensorFlow which I would want to avoid as far as possible. If required I would rather change the whole code to the newer version.
+  \end{itemize}
+\item For starters I should write the code for Minimum Spanning Tree and get some kind of provenance graph.
+\end{itemize}
+
+Accomplished :
+\begin{itemize}
+\item Tried the AlexNet (trained on ImageNet) on the dev1. Suprisingly gave 65/65. The only difference is that there were 61 of those > 0.95.
+\item Also tried the AlexNet (trained on ImageNet) on the protest dataset. Got 7/10 correct.
+\item Got good enough results on the NC2017\_Dev3 dataset using the alex365 (2155/2156) which is quite impressive.
+\item The next task would be to use an even further world set. Need to download the Eval set to see if there is anything worthwhile.
+% \item There are 2 directions that I can take from here on. One would
+\end{itemize}
+
 \section{Weekly Progress}
 \subsection{Week 1}
 Accomplished:

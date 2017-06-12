@@ -14,15 +14,19 @@ import disp_img
 
 if __name__ == '__main__':
     # probe_file = open('../../data/nimble17_data/probe.pkl', 'rb')
-    probe_file = open('../../data/nimble17_data/bvlc_alexnet_probe.pkl', 'rb')
+    # probe_file = open('../../data/nimble17_data/bvlc_alexnet_probe.pkl', 'rb')
+    probe_file = open('../../data/nimble17_data/dev3/alexnet365_probe.pkl', 'rb')
     probe_all_info = pickle.load(probe_file)
     # world_file = open('../../data/nimble17_data/world.pkl', 'rb')
-    world_file = open('../../data/nimble17_data/bvlc_alexnet_world.pkl', 'rb')
+    # world_file = open('../../data/nimble17_data/bvlc_alexnet_world.pkl', 'rb')
+    world_file = open('../../data/nimble17_data/dev3/alexnet365_world.pkl', 'rb')
     world_all_info = pickle.load(world_file)
 
     # prov_data = nimble_references(prov_ref_file)
     # prov_data.populate_data()
-    prov_data = prnc.prov_nodes(prnc.pref_file)
+    pref_file = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/' + \
+                'reference/provenance/NC2017_Dev3-provenance-ref-node.csv'
+    prov_data = prnc.prov_nodes(pref_file)
     prov_data.populate_data()
 
     dict_probe = dict()
@@ -38,7 +42,7 @@ if __name__ == '__main__':
     bad_nums = []
     lol = 0
     # k = 10
-    for itern, p_node in enumerate(prov_data.nodes[:]):
+    for itern, p_node in enumerate(prov_data.nodes[314:]):
         # pdb.set_trace()
         print ("iter no. ", itern)
         pfid = p_node.fid
