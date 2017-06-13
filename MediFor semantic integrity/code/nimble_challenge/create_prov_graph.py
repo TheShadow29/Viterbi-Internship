@@ -9,7 +9,22 @@ from get_all_feature_vecs17 import info_storer, info_storer_all
 import matplotlib.pyplot as plt
 # import disp_img
 import imshow_coll
+import numpy as np
 
+
+class graph_node:
+    def __init__(self, fid):
+        self.fid = fid
+        self.top_5_min = 0
+
+    def get_top5_min(self, G):
+        nn5 = np.zeros(1)
+        for g in G[self.fid].values():
+            nn5 = np.append(nn5, g['weight'])
+
+        
+
+        
 if __name__ == '__main__':
     # prov_file = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/' + \
                 # 'reference/provenance/NC2017_Dev3-provenance-ref-node.csv'
