@@ -15,11 +15,13 @@ import disp_img
 if __name__ == '__main__':
     # probe_file = open('../../data/nimble17_data/probe.pkl', 'rb')
     # probe_file = open('../../data/nimble17_data/bvlc_alexnet_probe.pkl', 'rb')
-    probe_file = open('../../data/nimble17_data/dev3/alexnet365_probe.pkl', 'rb')
+    # probe_file = open('../../data/nimble17_data/dev3/alexnet365_probe.pkl', 'rb')
+    probe_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_probe.pkl', 'rb')
     probe_all_info = pickle.load(probe_file)
     # world_file = open('../../data/nimble17_data/world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/bvlc_alexnet_world.pkl', 'rb')
-    world_file = open('../../data/nimble17_data/dev3/alexnet365_world.pkl', 'rb')
+    # world_file = open('../../data/nimble17_data/dev3/alexnet365_world.pkl', 'rb')
+    world_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_world.pkl', 'rb')
     world_all_info = pickle.load(world_file)
 
     # prov_data = nimble_references(prov_ref_file)
@@ -115,8 +117,8 @@ if __name__ == '__main__':
             l1 = 'probe/' + str(p_node.fid)
             l1 = [l1] + wfids_to_print
             # l1.append(wfids_to_print)
-            disp_img.show_img(l1)
-            pdb.set_trace()
+            # disp_img.show_img(l1)
+            # pdb.set_trace()
         
         total_num += 1
 
