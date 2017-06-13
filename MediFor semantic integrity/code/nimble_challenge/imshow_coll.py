@@ -3,7 +3,7 @@ import os
 import matplotlib.pyplot as plt
 
 
-def imshow_collection_new(l1):
+def imshow_collection_new(l1, show=True):
     if type(l1) == str:
         file_list = os.listdir(l1)
         file_list = [l1 + f if l1[-1] == '/' else l1 + '/' + f for f in file_list]
@@ -15,9 +15,17 @@ def imshow_collection_new(l1):
         ncol = n/nrow
     else:
         ncol = n/nrow + 1
-    plt.figure()
+    fig = plt.figure()
     for i, f in enumerate(file_list):
+        # print (f)
         plt.subplot(nrow, ncol, i+1)
-        plt.imshow(io.imread(f))
-    plt.show()
-    return plt
+        try:
+            plt.imshow(io.imread(f))
+        except TypeError:
+            im1 = io.imread(f)
+            im2 = im1[0]
+            plt.imshow(im2)
+
+    if show:
+        plt.show()
+    return fig 

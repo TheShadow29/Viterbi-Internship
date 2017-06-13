@@ -7,7 +7,8 @@ import two_imgs_eff
 import pickle
 from get_all_feature_vecs17 import info_storer, info_storer_all
 import matplotlib.pyplot as plt
-
+# import disp_img
+import imshow_coll
 
 if __name__ == '__main__':
     # prov_file = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/' + \
@@ -52,7 +53,8 @@ if __name__ == '__main__':
         # probe_info = probe_all_info.data[pid]
         probe_info = world_all_info.data[pid]
         fv_probe = probe_info.fv3
-        G.add_node(pfid)
+        pnode_id = pfid + pfile[-4:]
+        G.add_node(pnode_id)
         for wfile in list_world_files[:]:
             wfid = wfile.split('.')[0]
             try:
@@ -60,14 +62,24 @@ if __name__ == '__main__':
                 world_info = world_all_info.data[wid]
                 fv_world = world_info.fv3
                 if pfid != wfid:
-                    G.add_node(wfid)
+                    wnode_id = wfid + wfile[-4:]
+                    G.add_node(wnode_id)
                     corr = two_imgs_eff.cmp_fv(fv_probe, fv_world, 'ncc')['pear_ncc']
-                    G.add_edge(pfid, wfid, weight=corr)
+                    if corr > 0.9:
+                        G.add_edge(pnode_id, wnode_id, weight=corr)
             except Exception as e:
                 some_problem_files += 1
                 pass
         print ('Itern ', itern)
-
+    fig_save_dir = '../../data/nimble17_data/dev1/'
+    for ind, c in enumerate(sorted(nx.connected_components(G), key=len, reverse=True)):
+        c1 = list(c)
+        l1 = [wtdir + w for w in c1]
+        fig = imshow_coll.imshow_collection_new(l1, show=False)
+        fig.savefig(fig_save_dir + str(ind) + '.png')
+        print ('Ind ', ind)
+        # fig.show()
+        # pdb.set_trace()
     # elarge = [(u, v) for (u, v, d) in G.edges(data=True) if d['weight'] > 0.5]
     # esmall = [(u, v) for (u, v, d) in G.edges(data=True) if d['weight'] <= 0.5]
     # pos = nx.spring_layout(G)   # positions for all nodes
