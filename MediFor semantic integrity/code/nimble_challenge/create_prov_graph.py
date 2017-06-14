@@ -22,9 +22,7 @@ class graph_node:
         for g in G[self.fid].values():
             nn5 = np.append(nn5, g['weight'])
 
-        
 
-        
 if __name__ == '__main__':
     # prov_file = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/' + \
                 # 'reference/provenance/NC2017_Dev3-provenance-ref-node.csv'

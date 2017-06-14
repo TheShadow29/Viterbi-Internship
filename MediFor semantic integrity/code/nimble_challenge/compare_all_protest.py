@@ -18,6 +18,7 @@ if __name__ == '__main__':
     # probe_file = open('../../data/protest_data/Modified_Images_ProtestL_bbox.pkl', 'rb')
     # probe_file = open('../../data/protest_data/Modified_Images_ProtestL_hist_eq.pkl')
     probe_file = open('../../data/nimble17_data/bvlc_alexnet_Modified_Images_ProtestL.pkl', 'rb')
+    # probe_file = open('../../data/nimble17_data/bvlc_alexnet_Modified_Images_ProtestL_brute.pkl', 'rb')
     probe_all_info = pickle.load(probe_file)
     # world_file = open('../../data/protest_data/Pruned_Protest_YFCCImages.pkl', 'rb')
     # world_file = open('../../data/protest_data/Pruned_Protest_YFCCImages_hist_eq.pkl', 'rb')
@@ -25,11 +26,12 @@ if __name__ == '__main__':
     world_all_info = pickle.load(world_file)
 
     world_tdir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Pruned_Protest_YFCCImages/'
-    # probe_tdir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL/'
-    probe_tdir = '../../data/protest_data/cropped/direct_cropped/'
+    probe_tdir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL/'
+    # probe_tdir = '../../data/protest_data/cropped/direct_cropped/'
     num_corr = 0
     total_num = 0
     k = 5
+    results = dict()
     for itern, p_dat in enumerate(probe_all_info.data[:]):
         # pdb.set_trace()
         print ("iter no. ", itern)
@@ -37,7 +39,7 @@ if __name__ == '__main__':
         pfid = p_dat.fid
         gt_label = int(pfid.split('.')[0].split('_')[-1])
         all_corr = np.array([])
-        
+
         for w in world_all_info.data:
             fv_world = w.fv3
             corr = two_imgs_eff.cmp_fv(fv_probe, fv_world, 'ncc')['pear_ncc']
@@ -68,14 +70,19 @@ if __name__ == '__main__':
             if w_label == gt_label:
                 guess = True
                 guess_id = it
+                if pfid in results.keys():
+                    results[pfid] += 1
+                else:
+                    results[pfid] = 1
+                    
         if guess:
             num_corr += 1
-            print ('Correct guess in top ', it)
+            print ('Correct guess in top ', guess_id)
         else:
             # disp_img.show_img_protest(l1, gt_tuple, wfid_arr, top_corr)
             print ('No correct result in top 5')
         
-        disp_img.show_img_protest(l1, gt_tuple, wfid_arr, top_corr)
+        # disp_img.show_img_protest(l1, gt_tuple, wfid_arr, top_corr)
         total_num += 1
 
     print (num_corr, total_num)
