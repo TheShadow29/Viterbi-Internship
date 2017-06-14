@@ -12,16 +12,18 @@ from parse_all_data_nimble17 import nimble_references, nimble_prov_reference, pr
 import pdb
 import disp_img
 
+
 if __name__ == '__main__':
     # probe_file = open('../../data/nimble17_data/probe.pkl', 'rb')
     # probe_file = open('../../data/nimble17_data/bvlc_alexnet_probe.pkl', 'rb')
-    # probe_file = open('../../data/nimble17_data/dev3/alexnet365_probe.pkl', 'rb')
-    probe_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_probe.pkl', 'rb')
+    probe_file = open('../../data/nimble17_data/dev3/alexnet365_probe.pkl', 'rb')
+    # probe_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_probe.pkl', 'rb')
     probe_all_info = pickle.load(probe_file)
     # world_file = open('../../data/nimble17_data/world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/bvlc_alexnet_world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/dev3/alexnet365_world.pkl', 'rb')
-    world_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_world.pkl', 'rb')
+    # world_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_world.pkl', 'rb')
+    world_file = open('../../data/nimble17_data/dev3/alexnet365_bigger_world.pkl', 'rb')
     world_all_info = pickle.load(world_file)
 
     # prov_data = nimble_references(prov_ref_file)
@@ -44,7 +46,7 @@ if __name__ == '__main__':
     bad_nums = []
     lol = 0
     # k = 10
-    for itern, p_node in enumerate(prov_data.nodes[314:]):
+    for itern, p_node in enumerate(prov_data.nodes[:]):
         # pdb.set_trace()
         print ("iter no. ", itern)
         pfid = p_node.fid
@@ -91,11 +93,12 @@ if __name__ == '__main__':
         #     shutil.copy2(src_base, dest_path + '/w_exp.jpg')
         # else:
         #     shutil.copy2(src_base, dest_path + '/w_exp.png')
-            
+        
         for i in range(k):
             # if p_dat.base_browser_file_name in world_all_info.data[top_k[i]].fid:
             guess = False
-            if world_all_info.data[ids[i]].fid[:-4] in p_node.wfids:
+            # if world_all_info.data[ids[i]].fid[:-4] in p_node.wfids:
+            if world_all_info.data[ids[i]].fid.split('.')[0].split('/')[-1] in p_node.wfids:
                 num_corr += 1
                 guess = True
                 if (guess):
