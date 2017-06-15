@@ -11,19 +11,21 @@ from get_all_feature_vecs17 import info_storer, info_storer_all
 from parse_all_data_nimble17 import nimble_references, nimble_prov_reference, prov_ref_file
 import pdb
 import disp_img
+import imshow_coll
 
 
 if __name__ == '__main__':
     # probe_file = open('../../data/nimble17_data/probe.pkl', 'rb')
     # probe_file = open('../../data/nimble17_data/bvlc_alexnet_probe.pkl', 'rb')
-    probe_file = open('../../data/nimble17_data/dev3/alexnet365_probe.pkl', 'rb')
-    # probe_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_probe.pkl', 'rb')
+    # probe_file = open('../../data/nimble17_data/dev3/alexnet365_probe.pkl', 'rb')
+    probe_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_probe.pkl', 'rb')
     probe_all_info = pickle.load(probe_file)
     # world_file = open('../../data/nimble17_data/world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/bvlc_alexnet_world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/dev3/alexnet365_world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_world.pkl', 'rb')
-    world_file = open('../../data/nimble17_data/dev3/alexnet365_bigger_world.pkl', 'rb')
+    # world_file = open('../../data/nimble17_data/dev3/alexnet365_bigger_world.pkl', 'rb')
+    world_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_bigger_world.pkl', 'rb')
     world_all_info = pickle.load(world_file)
 
     # prov_data = nimble_references(prov_ref_file)
@@ -56,7 +58,7 @@ if __name__ == '__main__':
         temp_array = np.array([])
         id_array = np.array([])
         # k = len(p_node.wfids)
-        k = 1
+        k = 10
         for idx, w in enumerate(world_all_info.data):
             if pfid not in w.fid:
                 # pdb.set_trace()
@@ -109,19 +111,25 @@ if __name__ == '__main__':
             # if (guess):
         # print
         print ('Itern is ' + str(guess))
-        if not guess:
+        # guess = False
+        # if not guess:
+        if True:
             bad_nums.append(itern)
             print 'Pfid is ' + str(p_node.fid)
             tmp_w_array = [world_all_info.data[ids[i]] for i in range(k)]
             print 'Wfids predicted are '
-            wfids_to_print = ['world/' + str(w.fid) for w in tmp_w_array]
+            # wfids_to_print = ['world/' + str(w.fid) for w in tmp_w_array]
+            # pdb.set_trace()
+            wfids_to_print = [str(w.fid) for w in tmp_w_array]
             # print [str(w.fid) for w in tmp_w_array]
             print wfids_to_print
-            l1 = 'probe/' + str(p_node.fid)
+            l1 = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/probe/' + str(p_node.fid)
+            # l1 = 'world/' + str(p_node.fid)
             l1 = [l1] + wfids_to_print
             # l1.append(wfids_to_print)
             # disp_img.show_img(l1)
-            # pdb.set_trace()
+            imshow_coll.imshow_collection_new(l1)
+            pdb.set_trace()
         
         total_num += 1
 

@@ -6,6 +6,8 @@ import caffe
 import numpy as np
 import skimage
 import pickle
+
+
 def slice_img(img, slice_id):
     assert img.shape[2] == 3
     if (slice_id== 0):#Height/2

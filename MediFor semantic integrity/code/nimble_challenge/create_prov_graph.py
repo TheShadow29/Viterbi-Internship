@@ -10,18 +10,91 @@ import matplotlib.pyplot as plt
 # import disp_img
 import imshow_coll
 import numpy as np
+from itertools import chain
 
 
-class graph_node:
-    def __init__(self, fid):
-        self.fid = fid
-        self.top_5_min = 0
+def contracted_nodes(G, u, v, self_loops=True):
+    """Returns the graph that results from contracting `u` and `v`.
+    Node contraction identifies the two nodes as a single node incident to any
+    edge that was incident to the original two nodes.
+    Parameters
+    ----------
+    G : NetworkX graph
+       The graph whose nodes will be contracted.
+    u, v : nodes
+       Must be nodes in `G`.
+    self_loops : Boolean
+       If this is True, any edges joining `u` and `v` in `G` become
+       self-loops on the new node in the returned graph.
+    Returns
+    -------
+    Networkx graph
+       A new graph object of the same type as `G` (leaving `G` unmodified)
+       with `u` and `v` identified in a single node. The right node `v`
+       will be merged into the node `u`, so only `u` will appear in the
+       returned graph.
+    Examples
+    --------
+    Contracting two nonadjacent nodes of the cycle graph on four nodes `C_4`
+    yields the path graph (ignoring parallel edges)::
+        >>> import networkx as nx
+        >>> G = nx.cycle_graph(4)
+        >>> M = nx.contracted_nodes(G, 1, 3)
+        >>> P3 = nx.path_graph(3)
+        >>> nx.is_isomorphic(M, P3)
+        True
+    See also
+    --------
+    contracted_edge
+    quotient_graph
+    Notes
+    -----
+    This function is also available as `identified_nodes`.
+    """
 
-    def get_top5_min(self, G):
-        nn5 = np.zeros(1)
-        for g in G[self.fid].values():
-            nn5 = np.append(nn5, g['weight'])
+    H = G.copy()
+    if H.is_directed():
+        in_edges = ((w, u, d) for w, x, d in G.in_edges(v, data=True)
+                    if self_loops or w != u)
+        out_edges = ((u, w, d) for x, w, d in G.out_edges(v, data=True)
+                     if self_loops or w != u)
+        new_edges = chain(in_edges, out_edges)
+    else:
+        # new_edges = ((u, w, d) for x, w, d in G.edges(v, data=True)
+        #              if self_loops or w != u)
+        new_edges = ((u, w, d) for x, w, d in G.edges(v, data=True)
+                     if self_loops or w != u)
+        new_edges = list()
+        nodes_u = [w for x, w in G.edges(u)]
+        for x, w, d in G.edges(v, data=True):
+            if w != u:
+                if w not in nodes_u:
+                    new_edges.append((u, w, d))
+                else:
+                    max_d = max(d, G[u][w])
+                    new_edges.append((u, w, max_d))
+    v_data = H.node[v]
+    pdb.set_trace()
+    H.remove_node(v)
+    H.add_edges_from(new_edges)
+    if 'contraction' in H.node[u]:
+        H.node[u]['contraction'][v] = v_data
+    else:
+        H.node[u]['contraction'] = {v: v_data}
+    return H
 
+
+# class graph_node:
+#     def __init__(self, fid):
+#         self.fid = fid
+#         self.top_5_min = 0
+
+#     # def get_top5_min(self, G):
+#     #     nn5 = np.zeros(1)
+#     #     for g in G[self.fid].values():
+#     #         nn5 = np.append(nn5, g['weight'])
+#     def get_thresh(self, G):
+#         all_corr = G.edges(self.fid, )
 
 if __name__ == '__main__':
     # prov_file = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/' + \
@@ -78,21 +151,37 @@ if __name__ == '__main__':
                     wnode_id = wfid + wfile[-4:]
                     G.add_node(wnode_id)
                     corr = two_imgs_eff.cmp_fv(fv_probe, fv_world, 'ncc')['pear_ncc']
-                    if corr > 0.9:
-                        G.add_edge(pnode_id, wnode_id, weight=corr)
+                    # if corr > 0.9:
+                    G.add_edge(pnode_id, wnode_id, weight=corr)
             except Exception as e:
                 some_problem_files += 1
                 pass
         print ('Itern ', itern)
-    fig_save_dir = '../../data/nimble17_data/dev1/'
-    for ind, c in enumerate(sorted(nx.connected_components(G), key=len, reverse=True)):
-        c1 = list(c)
-        l1 = [wtdir + w for w in c1]
-        fig = imshow_coll.imshow_collection_new(l1, show=False)
-        fig.savefig(fig_save_dir + str(ind) + '.png')
-        print ('Ind ', ind)
-        # fig.show()
-        # pdb.set_trace()
+
+    # Now I have the compelte graph that would be required.
+    # Now I should contract similar nodes
+    clusters = [[]]
+    for node in G.nodes():
+        neighbors = G[node]
+        max_v = 0
+        max_k = ''
+        for k, v in neighbors:
+            if v > max_v:
+                max_v = v
+                max_k = k
+        if (max_v > thresh):
+            G = contracted_nodes(G, node, k)
+
+
+    fig_save_dir = '../../data/nimble17_data/dev1/max_grapher/'
+    # for ind, c in enumerate(sorted(nx.connected_components(G), key=len, reverse=True)):
+    # c1 = list(c)
+    # l1 = [wtdir + w for w in c1]
+    # fig = imshow_coll.imshow_collection_new(l1, show=False)
+    # fig.savefig(fig_save_dir + str(ind) + '.png')
+    # print ('Ind ', ind)
+    # fig.show()
+    # pdb.set_trace()
     # elarge = [(u, v) for (u, v, d) in G.edges(data=True) if d['weight'] > 0.5]
     # esmall = [(u, v) for (u, v, d) in G.edges(data=True) if d['weight'] <= 0.5]
     # pos = nx.spring_layout(G)   # positions for all nodes

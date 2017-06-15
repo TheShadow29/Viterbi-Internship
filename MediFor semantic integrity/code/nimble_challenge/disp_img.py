@@ -41,7 +41,8 @@ def show_img(l1):
     # plt.subplot()
     full_file_name = []
     for i in range(len(l1)):
-        full_file_name.append(fname + l1[i])
+        # full_file_name.append(fname + l1[i])
+        full_file_name.append(l1[i])
     f = full_file_name[0]
     # pdb.set_trace()
     probe_img = io.imread(f + '.jpg')

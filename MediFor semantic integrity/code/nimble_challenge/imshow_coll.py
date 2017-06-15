@@ -25,7 +25,11 @@ def imshow_collection_new(l1, show=True):
             im1 = io.imread(f)
             im2 = im1[0]
             plt.imshow(im2)
-
+        except IOError:
+            try:
+                plt.imshow(io.imread(f + '.jpg'))
+            except IOError:
+                plt.imshow(io.imread(f + '.png'))
     if show:
         plt.show()
-    return fig 
+    return fig
