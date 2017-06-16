@@ -14,13 +14,13 @@ import imshow_coll
 if __name__ == '__main__':
     # probe_file = open('../../data/nimble17_data/probe.pkl', 'rb')
     # probe_file = open('../../data/nimble17_data/bvlc_alexnet_probe.pkl', 'rb')
-    probe_file = open('../../data/nimble17_data/dev3/alexnet365_probe.pkl', 'rb')
-    # probe_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_probe.pkl', 'rb')
+    # probe_file = open('../../data/nimble17_data/dev3/alexnet365_probe.pkl', 'rb')
+    probe_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_probe.pkl', 'rb')
     probe_all_info = pickle.load(probe_file)
     # world_file = open('../../data/nimble17_data/world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/bvlc_alexnet_world.pkl', 'rb')
-    world_file = open('../../data/nimble17_data/dev3/alexnet365_world.pkl', 'rb')
-    # world_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_world.pkl', 'rb')
+    # world_file = open('../../data/nimble17_data/dev3/alexnet365_world.pkl', 'rb')
+    world_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/dev3/alexnet365_bigger_world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_bigger_world.pkl', 'rb')
     world_all_info = pickle.load(world_file)
@@ -38,11 +38,12 @@ if __name__ == '__main__':
         dict_world[w.fid[:-4]] = i
 
     num_corr = 0
-    total_num = 0
+    total_num = 1
     goods = 0
     bad_nums = []
     wtdir = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/world/'
-
+    intersection_array = []
+    total_wfids_array = []
     for itern, p_node in enumerate(prov_data.nodes[:]):
         # pdb.set_trace()
         # print ("iter no. ", itern)
@@ -97,11 +98,23 @@ if __name__ == '__main__':
             if set(p_node.wfids) == set(curr_wfids):
                 num_corr += 1
                 guess = True
+            comm_elm = len(set(p_node.wfids) & set(curr_wfids))
+            intersection_array.append(comm_elm)
+            total_wfids_array.append(len(p_node.wfids))
         else:
             if set(p_node.wfids) == set(curr_wfids[1:]):
                 num_corr += 1
                 guess = True
-        print ('Itern ', itern ,' ' + str(guess))
+            comm_elm = len(set(p_node.wfids) & set(curr_wfids[1:]))
+            intersection_array.append(comm_elm)
+            total_wfids_array.append(len(p_node.wfids))
+        # if True:
+            # l1 = [wtdir + e for e in curr_wfids]
+            # imshow_coll.imshow_collection_new(l1)
+        print ('Itern ', itern, ' ' + str(guess), ' comm_elm = ' + str(comm_elm), 'total_elm = ' + str(len(p_node.wfids)))
+        if total_num % 10 == 0:
+            print ('num_corr/total_num = ', str(num_corr) + '/' + str(total_num), str(num_corr*1.0/total_num), 'Average predction', str(sum(intersection_array)) + '/' + str(sum(total_wfids_array)), str(sum(intersection_array)*1.0/sum(total_wfids_array)))
+            
     #     if True:
     #         bad_nums.append(itern)
     #         print 'Pfid is ' + str(p_node.fid)
