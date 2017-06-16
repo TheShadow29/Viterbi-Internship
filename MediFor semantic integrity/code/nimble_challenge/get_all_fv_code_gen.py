@@ -115,6 +115,8 @@ if __name__ == '__main__':
     # img_top_dir = '../../data/nimble17_data/spliced/' #
     # img_top_dir = '../../data/nimble17_data/provenance/'
     # img_top_dir = '/arka_data/NC2017_Dev1_Beta4/world/'
+    # img_top_dir = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/world/'
+    # img_top_dir = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/world/'
     # img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Pruned_Protest_YFCCImages/'
     # img_top_dir = '../../data/protest_data/cropped/direct_cropped/'
     # img_top_dir = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/world/'
