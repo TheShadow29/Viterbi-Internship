@@ -23,8 +23,9 @@ if __name__ == '__main__':
     # probe_file = open('../../data/nimble17_data/dev3/alexnet365_probe.pkl', 'rb')
     # probe_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_probe.pkl', 'rb')
     # probe_file = open('../../data/nimble17_data/alexnet365_dev1_seed_1.pkl', 'rb')
-    probe_file = open('../../data/nimble17_data/alexnet365_dev3_seed_1.pkl', 'rb')
+    # probe_file = open('../../data/nimble17_data/alexnet365_dev3_seed_1.pkl', 'rb')
     # probe_file = open('../../data/nimble17_data/bvlc_alexnet_dev1_seed_1.pkl', 'rb')
+    probe_file = open('../../data/nimble17_data/bvlc_alexnet_dev3_seed_1.pkl', 'rb')
     probe_all_info = pickle.load(probe_file)
     # world_file = open('../../data/nimble17_data/world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/bvlc_alexnet_world.pkl', 'rb')
@@ -34,7 +35,8 @@ if __name__ == '__main__':
     # world_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_bigger_world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/alexnet365_NC2017_Dev1_Beta4_world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/bvlc_alexnet_NC2017_Dev1_Beta4_world.pkl')
-    world_file = open('../../data/nimble17_data/alexnet365_NC2017_Dev3_Beta1_world.pkl')
+    # world_file = open('../../data/nimble17_data/alexnet365_NC2017_Dev3_Beta1_world.pkl')
+    world_file = open('../../data/nimble17_data/bvlc_alexnet_NC2017_Dev3_Beta1_world.pkl', 'rb')
     world_all_info = pickle.load(world_file)
 
     num_corr = 0
@@ -60,7 +62,7 @@ if __name__ == '__main__':
         temp_array = np.array([])
         id_array = np.array([])
         # k = len(p_node.wfids)
-        k = 5
+        k = 1
         for idx, w in enumerate(world_all_info.data):
             if pfid not in w.fid:
                 # pdb.set_trace()
@@ -93,6 +95,7 @@ if __name__ == '__main__':
             corr1 = two_imgs_eff.cmp_fv(wi.fv3, wbase_gt.fv3, 'ncc')['pear_ncc']
             bool2 = corr1 > 0.95
             if bool1 or bool2:
+            # if bool1:
                 num_corr += 1
                 guess = True
                 if (guess):
@@ -127,8 +130,8 @@ if __name__ == '__main__':
             l1 = l1 + wfids_to_print2
             # l1.append(wfids_to_print)
             # disp_img.show_img(l1)
-            imshow_coll.imshow_collection_new(l1)
-            pdb.set_trace()
+            # imshow_coll.imshow_collection_new(l1)
+            # pdb.set_trace()
 
         total_num += 1
 
