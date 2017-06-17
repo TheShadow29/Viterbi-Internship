@@ -88,3 +88,31 @@ def show_with_bbox(img, bbox):
     rect = mpatches.Rectangle((x1, y1), rect_width, rect_height, edgecolor='r', facecolor='none')
     ax.add_patch(rect)
     plt.show()
+
+
+def show_with_bbox(img, bbox):
+    """
+    Expecting bbox as a 4-valued tuple
+    Format <x1,y1,probe_w,probe_h>
+    """
+    x1 = bbox[0]
+    y1 = bbox[1]
+    # x2 = bbox[2]
+    rect_width = bbox[2]
+    # y2 = bbox[3]
+    rect_height = bbox[3]
+    # pdb.set_trace()
+    # rect_height = y2 - y1
+    # rect_width = x2 - x1
+    # fig = plt.figure()
+    # ax = fig.add_subplot(1, 1, 1)
+    fig, ax = plt.subplots(1)
+    ax.imshow(img)
+    
+    # Rectangle(xy, width, height, angle=0.0, **kwargs)
+    # Note that in matplotlib, the lower left is (0,0)
+    # Draw a rectangle with lower left at xy = (x, y) with specified width and height
+    # lower left corner will be x1,y2
+    rect = mpatches.Rectangle((x1, y1), rect_width, rect_height, edgecolor='r', facecolor='none')
+    ax.add_patch(rect)
+    plt.show()

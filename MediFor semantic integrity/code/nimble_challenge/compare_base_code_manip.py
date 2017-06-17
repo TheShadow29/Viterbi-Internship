@@ -25,7 +25,8 @@ if __name__ == '__main__':
     # probe_file = open('../../data/nimble17_data/alexnet365_dev1_seed_1.pkl', 'rb')
     # probe_file = open('../../data/nimble17_data/alexnet365_dev3_seed_1.pkl', 'rb')
     # probe_file = open('../../data/nimble17_data/bvlc_alexnet_dev1_seed_1.pkl', 'rb')
-    probe_file = open('../../data/nimble17_data/bvlc_alexnet_dev3_seed_1.pkl', 'rb')
+    # probe_file = open('../../data/nimble17_data/bvlc_alexnet_dev3_seed_1.pkl', 'rb')
+    probe_file = open('../../data/nimble17_data/alexnet365_dev3_seed_2.pkl', 'rb')
     probe_all_info = pickle.load(probe_file)
     # world_file = open('../../data/nimble17_data/world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/bvlc_alexnet_world.pkl', 'rb')
@@ -35,8 +36,9 @@ if __name__ == '__main__':
     # world_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_bigger_world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/alexnet365_NC2017_Dev1_Beta4_world.pkl', 'rb')
     # world_file = open('../../data/nimble17_data/bvlc_alexnet_NC2017_Dev1_Beta4_world.pkl')
-    # world_file = open('../../data/nimble17_data/alexnet365_NC2017_Dev3_Beta1_world.pkl')
-    world_file = open('../../data/nimble17_data/bvlc_alexnet_NC2017_Dev3_Beta1_world.pkl', 'rb')
+    world_file = open('../../data/nimble17_data/alexnet365_NC2017_Dev3_Beta1_world.pkl')
+    # world_file = open('../../data/nimble17_data/bvlc_alexnet_NC2017_Dev3_Beta1_world.pkl', 'rb')
+    # world_file = open('..')
     world_all_info = pickle.load(world_file)
 
     num_corr = 0
@@ -45,7 +47,8 @@ if __name__ == '__main__':
     bad_nums = []
 
     # test_dir = '/mnt/disk1/ark_data/code_manip/dev1/seed_1/'
-    test_dir = '/mnt/disk1/ark_data/code_manip/dev3/seed_1/'
+    # test_dir = '/mnt/disk1/ark_data/code_manip/dev3/seed_1/'
+    test_dir = '/mnt/disk1/ark_data/code_manip/dev3/seed_2/'
     test_imgs = []
     for f in os.listdir(test_dir):
         if f[-4:] == '.jpg' or f[-4:] == '.png':
@@ -62,7 +65,7 @@ if __name__ == '__main__':
         temp_array = np.array([])
         id_array = np.array([])
         # k = len(p_node.wfids)
-        k = 1
+        k = 10
         for idx, w in enumerate(world_all_info.data):
             if pfid not in w.fid:
                 # pdb.set_trace()

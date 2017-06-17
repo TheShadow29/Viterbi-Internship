@@ -6,7 +6,7 @@ import caffe
 import numpy as np
 import skimage
 import pickle
-
+import fnmatch
 
 def slice_img(img, slice_id):
     assert img.shape[2] == 3
@@ -31,7 +31,8 @@ def worker_task(img_top_dir, transformer, slice_id, bbox_dict='none'):
         if q1.qsize() < 100:
             img_file_name = q2.get()
             # img1_path, img2_path = img_paths(img_folder_num, img_top_dir)
-            img1 = caffe.io.load_image(img_top_dir + img_file_name)
+            # img1 = caffe.io.load_image(img_top_dir + img_file_name)
+            img1 = caffe.io.load_image(img_file_name)
             if (bbox_dict != 'none' and bbox_dict != 'hist_eq'):
                 pts = bbox_dict[img_file_name[:-4]]
                 img1 = img1[pts[1]:pts[3], pts[0]:pts[2]]
@@ -122,7 +123,9 @@ if __name__ == '__main__':
     # img_top_dir = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/world/'
     # img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL/'
     # img_top_dir = '/mnt/disk1/ark_data/code_manip/dev1/seed_1/'
-    img_top_dir = '/mnt/disk1/ark_data/code_manip/dev3/seed_1/'
+    # img_top_dir = '/mnt/disk1/ark_data/code_manip/dev3/seed_1/'
+    # img_top_dir = '/mnt/disk1/ark_data/code_manip/dev3/seed_2/'
+    img_top_dir = '/mnt/disk1/ark_data/places365/data_256/'
     folder_name = img_top_dir.split('/')[-3] + '_' + img_top_dir.split('/')[-2]
     # folder_name = 'Modified_Images_ProtestL'
     # res = ''
@@ -137,9 +140,12 @@ if __name__ == '__main__':
     #     if img_paths(subdir, img_top_dir) == -1:
     #         img_dirs.remove(subdir)
     img_file_names = []
-    for files in os.listdir(img_top_dir):
-        if files[-4:] == '.jpg' or files[-4:] == '.png':
-            img_file_names.append(files)
+    # for files in os.listdir(img_top_dir):
+    #     if files[-4:] == '.jpg' or files[-4:] == '.png':
+    #         img_file_names.append(files)
+    for root, directories, filenames in os.walk(img_top_dir):
+        for f in fnmatch.filter(filenames, '*.*g'):
+            img_file_names.append(os.path.join(root, f))
     num_process = mp.cpu_count() - 1
     # count = [0]
     for i in img_file_names:
