@@ -7,6 +7,8 @@ import numpy as np
 import skimage
 import pickle
 import fnmatch
+import sys
+
 
 def slice_img(img, slice_id):
     assert img.shape[2] == 3
@@ -125,8 +127,9 @@ if __name__ == '__main__':
     # img_top_dir = '/mnt/disk1/ark_data/code_manip/dev1/seed_1/'
     # img_top_dir = '/mnt/disk1/ark_data/code_manip/dev3/seed_1/'
     # img_top_dir = '/mnt/disk1/ark_data/code_manip/dev3/seed_2/'
-    img_top_dir = '/mnt/disk1/ark_data/places365/data_256/'
-    folder_name = img_top_dir.split('/')[-3] + '_' + img_top_dir.split('/')[-2]
+    img_top_dir = '/mnt/disk1/ark_data/places365/data_256/' + sys.argv[1] + '/'
+    folder_name = img_top_dir.split('/')[-4] + img_top_dir.split('/')[-3] + '_' + \
+                  img_top_dir.split('/')[-2]
     # folder_name = 'Modified_Images_ProtestL'
     # res = ''
     dict_npy_file = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/mod_fine_labels.npy'
