@@ -1,4 +1,5 @@
 function [boxes] = gen_bbx_ss(img)
+    addpath('../../../SelectiveSearchCodeIJCV/')
     addpath('../../../SelectiveSearchCodeIJCV/Dependencies/')
     simFunctionHandles = {@SSSimColourTextureSizeFillOrig, @SSSimTextureSizeFill, @SSSimBoxFillOrig, @SSSimSize};
     simFunctionHandles = simFunctionHandles(1:2); % Two different merging strategies
