@@ -30,7 +30,7 @@ def plot_roc(G, list_probe_files, thresholds, pr_nodes):
                     fp += 1
         tp_list_for_diff_thresh.append(tp)
         fp_list_for_diff_thresh.append(fp)
-                    
+
     plt.figure()
     # plt.plot(fp_list_for_diff_thresh, tp_list_for_diff_thresh)
     plt.scatter(fp_list_for_diff_thresh, tp_list_for_diff_thresh)
@@ -75,8 +75,47 @@ def plot_roc1(G, dict_probe_world_files, thresholds, pr_nodes):
     plt.title('ROC curve discarding ref-nodes')
     plt.show()
     return fp_list_for_diff_thresh, tp_list_for_diff_thresh
-        
-                    
+
+
+# def plot_roc2(G, dict_probe_world_files, thresholds, pr_nodes):
+#     tp_list_for_diff_thresh = []
+#     fp_list_for_diff_thresh = []
+#     for t in thresholds:
+#         tp = 0
+#         fp = 0
+#         # pdb.set_trace()
+#         for ind, pfile in enumerate(dict_probe_world_files.keys()):
+#             # pdb.set_trace()
+#             gt_base_file = dict_probe_world_files[pfile]
+#             # pfid = pfile.split('/')[-1]
+#             pfid = pfile
+#             node_ind = pr_nodes.nodes_dict[pfid[:-4]]
+#             pnode = pr_nodes.nodes[node_ind]
+#             # for e in G.edges(pfid, data=True):
+#             # pdb.set_trace()
+#             edge_list = [(u, v, d) for (u, v, d) in G.edges(pfid, data=True) if d['weight'] > t]
+#             # pdb.set_trace()
+#             for u, v, d in edge_list:
+#                 v1 = v[:-4]
+#                 # pdb.set_trace()
+#                 l1 = []
+#                 l1.append(v1)
+#                 while True:
+#                     if gt_base_file in l1:
+#                         tp += 1
+#                         break
+#                     else:
+#         tp_list_for_diff_thresh.append(tp)
+#         fp_list_for_diff_thresh.append(fp)
+
+#     plt.figure()
+#     # plt.plot(fp_list_for_diff_thresh, tp_list_for_diff_thresh)
+#     plt.scatter(fp_list_for_diff_thresh, tp_list_for_diff_thresh)
+#     plt.title('ROC curve discarding ref-nodes')
+#     plt.show()
+#     return fp_list_for_diff_thresh, tp_list_for_diff_thresh
+
+
 def plot_cmc(G, list_probe_files, pr_nodes, ranks):
     tpir_list_for_diff_ranks = []
     for r in ranks:
@@ -90,16 +129,21 @@ def plot_cmc(G, list_probe_files, pr_nodes, ranks):
             edge_list_upto_rank_r = edge_list_sorted[:r]
     # ###########INCOMPLETE##################
     # ########I have no clue#################
-            
+
 
 if __name__ == '__main__':
-    graph_file = open('../../data/nimble17_data/NC2017_Dev1_Beta4_world_graph_all_corr.pkl', 'rb')
+    # graph_file = open('../../data/nimble17_data/NC2017_Dev1_Beta4_world_graph_all_corr.pkl', 'rb')
+    graph_file = open('../../data/nimble17_data/NC2017_Dev3_Beta1_world_graph_all_corr.pkl')
     G = pickle.load(graph_file)
-    prov_file_loc = '/arka_data/NC2017_Dev1_Beta4/reference/' + \
-                    'provenance/NC2017_Dev1-provenance-ref.csv'
-    prov_ref_node_file = '/arka_data/NC2017_Dev1_Beta4/reference/provenance/' + \
-                         'NC2017_Dev1-provenance-ref-node.csv'
-    # prov_file_loc = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/' + \
+    # prov_file_loc = '/arka_data/NC2017_Dev1_Beta4/reference/' + \
+    #                 'provenance/NC2017_Dev1-provenance-ref.csv'
+    # prov_ref_node_file = '/arka_data/NC2017_Dev1_Beta4/reference/provenance/' + \
+    #                      'NC2017_Dev1-provenance-ref-node.csv'
+    prov_file_loc = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/' + \
+                    'reference/provenance/NC2017_Dev3-provenance-ref.csv'
+    prov_ref_node_file = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/' + \
+                         'reference/provenance/NC2017_Dev3-provenance-ref-node.csv'
+    
     # 'reference/provenance/NC2017_Dev3-provenance-ref.csv'
     prov_file = open(prov_file_loc, 'rb')
     reader = pd.read_csv(prov_file, sep='|')
@@ -114,4 +158,5 @@ if __name__ == '__main__':
     pr_nodes = prnc.prov_nodes(prov_ref_node_file)
     pr_nodes.populate_data()
     # plot_roc(G, list_probe_files, thresholds, pr_nodes)
-    fpl, tpl = plot_roc1(G, dict_probe_world_files, thresholds, pr_nodes)
+    # fpl, tpl = plot_roc1(G, dict_probe_world_files, thresholds, pr_nodes)
+    fpl, tpl = plot_roc2(G, dict_probe_world_files, thresholds, pr_nodes)

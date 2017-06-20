@@ -2,7 +2,12 @@ import numpy as np
 import os
 import pickle
 import scipy.io as sio
+import skimage.io as skio
 import pdb
+import sys
+sys.path.append('../nimble_challenge/')
+import disp_img
+
 
 def get_area(bbox):
     '''
@@ -47,17 +52,24 @@ if __name__ == '__main__':
     num_cor = 0
     for f1 in file_list[:]:
         iou_list = list()
-        b1 = gt_dict_bbox[f1]
+        b1 = gt_dict_bbox[f1].copy()
         b1[2] = b1[0] + b1[2]
         b1[3] = b1[1] + b1[3]
         b2 = pred_dict_bbox[f1]
-        for i in range(len(b2[:])):
+        for i in range(len(b2[:20])):
+            b2[i][0], b2[i][1] = b2[i][1], b2[i][0]
+            b2[i][2], b2[i][3] = b2[i][3], b2[i][2]
             _, _, iou = get_iou(b2[i] - 1, b1)
             iou_list.append(iou)
         # print max(iou_list)
         iou_np = np.array(iou_list)
         ids = iou_np.argsort()[::-1]
+        # print b1, f1
         print ids[0], b2[ids[0]], iou_np[ids[0]]
+        img = skio.imread(img_tdir + f1)
+        # disp_img.show_with_bbox(img, gt_dict_bbox[f1])
+        b2b = b2[ids[0]]
+        # disp_img.show_with_bbox(img, [b2b[0], b2b[1], b2b[2] - b2b[0], b2b[3] - b2b[1]])
         total_num += 1
         if iou_np[ids[0]] > 0.5:
             num_cor += 1
