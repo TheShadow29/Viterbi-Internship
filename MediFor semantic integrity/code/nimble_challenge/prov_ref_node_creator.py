@@ -16,6 +16,7 @@ class prov_ref_node:
 class prov_nodes:
     def __init__(self, file_name):
         self.file_name = file_name
+        self.nodes_dict = dict()
         self.nodes = []
         return
 
@@ -35,9 +36,11 @@ class prov_nodes:
                 curr_prov_ref_node = prov_ref_node(curr_id)
             elif curr_id != prev_id and prev_id != '':
                 self.nodes.append(curr_prov_ref_node)
+                self.nodes_dict[curr_prov_ref_node.fid] = len(self.nodes) - 1
                 curr_prov_ref_node = prov_ref_node(curr_id)
             curr_prov_ref_node.append_wfids(row['WorldFileID'])
         self.nodes.append(curr_prov_ref_node)
+        self.nodes_dict[curr_prov_ref_node.fid] = len(self.nodes) - 1
         f.close()
 
 
