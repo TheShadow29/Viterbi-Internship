@@ -5,12 +5,14 @@ import pdb
 import os
 import two_imgs_eff
 import pickle
-from get_all_feature_vecs17 import info_storer, info_storer_all
+# from get_all_feature_vecs17 import info_storer, info_storer_all
+from get_all_fv_code_gen import info_storer, info_storer_all
 import matplotlib.pyplot as plt
 # import disp_img
 import imshow_coll
 import numpy as np
 from itertools import chain
+import pickle
 
 
 def contracted_nodes(G, u, v, self_loops=True):
@@ -103,77 +105,98 @@ if __name__ == '__main__':
     # prov_data.populate_data()
 
     # probe_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_probe.pkl', 'rb')
-    probe_file = open('../../data/nimble17_data/probe.pkl', 'rb')
-    probe_all_info = pickle.load(probe_file)
+    # probe_file = open('../../data/nimble17_data/probe.pkl', 'rb')
+    # probe_file = open('../../data/nimble17_data/alexnet365_NC2017_Dev1_Beta4_world.pkl', 'rb')
+    # probe_all_info = pickle.load(probe_file)
 
     # world_file = open('../../data/nimble17_data/dev3/bvlc_alexnet_world.pkl', 'rb')
-    world_file = open('../../data/nimble17_data/world.pkl', 'rb')
+    # world_file = open('../../data/nimble17_data/world.pkl', 'rb')
+    # world_file = open('../../data/nimble17_data/alexnet365_NC2017_Dev1_Beta4_world.pkl', 'rb')
+    # net_name = 'alex'
+    world_file = open('../../data/nimble17_data/alexnet365_NC2017_Dev3_Beta1_world.pkl', 'rb')
     world_all_info = pickle.load(world_file)
 
-    dict_probe = dict()
-    dict_world = dict()
-    for i, p in enumerate(probe_all_info.data):
-        dict_probe[p.fid[:-4]] = i
-    for i, w in enumerate(world_all_info.data):
-        dict_world[w.fid[:-4]] = i
+    # dict_probe = dict()
+    # dict_world = dict()
+    # for i, p in enumerate(probe_all_info.data):
+    #     dict_probe[p.fid[:-4]] = i
+    # for i, w in enumerate(world_all_info.data):
+    #     dict_world[w.fid[:-4]] = i
 
-    prov_file_loc = '/arka_data/NC2017_Dev1_Beta4/reference/' + \
-                    'provenance/NC2017_Dev1-provenance-ref.csv'
+    # prov_file_loc = '/arka_data/NC2017_Dev1_Beta4/reference/' + \
+    # 'provenance/NC2017_Dev1-provenance-ref.csv'
+
+    prov_file_loc = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/' + \
+                    'reference/provenance/NC2017_Dev3-provenance-ref.csv'
     prov_file = open(prov_file_loc, 'rb')
     reader = pd.read_csv(prov_file, sep='|')
     G = nx.Graph()
     list_probe_files = []
     for ind, row in reader.iterrows():
         list_probe_files.append(row['ProvenanceProbeFileName'])
-    list_world_files = []
-    wtdir = '/arka_data/NC2017_Dev1_Beta4/world/'
+    # list_world_files = []
+    # wtdir = '/arka_data/NC2017_Dev1_Beta4/world/'
+    wtdir = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/world/'
+    out_file_name = '_'.join(wtdir.split('/')[-3:-1])
 
-    for wfile in os.listdir(wtdir):
-        if wfile[-4:] == '.jpg' or wfile[-4:] == '.png':
-            list_world_files.append(wfile)
+    # for wfile in os.listdir(wtdir):
+    #     if wfile[-4:] == '.jpg' or wfile[-4:] == '.png':
+    #         list_world_files.append(wfile)
+
     some_problem_files = 0
+
     for itern, pfile in enumerate(list_probe_files[:]):
-        pfid = pfile.split('.')[0].split('/')[-1]
+        # pfid = pfile.split('.')[0].split('/')[-1]
         # pid = dict_probe[pfid]
-        pid = dict_world[pfid]
+        # pid = dict_world[pfid]
+        pfid = pfile.split('/')[-1]
+        pid = world_all_info.data_id_dict[pfid]
         # probe_info = probe_all_info.data[pid]
         probe_info = world_all_info.data[pid]
         fv_probe = probe_info.fv3
-        pnode_id = pfid + pfile[-4:]
+        pnode_id = pfid
         G.add_node(pnode_id)
-        for wfile in list_world_files[:]:
-            wfid = wfile.split('.')[0]
-            try:
-                wid = dict_world[wfid]
-                world_info = world_all_info.data[wid]
-                fv_world = world_info.fv3
-                if pfid != wfid:
-                    wnode_id = wfid + wfile[-4:]
-                    G.add_node(wnode_id)
-                    corr = two_imgs_eff.cmp_fv(fv_probe, fv_world, 'ncc')['pear_ncc']
-                    # if corr > 0.9:
-                    G.add_edge(pnode_id, wnode_id, weight=corr)
-            except Exception as e:
-                some_problem_files += 1
-                pass
+        # for wfile in list_world_files[:]:
+        #     wfid = wfile.split('.')[0]
+        #     try:
+        #         wid = dict_world[wfid]
+        #         world_info = world_all_info.data[wid]
+        #         fv_world = world_info.fv3
+        #         if pfid != wfid:
+        #             wnode_id = wfid + wfile[-4:]
+        #             G.add_node(wnode_id)
+        #             corr = two_imgs_eff.cmp_fv(fv_probe, fv_world, 'ncc')['pear_ncc']
+        #             # if corr > 0.9:
+        #             G.add_edge(pnode_id, wnode_id, weight=corr)
+        #     except Exception as e:
+        #         some_problem_files += 1
+        #         pass
+        for w in world_all_info.data:
+            if w.fid != pfid:
+                corr = two_imgs_eff.cmp_fv(fv_probe, w.fv3, 'ncc')['pear_ncc']
+                G.add_edge(pnode_id, w.fid, weight=corr)
+
         print ('Itern ', itern)
 
+    g = open('../../data/nimble17_data/' + out_file_name + '_graph_all_corr.pkl', 'w')
+    pickle.dump(G, g)
+    g.close()
     # Now I have the compelte graph that would be required.
     # Now I should contract similar nodes
-    clusters = [[]]
-    for node in G.nodes():
-        neighbors = G[node]
-        max_v = 0
-        max_k = ''
-        for k, v in neighbors:
-            if v > max_v:
-                max_v = v
-                max_k = k
-        if (max_v > thresh):
-            G = contracted_nodes(G, node, k)
+    # clusters = [[]]
+    # for node in G.nodes():
+    #     neighbors = G[node]
+    #     max_v = 0
+    #     max_k = ''
+    #     for k, v in neighbors:
+    #         if v > max_v:
+    #             max_v = v
+    #             max_k = k
+        # if (max_v > thresh):
+            # G = contracted_nodes(G, node, k)
 
 
-    fig_save_dir = '../../data/nimble17_data/dev1/max_grapher/'
+    # fig_save_dir = '../../data/nimble17_data/dev1/max_grapher/'
     # for ind, c in enumerate(sorted(nx.connected_components(G), key=len, reverse=True)):
     # c1 = list(c)
     # l1 = [wtdir + w for w in c1]
