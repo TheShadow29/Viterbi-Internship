@@ -64,8 +64,8 @@ def contracted_nodes(G, u, v, self_loops=True):
     else:
         # new_edges = ((u, w, d) for x, w, d in G.edges(v, data=True)
         #              if self_loops or w != u)
-        new_edges = ((u, w, d) for x, w, d in G.edges(v, data=True)
-                     if self_loops or w != u)
+        # new_edges = ((u, w, d) for x, w, d in G.edges(v, data=True)
+        # if self_loops or w != u)
         new_edges = list()
         nodes_u = [w for x, w in G.edges(u)]
         for x, w, d in G.edges(v, data=True):
