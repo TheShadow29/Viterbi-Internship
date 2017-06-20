@@ -33,6 +33,21 @@ def plot_roc(G, list_probe_files, thresholds, pr_nodes):
     plt.scatter(fp_list_for_diff_thresh, tp_list_for_diff_thresh)
     plt.show()
 
+def plot_cmc(G, list_probe_files, pr_nodes, ranks):
+    tpir_list_for_diff_ranks = []
+    for r in ranks:
+        # tpir = 0
+        for ind, pfile in enumerate(list_probe_files):
+            pfid = pfile.split('/')[-1]
+            node_ind = pr_nodes.nodes_dict[pfid[:-4]]
+            pnode = pr_nodes.nodes[node_ind]
+            # -dat['weight'] to get in descending order
+            edge_list_sorted = sorted(G.edges(pfid, data=True), key=lambda (src, dest, dat) : -dat['weight'])
+            edge_list_upto_rank_r = edge_list_sorted[:r]
+    ############INCOMPLETE##################
+    #########I have no clue#################
+            
+
 if __name__ == '__main__':
     graph_file = open('../../data/nimble17_data/NC2017_Dev1_Beta4_world_graph_all_corr.pkl', 'rb')
     G = pickle.load(graph_file)
