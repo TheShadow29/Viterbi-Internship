@@ -11,6 +11,7 @@ import pdb
 import disp_img
 import imshow_coll
 
+
 if __name__ == '__main__':
     # probe_file = open('../../data/nimble17_data/probe.pkl', 'rb')
     # probe_file = open('../../data/nimble17_data/bvlc_alexnet_probe.pkl', 'rb')
@@ -44,6 +45,7 @@ if __name__ == '__main__':
     wtdir = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/world/'
     intersection_array = []
     total_wfids_array = []
+    tp_array = [0 for i in range(26)]
     for itern, p_node in enumerate(prov_data.nodes[:]):
         # pdb.set_trace()
         # print ("iter no. ", itern)
@@ -94,6 +96,7 @@ if __name__ == '__main__':
         # imshow_coll.imshow_collection_new([wtdir + w123 for w123 in curr_wfids])
         # if (len(p_node.wfids) == len(set(p_node.wfids) & set(curr_wfids[1:]))):
         guess = False
+        
         if not plus_one:
             if set(p_node.wfids) == set(curr_wfids):
                 num_corr += 1

@@ -557,6 +557,31 @@ Target :
 \item Read the paper on Matching Net (found on Arxiv).
 \end{itemize}
 
+Accomplished :
+\begin{itemize}
+\item ROC and CMC giving a bit baffling results.
+\item Corrected the IOU, now its 0.96, which is quite decent actually.
+\item Brainstormed about the donor matching part. Wrote quite a few points. Summarized below:
+  \begin{itemize}
+  \item Might need a better dataset.
+  \item Can for now take the best IOU. Also need to take care that donor should be more or less be completely inside the bbx.
+  \item Still need to figure out a way to see if an image is manipulated, and then see where the manipulation has occured.
+  \item Can use image segmentation as well as brute force matching (still need to explore this idea a bit further).
+  \item Need to employ some or the other form of Image Normalization.
+  \item Specialized methods for text detection and person id. Can try to match it across donors.
+  \end{itemize}
+\item Read a paper on text detection. Interesting paper and the code is also available. Wasn't able to make the Cython part of the code run, but once done, it should be trivial from there on.
+\end{itemize}
+
+\subsubsection{June 21 : Wednesday}
+Target :
+\begin{itemize}
+\item Try to get even better ROC plots.
+\item Try to run the text detection code at the earliest.
+\item If detected crop, normalize and check across protest datasets.
+\item May also try face detection, but not too sure on that part. (Bit behind on the list).
+\end{itemize}
+
 \section{Weekly Progress}
 \subsection{Week 1}
 Accomplished:
