@@ -579,9 +579,21 @@ Target :
 \item Try to get even better ROC plots.
 \item Try to run the text detection code at the earliest.
 \item If detected crop, normalize and check across protest datasets.
-\item May also try face detection, but not too sure on that part. (Bit behind on the list).
+\item May also try face detection, but not too sure on that part. (Bit behind on the list). Also Kan might already be working on it.
 \end{itemize}
 
+Notes to self :
+\begin{itemize}
+\item The text detection is pretty cool.
+\item Next task would be to crop the bbox regions, and then try to run a brute force search on the whole world dataset.
+\item Now I just need to get as many curves (roc, cmc) as possible, more importantly as good as possible.
+\end{itemize}
+
+Accomplished :
+\begin{itemize}
+\item Got the text detection code working. Giving better than expected results. But Rama has a fair point. It will be troublesome if the background images has a lot of text in it giving rise to a lot of false posiitives. Not a sure shot method but interesting results I would say.
+% \item 
+\end{itemize}
 \section{Weekly Progress}
 \subsection{Week 1}
 Accomplished:
