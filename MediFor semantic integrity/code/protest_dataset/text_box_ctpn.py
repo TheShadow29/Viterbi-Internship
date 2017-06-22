@@ -51,6 +51,8 @@ if __name__ == '__main__':
         if fls[-4:] == '.png' or fls[-4:] == '.jpg':
             img_file_list.append(fls)
     dict_img_text_lines = dict()
+    exceptions = 0
+    no_text_images = 0
     for itern, img_fname in enumerate(img_file_list):
         try:
             img1 = skio.imread(img_tdir + img_fname)
@@ -66,12 +68,17 @@ if __name__ == '__main__':
             # plt.imshow(im_with_text_lines)
             # plt.show()
             skio.imsave(out_tdir + img_fname + '_tl.png', im_with_text_lines)
-            print ('Itern ', itern)
+            if text_lines.shape[0] == 0:
+                no_text_images += 1
+            
             # pdb.set_trace()
         except ValueError as e:
+            exceptions += 1
             print (e)
             pass
-
+        print ('Itern ', itern)
+        if itern % 10 == 0:
+            print ('exceptions ', exceptions, ' no_text_images', no_text_images)
     g = open('../../data/protest_data/dict_protest_text_lines', 'w')
     pickle.dump(dict_img_text_lines, g)
     g.close()

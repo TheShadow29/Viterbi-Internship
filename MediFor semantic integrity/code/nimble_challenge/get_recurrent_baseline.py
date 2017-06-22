@@ -1,3 +1,5 @@
+import sys
+sys.path.append('/home/arka_s/Caffe/caffe/python/')
 import pickle
 import two_imgs_eff
 import numpy as np
@@ -10,6 +12,7 @@ from parse_all_data_nimble17 import nimble_references, nimble_prov_reference, pr
 import pdb
 import disp_img
 import imshow_coll
+import matplotlib.pyplot as plt
 
 
 if __name__ == '__main__':
@@ -46,6 +49,7 @@ if __name__ == '__main__':
     intersection_array = []
     total_wfids_array = []
     tp_array = [0 for i in range(26)]
+    fp_array = [0 for i in range(26)]
     for itern, p_node in enumerate(prov_data.nodes[:]):
         # pdb.set_trace()
         # print ("iter no. ", itern)
@@ -104,6 +108,11 @@ if __name__ == '__main__':
             comm_elm = len(set(p_node.wfids) & set(curr_wfids))
             intersection_array.append(comm_elm)
             total_wfids_array.append(len(p_node.wfids))
+            for i in range(min(26, len(curr_wfids))):
+                if curr_wfids[i] in p_node.wfids:
+                    tp_array[i] += 1
+                else:
+                    fp_array[i] += 1
         else:
             if set(p_node.wfids) == set(curr_wfids[1:]):
                 num_corr += 1
@@ -111,6 +120,12 @@ if __name__ == '__main__':
             comm_elm = len(set(p_node.wfids) & set(curr_wfids[1:]))
             intersection_array.append(comm_elm)
             total_wfids_array.append(len(p_node.wfids))
+            for i in range(min(26, len(curr_wfids))):
+                if curr_wfids[i] in p_node.wfids:
+                    tp_array[i] += 1
+                else:
+                    fp_array[i] += 1
+            
         # if True:
             # l1 = [wtdir + e for e in curr_wfids]
             # imshow_coll.imshow_collection_new(l1)
@@ -141,3 +156,8 @@ if __name__ == '__main__':
     print (num_corr, total_num)
     # print bad_nums
     # print goods
+    plt.figure()
+    # plt.plot(fp_list_for_diff_thresh, tp_list_for_diff_thresh)
+    plt.scatter(fp_array, tp_array)
+    plt.title('ROC curve with any ref node')
+    plt.show()
