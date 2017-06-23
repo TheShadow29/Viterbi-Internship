@@ -67,7 +67,7 @@ def get_iou2(bbox_pred, bbox_gt):
         else:
             return 0, area_union, 0
 
-        
+
 if __name__ == '__main__':
     img_tdir = '/arka_data/places_data/copied_data/'
     file_list = []
@@ -75,20 +75,22 @@ if __name__ == '__main__':
         if f[-4:] == '.jpg' or f[-4:] == '.png':
             file_list.append(f)
 
-    gt_dict_bbox = pickle.load(open('../../data/protest_data/code_manip_bbox_dict.pkl', 'rb'))
-    pred_dict_bbox = pickle.load(open('./code_manip_bbox_dict.pkl', 'rb'))
+    gt_dict_bbox = pickle.load(open('../../data/protest_data/code_manip_bbox_dict.pkl', 'rb'))  #
+    # pred_dict_bbox = pickle.load(open('./code_manip_bbox_dict.pkl', 'rb'))
+    pred_dict_bbox = pickle.load(open('./random_bbx.pkl', 'rb'))
     total_num = 0
     num_cor = 0
-    for f1 in file_list[:]:
+    for f1 in file_list[:100]:
         iou_list = list()
         b1 = gt_dict_bbox[f1].copy()
         b1[2] = b1[0] + b1[2]
         b1[3] = b1[1] + b1[3]
         b2 = pred_dict_bbox[f1]
-        for i in range(len(b2[:20])):
+        for i in range(len(b2[:40])):
             b2[i][0], b2[i][1] = b2[i][1], b2[i][0]
             b2[i][2], b2[i][3] = b2[i][3], b2[i][2]
-            _, _, iou = get_iou2(b2[i] - 1, b1)
+            # _, _, iou = get_iou2(b2[i] - 1, b1)
+            _, _, iou = get_iou(b2[i] - 1, b1)
             iou_list.append(iou)
         # print max(iou_list)
         iou_np = np.array(iou_list)
