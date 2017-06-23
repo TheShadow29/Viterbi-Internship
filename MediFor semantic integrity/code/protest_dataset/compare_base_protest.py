@@ -1,5 +1,8 @@
 # import caffe
 # import matplotlib.pyplot as plt
+import sys
+sys.path.append('../nimble_challenge/')
+sys.path.append('/home/arka_s/Caffe/caffe/python/')
 import pickle
 import two_imgs_eff
 import numpy as np
@@ -8,17 +11,22 @@ import os
 import shutil
 import prov_ref_node_creator as prnc
 # from get_all_feature_vecs17 import info_storer, info_storer_all
-from get_all_fv_code_gen import info_storer, info_storer_all
+# from get_all_fv_code_gen import info_s-torer, info_storer_all
+from txt_data_storer import info_storer, info_storer_all
 from parse_all_data_nimble17 import nimble_references, nimble_prov_reference, prov_ref_file
 import pdb
 import disp_img
 import imshow_coll
 
 
+
+
 if __name__ == '__main__':
-    probe_file = open('../../data/nimble17_data/alexnet365_dev3_seed_2.pkl', 'rb')
+    # probe_file = open('../../data/nimble17_data/alexnet365_dev3_seed_2.pkl', 'rb')
+    probe_file = open('../../data/protest_data/alexnet365_Modified_Images_ProtestL_txt_boxes.pkl', 'rb')
     probe_all_info = pickle.load(probe_file)
-    world_file = open('../../data/nimble17_data/alexnet365_NC2017_Dev3_Beta1_world.pkl')
+    # world_file = open('../../data/nimble17_data/alexnet365_NC2017_Dev3_Beta1_world.pkl')
+    world_file = open('../../data/protest_data/alexnet365_Pruned_Protest_YFCCImages_txt_boxes.pkl', 'rb')
     world_all_info = pickle.load(world_file)
 
     num_corr = 0
@@ -27,40 +35,42 @@ if __name__ == '__main__':
     bad_nums = []
 
     # test_dir = '/mnt/disk1/ark_data/code_manip/dev3/seed_2/'
-    test_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL'
+    test_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL/'
     test_imgs = []
     for f in os.listdir(test_dir):
         if f[-4:] == '.jpg' or f[-4:] == '.png':
             test_imgs.append(f)
     # for itern, p_node in enumerate(prov_data.nodes[:]):
     # wtdir = '/arka_data/NC2017_Dev1_Beta4/world/'
-    wtdir = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/world/'
+    # wtdir = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/world/'
+    wtdir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Pruned_Protest_YFCCImages/'
     for itern, pfid in enumerate(test_imgs):
         # pdb.set_trace()
-        print ("iter no. ", itern)
-        # p_info_idx = dict_probe[pfid]
-        probe_info = probe_all_info.data[probe_all_info.data_id_dict[pfid]]
-        fv_probe = probe_info.fv3
-        temp_array = np.array([])
-        id_array = np.array([])
-        # k = len(p_node.wfids)
-        k = 10
-        for idx, w in enumerate(world_all_info.data):
-            if pfid not in w.fid:
-                # pdb.set_trace()
-                # lol += 1
-                corr = two_imgs_eff.cmp_fv(fv_probe, w.fv3, 'ncc')['pear_ncc']
-                temp_array = np.append(temp_array, corr)
-                id_array = np.append(id_array, idx)
-            # else:
-            # lol += 1
-        top_k = temp_array.argsort()[-k:]
-        top_k = list(reversed(top_k))
-        print (temp_array[top_k])
-        ids = id_array[top_k].astype(int)
-        # pdb.set_trace()
-        base_gt = pfid.split('.')[0].split('_')[1]
         try:
+            print ("iter no. ", itern)
+            # p_info_idx = dict_probe[pfid]
+            probe_info = probe_all_info.data[probe_all_info.data_id_dict[pfid]]
+            fv_probe = probe_info.fv3
+            temp_array = np.array([])
+            id_array = np.array([])
+            # k = len(p_node.wfids)
+            k = 10
+            for idx, w in enumerate(world_all_info.data):
+                if pfid not in w.fid:
+                    # pdb.set_trace()
+                    # lol += 1
+                    corr = two_imgs_eff.cmp_fv(fv_probe, w.fv3, 'ncc')['pear_ncc']
+                    temp_array = np.append(temp_array, corr)
+                    id_array = np.append(id_array, idx)
+                    # else:
+                    # lol += 1
+            top_k = temp_array.argsort()[-k:]
+            top_k = list(reversed(top_k))
+            pritnt (emp_array[top_k])
+            ids = id_array[top_k].astype(int)
+            # pdb.set_trace()
+            base_gt = pfid.split('.')[0].split('_')[1]
+        # try:
             wbase_gt_ind = world_all_info.data_id_dict[base_gt + '.png']
         except KeyError as e:
             wbase_gt_ind = world_all_info.data_id_dict[base_gt + '.jpg']

@@ -55,22 +55,23 @@ class info_storer_all:
     def __init__(self, _fol):
         self.folder_name = _fol
         self.data = []
+        self.data_id_dict = dict()
 
     def add_one_info(self, info_storer):
         self.data.append(info_storer)
-
+        self.data_id_dict[info_storer.fid] = len(self.data) - 1
 
 if __name__ == '__main__':
     start_time = time.time()
     # img_path_name = lambda x : '../../data/nimble17_data/NC2016_' + str(x) + '.jpg'
     # img_path_orig = lambda x,y : '/arka_data/NC2016_Test0613/' + str(x) + '/NC2016_' + '%04d' %y + '.jpg'
     # img_path_1 = lambda x : '../../data/nimble_data/manipulated/' + str(x)
-    caffe_model_dir = '../../data/caffe_model/alexnet365/'
-    # caffe_model_dir = '/home/arka_s/Caffe/caffe/models/bvlc_alexnet/'
-    # descriptor_path = caffe_model_dir + 'deploy.prototxt'
-    descriptor_path = caffe_model_dir + 'deploy_alexnet_places365.prototxt'
-    # weights_path = caffe_model_dir + 'bvlc_alexnet.caffemodel'
-    weights_path = caffe_model_dir + 'alexnet_places365.caffemodel'
+    # caffe_model_dir = '../../data/caffe_model/alexnet365/'
+    caffe_model_dir = '/home/arka_s/Caffe/caffe/models/bvlc_alexnet/'
+    descriptor_path = caffe_model_dir + 'deploy.prototxt'
+    # descriptor_path = caffe_model_dir + 'deploy_alexnet_places365.prototxt'
+    weights_path = caffe_model_dir + 'bvlc_alexnet.caffemodel'
+    # weights_path = caffe_model_dir + 'alexnet_places365.caffemodel'
 
     net_name = caffe_model_dir.split('/')[-2]
 
@@ -96,10 +97,10 @@ if __name__ == '__main__':
     # img_top_dir = '../../data/nimble17_data/spliced/' #
     # img_top_dir = '../../data/nimble17_data/provenance/'
     # img_top_dir = '/arka_data/NC2017_Dev1_Beta4/world/'
-    # img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Pruned_Protest_YFCCImages/'
+    img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Pruned_Protest_YFCCImages/'
     # img_top_dir = '../../data/protest_data/cropped/direct_cropped/'
     # img_top_dir = '/mnt/disk1/ark_data/NC2017_Dev3_Beta1/NC2017_Dev3_Beta1/world/'
-    img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL/'
+    # img_top_dir = '/home/nkovvuri/Rama_Work/dataset/Protest_Images/Modified_Images_ProtestL/'
     folder_name = img_top_dir.split('/')[-2]
     # folder_name = 'Modified_Images_ProtestL'
     # res = ''
@@ -113,8 +114,8 @@ if __name__ == '__main__':
     #     if sdir[-4:] == '.mat':
     #         tmp = sio.loadmat(ss_box_tdir + sdir)['cur_bbxes'] - 1
     #         bbx_list_dict[sdir[:-4]] = tmp[:, [1, 0, 3, 2]]
-    # bbx_list_dict_file = open('../../data/protest_data/dict_protest_text_lines.pkl')
-    bbx_list_dict_file = open('../../data/protest_data/dict_Modified_Images_ProtestL_text_lines.pkl', 'rb')
+    bbx_list_dict_file = open('../../data/protest_data/dict_protest_text_lines.pkl')
+    # bbx_list_dict_file = open('../../data/protest_data/dict_Modified_Images_ProtestL_text_lines.pkl', 'rb')
     bbx_list_dict = pickle.load(bbx_list_dict_file)
     # TO DO
     # bbox_dict creation
@@ -139,7 +140,7 @@ if __name__ == '__main__':
     for w in workers:
         w.start()
         total_num = 0
-    while total_num < len(img_file_names)*100:
+    while total_num < len(img_file_names):
         # while True:
         # for didx in range(batch_size):
         try:
