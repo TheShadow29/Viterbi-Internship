@@ -618,6 +618,24 @@ Notes to self:
 \item I should also give a look at the Mask-RCNN paper and see how good results can we actually achieve. The results might not be as good as predicted, need to be prepared for the worst.
 \end{itemize}
 
+Accomplished :
+\begin{itemize}
+\item Things don't go as you always expect it seems.
+\item Text lines produced a very bad error, but it is fixable. I should get started on that the first thing in the morning tomorrow.
+\item GAN paper was too cool. So they basically have a generator and discriminator model and they try to generate images of the given probability distribution. My plan is reverse engineering. If I can somehow exploit only the discriminator part and if by some black magic I am able to change the probability of discriminator vs the generator so that the discriminator always wins, then this is gonna be the chance for breakthrough. Had a positive discussion with Kan. I might be thinking a bit too ahead, and I might be deluded by strong misconceptions, but this is what I need to do. Now. Also there might be some problems with the GAN training but all that comes later. First part would be conceptualization.
+\item Also started of with the GAN tutorial. But its only half complete.
+\end{itemize}
+
+\subsubsection{June 23 : Friday}
+Target :
+\begin{itemize}
+\item The first task would be to get the text line output, and see if any improvements at all. Can perhaps augment it with the selective search results and check for improvement.
+\item Then I can also try the Mask-CNN method to get complete pixel wise segmentation, and then in some sense try out some kind of brute force match. Not too sure that even this will give some good results or not.
+\item Complete the GAN tutorial at the earliest so that I know (if any) the caveats.
+\item Also have a look at the TF object detection API.
+\item Talk to prof about the GAN and Mask-CNN methods, if at all they are worth trying.
+\end{itemize}
+
 \section{Weekly Progress}
 \subsection{Week 1}
 Accomplished:
