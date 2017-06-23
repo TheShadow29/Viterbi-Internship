@@ -60,7 +60,7 @@ Target :
 \begin{itemize}
 \item Complete regressing 3DMM parameters
 \item Complete till week 10 from NN
-\item Also try to do the course CS231n Stanford : CNN for Visual Recognition. 
+\item Also try to do the course CS231n Stanford : CNN for Visual Recognition.
 \end{itemize}
 Accomplished :
 \begin{itemize}
@@ -147,11 +147,11 @@ Accomplished :
 \begin{itemize}
 \item Damn, there seems to be some caution that needs to be taken care for External hard-disk. Note to self : in the future, if you are trying to untar, donot use the direct archive method. The problem isn't exactly keep on storing (writing) the data. In fact, if there is some trouble in the process of untaring, there is practically nothing one can do. I had to remove the Hard-disk from the PC. But then it threw the error that the disk is corrupted. My guess is that, while untaring, it still wanted to write some data, which it was not able to do so. I had to go windows and run chkdsk (probably short for check disk), most likely because it is an ntfs partition. At the very least, chkdsk solved the problem pretty quickly. Now trying to unzip using winRAR, and at the very least it shows ETA. For about 4.4GB test data set of the Places365 dataset, it is taking about 4 hours. Lets see how it goes.
 \item I am an idiot. I was trying to untar it on the hard disk. Untaring it on the SDD was like 1min or so. I seriously wasted the whole morning.
-\item I am once again reminded of the need to read the documentation. Read the complete caffe documentation, now I feel like I can do something. 
+\item I am once again reminded of the need to read the documentation. Read the complete caffe documentation, now I feel like I can do something.
 \end{itemize}
 
 \subsubsection{26 May : Friday}
-Target : 
+Target :
 \begin{itemize}
 \item I think, I should go step by step. First I will try to read the existing caffe model, and try to run that on the places365 dataset. I should try to see the test results, and see if it is meeting the expected benchmarks.
 \item Parallely I will try to create some dataset related to the localization. Let's see how it goes from there on.
@@ -173,13 +173,13 @@ No work done.
 Target :
 \begin{itemize}
 \item Get a hang of TensorFlow which would likely be used in the project subsequently.
-\item Watch NN video lectures side by side when running the code so as to fully utilize the time. 
+\item Watch NN video lectures side by side when running the code so as to fully utilize the time.
 \item Try to parse everything from the Nimble Challenge Dataset, and try to use Places365 model on it.
 \item Manually try to evaluate the results.
 \end{itemize}
 
 % Planning the next task :
-Notes to self : 
+Notes to self :
 \begin{itemize}
 \item I need to work on the Nimble dataset. Professor suggested that my task would be on, weather the two images are the same.
 \item To achive that, one of the ideas would be to take a direct inner product between the feature vectors. I also need to think, weather to directly take the softmax probabilities or take the direct values from the previous layer, hoping that it would have captured some or the other thing relating to the semantics of the scene in question.
@@ -214,7 +214,7 @@ Accomplished:
 \begin{itemize}
 \item Tested for some simple results. The correlation (pearson's correlation) was quite high for similar images, and low for different images. But most of the images tried were control, so can't really judge the success.
 \item Still need to try it on difficult images, and also try to use the multiprocessing library. Check \href{https://github.com/BVLC/caffe/issues/3607#issuecomment-305180367}{github issue}
-\item Also started reading the documentation of tensorflow a bit. Should be helpful in the future. 
+\item Also started reading the documentation of tensorflow a bit. Should be helpful in the future.
 \end{itemize}
 
 \subsubsection{31 May : Wednesday}
@@ -308,7 +308,7 @@ Accomplished :
 \begin{itemize}
 \item Only did the test on the provenance part. They are exactly the same as the Manipulated images with is\_target as Y.
 \item Also saved fv1, fv2, fv3 using pickle. Pickle is an extremely useful tool for saving complete classes. And it took very less time. I am astounded that I didn't know about this library before.
-% \item 
+% \item
 \end{itemize}
 
 \subsubsection{4 June : Sunday}
@@ -500,7 +500,7 @@ Accomplished :
 \item Created a small dataset for manipulated images using gimp.
 \item Then wrote a pretty general code for generating manipulated images with one probe and one donor. Currently donor takes approximately $1/4^{th}$ of the total base image area.
 \item Also read a bit on the usc-disparity report. But didn't understand that very well. Need to review it once again.
-\item I am not really able to understand the splice dataset. The images seem to be uncorrelated. 
+\item I am not really able to understand the splice dataset. The images seem to be uncorrelated.
 \end{itemize}
 
 \subsubsection{June 16 : Friday}
@@ -522,8 +522,8 @@ Notes to self:
 Accomplished :
 \begin{itemize}
 \item Kept the code to run and generate as many protest dataset as possible. Targetting 10k.
-\item Got some new tasks by the professor. He says I can start with the donor matching at the earliest, after generating the PR curve. 
-\item Also need to get all the fv of all the places365 train data. 
+\item Got some new tasks by the professor. He says I can start with the donor matching at the earliest, after generating the PR curve.
+\item Also need to get all the fv of all the places365 train data.
 \end{itemize}
 
 \subsubsection{June 17 : Saturday}
@@ -592,8 +592,32 @@ Notes to self :
 Accomplished :
 \begin{itemize}
 \item Got the text detection code working. Giving better than expected results. But Rama has a fair point. It will be troublesome if the background images has a lot of text in it giving rise to a lot of false posiitives. Not a sure shot method but interesting results I would say.
-% \item 
+\item Have put the codes for CMC generation, but I am not sure if they will be useful if at all.
+\item Also text line bboxes generation code is ongoing.
+\item Read 2 ML blogs. Read about the Faster-RCNN and Mask-CNN. I think I will try to apply it on the image dataset that I have to see if I can actually get something out of it. I should try for implemented code (need not reinvent the wheel).
+\item After getting the text boxes I need to generate the fv for both alex, bvlc set.
+% \item
 \end{itemize}
+
+\subsubsection{June 22 : Thursday}
+Target :
+\begin{itemize}
+\item Since the text lines are not very great, not much interested in pursuing this any further very honestly.
+\item Around $(1/4)^{th}$ of them had no text detected. This is definitely not a viable approach.
+\item Should look at Mask-CNN. It may give some better insights (proposals).
+\item Discuss with professor as to what else can be done to improve it.
+\item Another idea would be to look at Deep Image Anthology (from arxiv) and can generate some very good examples of manipulations, much better than I would be able to generate on my own I think. If I can make this work, then Hurray.
+\end{itemize}
+
+Notes to self:
+\begin{itemize}
+\item First things first, check with the Text Proposals. But yes I should also give some thought to both CMC and ROC.
+\item For starters I can simply run the code for text proposals at the earliest, and while it is happening work on other things.
+\item I should look at both Mask-RCNN as well as the GAN paper.
+\item First I should complete the GAN tutorial (introduction). Then have a look at the paper briefly to get an idea of what is happening exactly. Then I can directly use it to generate some interesting results. May turn out to be a pretty neat dataset quite honestly.
+\item I should also give a look at the Mask-RCNN paper and see how good results can we actually achieve. The results might not be as good as predicted, need to be prepared for the worst.
+\end{itemize}
+
 \section{Weekly Progress}
 \subsection{Week 1}
 Accomplished:
@@ -706,8 +730,8 @@ Target :
 \item This the main/crucial month, and already one day has passed. Each and every day counts. July will flyby very quickly and I won't have time to do anything else other than simple documentation.
 \item Some broad (really broad) targets complementary to the project would be to complete the NN course (being delayed for quite a while) and complete the CS231n Stanford course. I might need to spend some of the holidays more efficiently. I might also need to manage time better. Also I should be quite familiarized with TensorFlow, and get more proficiency in Tensorflow.
 \item The main plan. I need to probably work harder to get any kind of results. First I would need to get the results on the Nimble Dataset 2017. It is a great revision to the 2016 dataset, and is more challenging. Much of the previous works may not necessarily yield very good results. But the good thing is, if I can get this working, I will actually be able to contribute to the Vision community. Moreover this should help complement the MediFor dataset too.
-\item In addition, I should think about more loss functions or better correlators, or anything that will give me better results. I should also think a bit about Image Geolocalization, though even the simplest matching stuff is in itself still a big challenge. I should also read more papers related to the CNN architectures and deep neural networks. Specifically I think coding them would be a great bonus. 
-% \item 
+\item In addition, I should think about more loss functions or better correlators, or anything that will give me better results. I should also think a bit about Image Geolocalization, though even the simplest matching stuff is in itself still a big challenge. I should also read more papers related to the CNN architectures and deep neural networks. Specifically I think coding them would be a great bonus.
+% \item
 \end{itemize}
 
 \end{document}

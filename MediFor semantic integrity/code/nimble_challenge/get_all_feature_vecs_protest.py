@@ -26,7 +26,7 @@ def worker_task(img_top_dir, transformer, slice_id, bbox_dict='none'):
     # after preprocess : im
     # if (bbox_dict == 'none'):
     backoff = 0.1
-    
+
     while True:
         if q1.qsize() < 100:
             img_file_name = q2.get()
@@ -38,7 +38,7 @@ def worker_task(img_top_dir, transformer, slice_id, bbox_dict='none'):
                 # skimage.io.imshow(img1)
             elif (bbox_dict == 'hist_eq'):
                 img1 = skimage.exposure.equalize_hist(img1)
-                
+
             img1_s1, img1_s2 = slice_img(img1, slice_id)
             # img2_s1, img2_s2 = slice_img(img2,slice_id)
             im1 = transformer.preprocess('data', img1)
@@ -46,7 +46,7 @@ def worker_task(img_top_dir, transformer, slice_id, bbox_dict='none'):
             im1_s2 = transformer.preprocess('data', img1_s2)
             # im2_s1 = transformer.preprocess('data', img2_s1)
             # im2_s2 = transformer.preprocess('data', img2_s2)
-            
+
             # q1.put(((im1_s1,im2_s1),(im1_s2,im2_s2),img_folder_num))
             q1.put((im1_s1, im1_s2, im1, img_file_name))
             # q1.put(())
@@ -61,7 +61,7 @@ def worker_task(img_top_dir, transformer, slice_id, bbox_dict='none'):
                 backoff *= 2
                 # time.sleep(backoff)
 
-                
+
 class info_storer:
     def __init__(self, _fid, _layer, _fv1, _fv2, _fv3):
         # self.fol = _fol
@@ -76,11 +76,11 @@ class info_storer_all:
     def __init__(self, _fol):
         self.folder_name = _fol
         self.data = []
-        
+
     def add_one_info(self, info_storer):
         self.data.append(info_storer)
 
-        
+
 if __name__ == '__main__':
     start_time = time.time()
     # img_path_name = lambda x : '../../data/nimble17_data/NC2016_' + str(x) + '.jpg'
@@ -157,7 +157,7 @@ if __name__ == '__main__':
             net.blobs['data'].data[1, :, :, :] = im_s2
             net.blobs['data'].data[2, :, :, :] = im1
             # net.blobs['data'].data[3,:,:,:] = im_tuple2[1]
-            # 
+            #
             out = net.forward()
             # layer = 'prob'
             # layer = 'fc7'
@@ -175,11 +175,11 @@ if __name__ == '__main__':
         # print ('Total Num Completed: ' + str(total_num) + ' img_dir_num ' + str(im_f_n) +' ' + str(to_pr[3]['pear_ncc']) + ' ' +
         # str(to_pr2[3]['pear_ncc']))
         print ('Total Num Completed: ' + str(total_num))
-            
+
     # g = open('../../data/nimble17_data/results/pb_comp_'+folder_name + layer + '_slice' +str(slice_id) + '.txt','w')
     # g.write(res)
     # g.close()
-    
+
     # g = open('../../data/protest_data/' + folder_name + '_hist_eq.pkl', 'w')
     g = open('../../data/nimble17_data/' + net_name + '_' + folder_name + '.pkl', 'w')
     info_storer_all.__module__ = "get_all_feature_vecs_protest"
