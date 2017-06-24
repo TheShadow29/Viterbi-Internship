@@ -76,8 +76,8 @@ if __name__ == '__main__':
             file_list.append(f)
 
     gt_dict_bbox = pickle.load(open('../../data/protest_data/code_manip_bbox_dict.pkl', 'rb'))  #
-    # pred_dict_bbox = pickle.load(open('./code_manip_bbox_dict.pkl', 'rb'))
-    pred_dict_bbox = pickle.load(open('./random_bbx.pkl', 'rb'))
+    pred_dict_bbox = pickle.load(open('./code_manip_bbox_dict.pkl', 'rb'))
+    # pred_dict_bbox = pickle.load(open('./random_bbx.pkl', 'rb'))
     total_num = 0
     num_cor = 0
     for f1 in file_list[:100]:

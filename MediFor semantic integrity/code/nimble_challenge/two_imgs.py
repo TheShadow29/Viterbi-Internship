@@ -5,7 +5,7 @@ import pickle
 import sys
 import pdb
 import scipy
-# from scipy.stats.stats import pearsonr   
+# from scipy.stats.stats import pearsonr
 
 
 def println(arg):
@@ -23,8 +23,8 @@ def are_the_two_imgs_same(img1_path, img2_path):
     are_same3 = cmp_fv( fv1, fv2, metric='ncc')#normalize cross correlation
     # are_same4 = cmp_fv( fv1, fv2, metric='ct')#census transform
     ##Only Inner Product ?? => Only Valid for FCN??
-    
-    
+
+
     return fv1,fv2,are_same0, are_same1, are_same2,are_same3
 
 def cmp_fv(fv1,fv2,metric='ssd'):
@@ -55,7 +55,7 @@ def cmp_fv(fv1,fv2,metric='ssd'):
         }
     else:
         return -1
-    
+
 
 def get_feature_vector(img_path):
     #first try with direct probabilities
@@ -97,5 +97,3 @@ if __name__ == '__main__':
     # img1_path = img_path_name(4804)
     # img2_path = img_path_name(7301)
     # print (are_the_two_imgs_same(img1_path, img2_path))
-
-    
