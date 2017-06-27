@@ -27,7 +27,7 @@
 \begin{itemize}
 \item Can try to analyze the hidden layers, to find which nodes are the ones which are capturing illumination invariant features and stuff like that.
 \end{itemize}
-
+Comments : Already been done by many researchers. See : \href{https://github.com/raghakot/keras-vis}{Keras Vis}
 \section{NN}
 \subsection{Filtering automatically with CNN}
 \begin{itemize}
@@ -50,6 +50,7 @@
   \item Heirarchial classes. Instead of 1D output neural network, we can have multi dimensional neural network.
   \end{itemize}
 \end{itemize}
+
 \subsection{MediFor}
 \subsubsection{Approach 1}
 \begin{itemize}
@@ -64,10 +65,16 @@
 \item Not a very interesting idea though.
 \end{itemize}
 
-
+\subsection{Kind of Transfer Learning : Modular CNNs}
+\begin{itemize}
+\item Suppose that I have a CNN model, and I train that for Scale Invariance. Now suppose that I also have another model and I train that for Illumination invariance.
+\item Now suppose I need both the properties. I should be able to do this directly cascading one after the other. Not sure if this is done yet, but I find this to be a pretty cool idea.
+\item In fact if this can be achieved, then we can actually in some sense get more of an understanding how the thinking process actually takes place.
+\item Also making things modular will let people simply use all the pre-computed nets as a black box and let that be added as a prefix to many vision applications.
+\end{itemize}
 \section{Important Tips : By Prof. Ram Nevatia}
 \begin{itemize}
-\item Whatever written in the paper, is written very nicely. Do not change the work flow for poster, or even the content or representation. Has happened with the prof said that pains in changing the course plan from one assignment to another. 
+\item Whatever written in the paper, is written very nicely. Do not change the work flow for poster, or even the content or representation. Has happened with the prof said that pains in changing the course plan from one assignment to another.
 \end{itemize}
 
 
