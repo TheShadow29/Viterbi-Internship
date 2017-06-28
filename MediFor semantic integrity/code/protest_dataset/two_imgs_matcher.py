@@ -16,11 +16,11 @@ def println(arg):
     print('\n'.join(arg))
 
 
-def are_the_two_imgs_same(img1_path, img2_path, transformer, net):
+def are_the_two_imgs_same(img1_path, img2_path, transformer, net, layer):
     # fv1 = get_feature_vector(img1_path)
     # fv2 = get_feature_vector(img2_path)
     # fv1, fv2 = get_feature_vector(img1_path, img2_path)
-    fv1, fv2 = get_direct_prob(img1_path, img2_path, transformer, net)
+    fv1, fv2 = get_direct_prob(img1_path, img2_path, transformer, net, layer)
     # Metrics to try:
     # # Absolute Distance between the two fv
     # # Angle between the two fv
@@ -70,7 +70,7 @@ def cmp_fv(fv1, fv2, metric='ssd'):
 #     #then try without the softmax probabilities
 #     return feature_vector
 
-def get_direct_prob(img1_path, img2_path, transformer, net):
+def get_direct_prob(img1_path, img2_path, transformer, net, layer):
     # caffe.io.use_plugin('matplotlib')
     if (type(img1_path) == str):
         im1 = caffe.io.load_image(img1_path)
@@ -83,8 +83,8 @@ def get_direct_prob(img1_path, img2_path, transformer, net):
     net.blobs['data'].data[1, :, :, :] = transformer.preprocess('data', im2)
 
     out = net.forward()
-        # pdb.set_trace()
-    fv1 = net.blobs['prob'].data[0].flatten()
-    fv2 = net.blobs['prob'].data[1].flatten()
+    # pdb.set_trace()
+    fv1 = net.blobs[layer].data[0].flatten()
+    fv2 = net.blobs[layer].data[1].flatten()
     # pdb.set_trace()
     return fv1, fv2
