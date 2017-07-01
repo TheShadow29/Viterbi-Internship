@@ -29,7 +29,7 @@ from tf_image_segmentation.utils.pascal_voc import pascal_segmentation_lut
 
 number_of_classes = 21
 # image_filename = '../../data/protest_data/cropped/direct_cropped/beach_mdf_cropped_019.jpg'
-image_filename = '../../data/protest_data/only_text/beach_mdf_019/3.png'
+image_filename = '../../data/protest_data/only_text/beach_mdf_019/0.png'
 image_filename_placeholder = tf.placeholder(tf.string)
 
 feed_dict_to_use = {image_filename_placeholder: image_filename}
