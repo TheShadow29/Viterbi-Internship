@@ -654,7 +654,7 @@ No work done
 \subsubsection{June 25 : Sunday}
 No work done
 
-\subsection{Week 8 : June 26 to July 2}
+\subsection{Week 7 : June 26 to July 2}
 \subsubsection{June 26 : Monday}
 Target :
 \begin{itemize}
@@ -727,6 +727,29 @@ Target :
 Accomplished :
 \begin{itemize}
 \item FCN is working but results not interpretable.
+\item Tried TF fcn implementation, but unfortunately it didn't work with the text dataset, because the PASCAL VOC doesn't have text as a class.
+\item Saw the TF object detection API (yet to be implemented). But it could be used with COCO-text dataset (trained on it).
+\item Prof suggested to work with another opencv segmenter (pre-NN) and may be read about the COCO-text paper, which might give a few more algorithms to try on.
+\end{itemize}
+
+\subsubsection{July 1 : Saturday}
+No work done
+
+\subsubsection{July 2 : Sunday}
+No work done
+
+\subsection{Week 8 : July 3 - July 9}
+\subsubsection{July 3 : Monday}
+No work done
+
+\subsubsection{July 4 : Tuesday}
+No work done
+
+\subsubsection{July 5 : Wednesday}
+Target :
+\begin{itemize}
+\item Try to use the opencv algo professor has suggested.
+\item Finish a significant part of the report.
 \end{itemize}
 
 \section{Weekly Progress}
@@ -831,6 +854,28 @@ Target :
 \item Also need to read about GANs in general. There might be important clues as to how to solve the MediFor problem in general. If I am able to make someone understand how it all comes about then I should be able to make a breakthrough.
 \item Also keep on having a look at NN courses for vision in the free time.
 \end{itemize}
+
+Accomplished :
+\begin{itemize}
+\item Text matching didn't work as nicely as I thought. There were a few reasons for this.
+  \begin{itemize}
+  \item First and most important is that the feature vectors inherently encode some kind of global features. As a result the two text cards get very similar score, and depending on some hidden things that it captures, it gives more score to one than the other.
+  \item Second reason is that upscaling makes the things very bad.
+  \end{itemize}
+\item Read the columbia paper. The ideas were quite interesting, but they would be indeed difficult to replicate.
+\item Read in a bit in depth about GAN.
+\item Prof suggested not to work with GAN. Primarily because of lack of time, and second because of insufficient train data, and third he (and also I) am very skeptical wheather or not this will work.
+\item Couldn't give any time to NN courses.
+\end{itemize}
+
+\subsection{Week 8}
+Target :
+\begin{itemize}
+\item I should start wrapping up. As such I have mailed the professor that I would get the first draft on the report (on existing work done) by 6th July evening, so that even he would have time over the weekend to check it.
+\item I need to try and do something constructive on the text matching part. I don't care if I have to do a night out for that, but I need to finish it somehow, and that too this freaking week.
+% \item
+\end{itemize}
+
 \section{Month}
 \subsection{Month : May}
 Accomplished :
