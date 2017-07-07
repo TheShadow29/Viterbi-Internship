@@ -24,8 +24,44 @@
 \newpage
 
 \section{Abstract}
+
 \section{Introduction}
+The work is done as a part of the MediFor Project. The MediFor project aims at pushing the state of the art research in the field of media forensics which in broad sense deals with the tampering of the media (image, video or audio) and its detection. This work only deals with image forensics. For each manipulated image the MediFor project demands the actual image on which manipulation is done (this is called the baseline image), the kind of manipulation, and in case of splice manipulation where one image is spliced onto another image it also demands the donor image. This work focuses only on the first part, where the aim is to find the baseline image. It is assumed that the world set contains the true baseline image. All experiments are done on Nimble Dataset which is publicly available for use.
 \section{Implementation Details}
+\subsection{Datasets Used}
+The datasets used for this project are Nimble Datasets
+\begin{center}
+  \begin{tabular}{| c | c | c | c |}
+    \hline
+    Dataset version & \# Probe Images & \# World Images & \# Provenance Images\\
+    \hline
+    NC2016 & 1124 & 874 & - \\
+    \hline
+    NC2017 Dev1 Beta4 & 515 & 1631 & 65 \\
+    \hline
+    NC2017 Dev3 Beta1 & 2261 & 4098 & 2157 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+The neural nets used for evaluations are
+\begin{center}
+  \begin{tabular}{|c|c|}
+    \hline
+    Neural Net Used & Dataset Trained on \\
+    \hline
+    AlexNet & Places365 \\
+    \hline
+    AlexNet & ImageNet \\
+    \hline
+  \end{tabular}
+\end{center}
+\subsection{Experiments}
+All experiments have been done on the Nimble Datasets. For the neural nets, the corresponding caffe models are used. All code is written in Python.
+\subsubsection{Baseline Detection}
+The baseline detection problem is essentially finding the base image of the corresponding manipulated image.
+
+
 \section{Results}
 \section{Discussion}
 
