@@ -59,7 +59,14 @@ The neural nets used for evaluations are
 \subsection{Experiments}
 All experiments have been done on the Nimble Datasets. For the neural nets, the corresponding caffe models are used. All code is written in Python.
 \subsubsection{Baseline Detection}
-The baseline detection problem is essentially finding the base image of the corresponding manipulated image.
+The baseline detection problem is essentially finding the base image of the corresponding manipulated image. There can be different types of manipulation. The Nimble 2016 dataset has the following
+% add some content from the read me files
+while the Nimble 2017 dataset has the following
+% add some content from the read me files.
+
+For the purpose of baseline detection, two models are used. First is AlexNet trained on Places365 and second is AlexNet trained on ImageNet. The reason for using AlexNet is primarily that it requires low memory and time. The models used are pre-trained caffemodels %insert corresponding links and references here.
+
+
 
 
 \section{Results}
