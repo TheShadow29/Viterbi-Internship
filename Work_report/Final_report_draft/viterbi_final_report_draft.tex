@@ -133,9 +133,10 @@ Slicing the images to get better matches :
 Things I tried on the Datasets
 \begin{itemize}
 \item First tried simple matching. This involved extracting the feature vectors from the image and then doing a brute force comparison with the other images in the world dataset. Then try to note if the ground truth image is in the top-k matches. Here k is chosen to be 1, 5, 10.
-\item K-means clustering : Direct clustering algorithm was applied with k chosen to be the same as the number of probe images. This gave quite decent results. k-means was implemented using scikit-learn module.
+\item K-means clustering : Direct clustering algorithm was applied with k chosen to be the same as the number of probe images. This gave quite decent results. k-means was implemented using scikit-learn module. Used around 100 iterations, and since it has converged to certain degree adding more number of iterations wouldn't really be of much help.
   % Table to be added for the k-means experiment.
 \item Misleading results : The organization of the dataset is somewhat poor. Each probe image has multiple images in the world set which are closely related to it. And there are cases where two images with different ids are extremely similar. This results in a high correlation, even though it is not the ground truth.
+\item It is noted that while imagenet gave more correct results, the correlation > 0.95 was lesser, whereas the opposite was true for the case of places365.
 \end{itemize}
 
 Graph Structure
@@ -144,6 +145,16 @@ Graph Structure
 \item The nodes of the graph are all the world images. Each edge of the graph has a weight equal to the correlation between the two nodes.
 \end{itemize}
 
+Recurrent baseline
+\begin{itemize}
+\item
+\end{itemize}
+
+Protest Dataset
+\begin{itemize}
+\item The direct correlation matching for the protest dataset using the Places365 gave very bad results. 0/10. This is in some sense intuitive because the background is completely different. The Imagenet still gave slightly better results.
+\item No amount of histogram equalization did any good.
+\end{itemize}
 \section{Results}
 \section{Discussion}
 
