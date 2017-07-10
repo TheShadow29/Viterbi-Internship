@@ -147,7 +147,8 @@ Graph Structure
 
 Recurrent baseline
 \begin{itemize}
-\item
+\item Then tried the recurrent baseline approach.
+\item Here I  basically use the graph structure. What I essentially do is that I take a probe image node. Now I find the world image with maximum similarity. Once found, I contract the two nodes to one, and all the corresponding edges now have the weight as the max of the two correlation. Experimentation was also done by taking the mean, but max provided better results.
 \end{itemize}
 
 Protest Dataset
@@ -155,6 +156,47 @@ Protest Dataset
 \item The direct correlation matching for the protest dataset using the Places365 gave very bad results. 0/10. This is in some sense intuitive because the background is completely different. The Imagenet still gave slightly better results.
 \item No amount of histogram equalization did any good.
 \end{itemize}
+
+Self Generated Images
+\begin{itemize}
+\item Created quite a few test cases using direct cropping, with different aspect ratios, with different angle of rotations, more than 25\% of the image being covered etc.
+\end{itemize}
+
+Roc and Cmc plots
+\begin{itemize}
+\item Generated roc and cmc plots for all the relevant results.
+  % Add the plots
+  % Also add the quantitative results.
+\end{itemize}
+
+Papers read
+Relevant
+\begin{itemize}
+\item TieZhing : Text Detection
+\item Coco Paper
+\item FCN
+\end{itemize}
+Not really relevant
+\begin{itemize}
+\item Matching Net
+\item Columbia Paper
+\end{itemize}
+
+Text Detection Approach for Semantic Integrity
+\begin{itemize}
+\item Used the caffe model by TieZhing.
+\item Failures because of various reasons.
+\item FCN trained on VOC doesn't have text as a class.
+\item Using simple algorithms like watershed or even the new wrapper doesn't give good results.
+% \item
+\end{itemize}
+
+Invariance Testing
+\begin{itemize}
+\item Did scale and illumination invariance testing.
+\item Generated images using skimage for testing.
+\end{itemize}
+
 \section{Results}
 \section{Discussion}
 
