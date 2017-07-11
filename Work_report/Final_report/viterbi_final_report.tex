@@ -9,7 +9,14 @@
 % \usepackage{titlesec}
 
 \newcommand{\ra}{$\rightarrow$}
-
+% \usepackage[
+%     backend=biber,
+%     style=authoryear,
+%     maxcitenames=2,
+%     sorting=nyt,
+%     backref=true
+%     ]{biblatex}
+%     \addbibresource{ref.bib}
 
 \title{Viterbi Internship - Final Work Report}
 % \author{Arka Sadhu}
@@ -32,15 +39,23 @@ The work is done as a part of the MediFor Project. The MediFor project aims at p
 \section{Theory}
 \subsection{Basic Definitions}
 \begin{itemize}
-\item Probe Image : This is the manipulated image given the probe folder.
+\item Probe Image : This is the given image. It may or may not be manipulated.
 \item Probe folder : Folder containing the probe images.
-\item Baseline Image : This the actual image corresponding to a probe image with no manipulations
-\item Donor : In the case where the manipulation is such that a part of image A is pasted onto image B, then image A is called the Donor Image and B is the baseline image. The resulting image would be the probe image.
-\item World folder : Folder contaning all the images. This includes baseline, donor as well as the probe images.
-\item Provenance : Provenance is simple sense means the origin, so it defines the original image of a particular probe image.
-\item Provenance Graph : A relational graph which depicts all the transformations a particular baseline image would've undergone to reach the probe image. It is assumed that all the intermediate images are a part of the world dataset.
+\item Base Image : This the actual image corresponding to a probe image with no manipulations exists.
+\item Donor Image : In the case where the manipulation is such that a part of image A is pasted onto image B, then image A is called the Donor Image and B is the base image. The resulting image would be the manipulated image which would exist in the probe folder.
+\item World folder : Folder contaning all the images. This includes base, donor as well as the probe images.
+\item World set : The collection of images in the world folder. It is used interchangeably with world images.
+\item Provenance : Provenance in simple sense means the origin, so it defines the original image of a particular probe image.
+\item Provenance Graph : A relational graph which depicts all the transformations a particular baseline image would've undergone to reach the probe image. It is assumed that all the intermediate images are also a part of the world dataset.
+\item Base detection : Detection of the base image from a given probe image and the entire world set.
+\item Donor detection : Detection of the donor image from a given probe image and the entire world set.
 \end{itemize}
 
+\subsection{MediFor Project}
+The MediFor project broadly has two main categories Video and Image. For any kind of media, MediFor Project wants automated assessment of the integrity of the media. If successful, the MediFor platform will automatically detect manipulations, provide detailed information about how these manipulations were performed, and reason about the overall integrity of visual media to facilitate decisions regarding the use of any questionable image or video.\cite{MedF_w}
 
+
+\bibliography{./ref.bib}
+\bibliographystyle{ieeetr}
 
 \end{document}
