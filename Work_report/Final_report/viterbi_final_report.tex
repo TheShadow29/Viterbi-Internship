@@ -54,6 +54,52 @@ The work is done as a part of the MediFor Project. The MediFor project aims at p
 \subsection{MediFor Project}
 The MediFor project broadly has two main categories Video and Image. For any kind of media, MediFor Project wants automated assessment of the integrity of the media. If successful, the MediFor platform will automatically detect manipulations, provide detailed information about how these manipulations were performed, and reason about the overall integrity of visual media to facilitate decisions regarding the use of any questionable image or video.\cite{MedF_w}
 
+There are three technical areas of interest for integrity analytics. \cite{MedF_dw}
+\newline
+----May need to add a few more lines here---------
+\begin{itemize}
+\item Digital Integrity : This is related to the noise modelling and statistics and its consistency.
+\item Physical Integrity : This is related to shadow consistency.
+\item Semantic Integrity : This is related to semantic consistency
+\end{itemize}
+
+In this work we are concerned only with semantic integrity.
+
+\subsection{Contributions of this Work}
+% ----------To Be Filled Later --------------- %
+
+% \subsection{Datasets Used} ------- Can be included in Appendix kinda
+\subsection{Base Detection}
+Base detection problem is essentially finding the underlying base image given a probe image. Here we make the assumption that the base image exists in the world set. The next problem is to get all the manipulated images derived from the base image. And beyond this is to create a provenance graph of the collected manipulated images. The last problem is not addressed in this work.
+
+\subsubsection{Neural Networks used}
+We use two pre-trained caffe \cite{jia2014caffe} models in this work. AlexNet\cite{NIPS2012_4824} trained on Places365\cite{zhou2017places} and AlexNet trained on ImageNet. The reason for using AlexNet instead of VGG16 or any of the later models is that we wanted to work with a simplest model and test our performances without compromising memory and time. Places365 is a scene-centric dataset while ImageNet is object centric dataset. And as such we expect there should be a difference in their base detection capability.
+\begin{table}[]
+\centering
+\caption{Places365 Validation}
+\label{p365_val}
+\begin{tabular}{|l|l|ll|}
+  \hline
+  Correct Matches & Total Images & Accuracy  &\\
+  \hline
+  2975 & 3650 & 81.5068493151 &  \\
+  2969 & 3650 & 81.3424657534 &  \\
+  2952 & 3650 & 80.8767123288 &  \\
+  2993 & 3650 & 82            &  \\
+  2977 & 3650 & 81.5616438356 &  \\
+  3036 & 3650 & 83.1780821918 &  \\
+  2941 & 3650 & 80.5753424658 &  \\
+  2976 & 3650 & 81.5342465753 &  \\
+  2941 & 3650 & 80.5753424658 &  \\
+  2938 & 3650 & 80.4931506849 & \\
+  \hline
+\end{tabular}
+\end{table}
+
+
+
+\subsection{Donor Detection}
+
 
 \bibliography{./ref.bib}
 \bibliographystyle{ieeetr}

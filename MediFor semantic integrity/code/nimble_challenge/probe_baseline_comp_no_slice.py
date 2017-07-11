@@ -26,38 +26,45 @@ def worker_task(img_top_dir,transformer):
             # time.sleep(backoff)
             count = q2.get()
             img_folder_num = img_dirs[count]
-            # count[0] += 1            
+            # count[0] += 1
             img1_path, img2_path = img_paths(img_folder_num, img_top_dir)
             try:
                 img1 = caffe.io.load_image(img1_path)
                 # img1 = caffe.io.resize(img1,(227,227,3))
                 img2 = caffe.io.load_image(img2_path)
                 # img2 = caffe.io.load_image(img2, (227,227,3))
-                
+
                 im1 = transformer.preprocess('data',img1)
                 im2 = transformer.preprocess('data',img2)
-                
+
                 q1.put((im1,im2,img_folder_num))
             except Exception as e:
                 print 'img_folder_num ' + str(img_folder_num)
                 raise e
-            
+
                 # pdb.set_trace()
                 # raise e
                 # pass
         else:
             backoff *= 2
             # time.sleep(backoff)
-            
+
 
 if __name__ == '__main__':
     start_time = time.time()
     img_path_name = lambda x : '../../data/nimble_data/NC2016_' + str(x) + '.jpg'
     img_path_orig = lambda x,y : '/arka_data/NC2016_Test0613/' + str(x) + '/NC2016_' + '%04d' %y + '.jpg'
     img_path_1 = lambda x : '../../data/nimble_data/manipulated/' + str(x)
-    caffe_model_dir = '../../data/caffe_model/alexnet365/'
-    descriptor_path = caffe_model_dir + 'deploy_alexnet_places365.prototxt'
-    weights_path = caffe_model_dir + 'alexnet_places365.caffemodel'
+
+    # caffe_model_dir = '../../data/caffe_model/alexnet365/'
+    # descriptor_path = caffe_model_dir + 'deploy_alexnet_places365.prototxt'
+    # weights_path = caffe_model_dir + 'alexnet_places365.caffemodel'
+
+    caffe_model_dir = '/home/arka_s/Caffe/caffe/models/bvlc_alexnet/'
+    descriptor_path = caffe_model_dir + 'deploy.prototxt'
+    weights_path = caffe_model_dir + 'bvlc_alexnet.caffemodel'
+
+
     ilsvrc_mean_path = '/home/arka_s/Caffe/caffe/python/caffe/imagenet/ilsvrc_2012_mean.npy'
     net = caffe.Net(descriptor_path, weights_path, caffe.TEST)
 
@@ -72,14 +79,14 @@ if __name__ == '__main__':
     net.blobs['data'].reshape(2,3,227,227)
     q1 = mp.Queue()
     q2 = mp.Queue()
-    img_top_dir = '../../data/nimble_data/manipulated/'
+    img_top_dir = '../../data/nimble17_data/manipulated/'
     res = ''
     img_dirs = os.listdir(img_top_dir)
     skimage.io.use_plugin('matplotlib')
     for subdir in img_dirs:
         if img_paths(subdir, img_top_dir) == -1:
             img_dirs.remove(subdir)
-        
+
     num_process = mp.cpu_count() - 1
     # count = [0]
     for i in range(len(img_dirs)):
@@ -104,7 +111,7 @@ if __name__ == '__main__':
             are_same1 = two_imgs_eff.cmp_fv( fv1, fv2, metric='sad' )#sum of absolute distance
             are_same2 = two_imgs_eff.cmp_fv( fv1, fv2, metric='ip' )#inner product
             are_same3 = two_imgs_eff.cmp_fv( fv1, fv2, metric='ncc')#normalize cross correlation
-            
+
             to_pr = (are_same0, are_same1, are_same2, are_same3)
             with open(img_top_dir + str(im_f_n) + '/eval_' + str(layer) + '.txt','wb') as f:
                 f.write(str(to_pr))
@@ -118,11 +125,11 @@ if __name__ == '__main__':
             print (e)
         total_num += 1
         print ('Total Num Completed: ' + str(total_num) + ' img_dir_num ' + str(im_f_n) +' ' + str(to_pr[3]['pear_ncc']))
-              
-            
-        
-    
-    
+
+
+
+
+
     # for subdir in os.listdir(img_top_dir):
     # # subdir = '601'
     #     bo = True
@@ -150,7 +157,7 @@ if __name__ == '__main__':
     #             res += str(subdir) + str(to_print[3]['pear_ncc']) + '\n'
     #         i += 1
     #         print ('Iter: ' + str(i) +  ' Counter ' + str(subdir))
-    g = open('../../data/nimble_data/pb_comp.txt','w')
+    g = open('../../data/nimble17_data/pb_comp.txt','w')
     g.write(res)
     g.close()
     print("--- %s seconds ---" % (time.time() - start_time))
