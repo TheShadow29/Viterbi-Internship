@@ -1,0 +1,46 @@
+\documentclass{article}
+\usepackage[a4paper, tmargin=1in, bmargin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{parskip}
+\usepackage{pdflscape}
+\usepackage{listings}
+\usepackage{hyperref}
+% \usepackage{titlesec}
+
+\newcommand{\ra}{$\rightarrow$}
+
+
+\title{Viterbi Internship - Final Work Report}
+% \author{Arka Sadhu}
+\author{Arka Sadhu\\{ Supervised by: Prof. Ram Nevatia}}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Abstract}
+Media forensics in general involves detection of the tampered media, identification of the tampered portion as well as trying to recover the original media.
+
+\section{Introduction}
+The work is done as a part of the MediFor Project. The MediFor project aims at pushing the state of the art research in the field of media forensics which in broad sense deals with the tampering of the media (image, video or audio) and its detection. This work only deals with image forensics. For each manipulated image the MediFor project demands the actual image on which manipulation is done (this is called the baseline image), the kind of manipulation, and in case of splice manipulation where one image is spliced onto another image it also demands the donor image. This work focuses only on the first part, where the aim is to find the baseline image. It is assumed that the world set contains the true baseline image. All experiments are done on Nimble Dataset which is publicly available for use.
+
+\section{Theory}
+\subsection{Basic Definitions}
+\begin{itemize}
+\item Probe Image : This is the manipulated image given the probe folder.
+\item Probe folder : Folder containing the probe images.
+\item Baseline Image : This the actual image corresponding to a probe image with no manipulations
+\item Donor : In the case where the manipulation is such that a part of image A is pasted onto image B, then image A is called the Donor Image and B is the baseline image. The resulting image would be the probe image.
+\item World folder : Folder contaning all the images. This includes baseline, donor as well as the probe images.
+\item Provenance : Provenance is simple sense means the origin, so it defines the original image of a particular probe image.
+\item Provenance Graph : A relational graph which depicts all the transformations a particular baseline image would've undergone to reach the probe image. It is assumed that all the intermediate images are a part of the world dataset.
+\end{itemize}
+
+
+
+\end{document}
