@@ -206,6 +206,8 @@ Here is a small table comparing the different methods
 
 \subsubsection{Speeding up the Feature Extraction Process}
 % Add a few lines about the multiprocessing library
+The feature extraction process (for all images in the world set) can be time consuming. For this reason we used multiprocessing to spawn new processes. One process was reserved for the Caffe net, and all the other processes were used for pre-processing the images. This lead to a significant speed. For the to process 3650 passes of through the net it took 652 seconds in a standalone code, while using multiprocessing reduced it to 87 seconds.
+
 
 \subsubsection{Image Slicing}
 A general observation in the datasets was that the manipulation existed in only a part of the probe image. For this reason, we use the method of image slicing, that is cutting the image into two halves horizontally or vertically, even getting four quadrants as well. Then we match each slice with the corresponding slice in the other image. This gives a very easy boost to the accuracy but at the same time demands more computational resources or time.
@@ -265,7 +267,7 @@ Very good implies no false positives or negatives, whereas one bad and two bad i
 \subsubsection{Getting all the Base Images}
 The Nimble Dataset 2017 Dev 3 Beta 1 had a lot more probe and world images, specifically 2157 manipulated probe images and 4098 world images. The world set not only consisted of the base image, but also of the probe image as well as the intermediate manipulated images. This essentially means that there is one particular base image and then subsequent manipulations on the top of that base image gives us the probe image. We aim to find all the manipulated images along with the base image.
 
-For this we use a graph based approach. All graphs are made using networkx. We first create a graph G with all the probe images as the node. Then we add all the images in the world (discarding the probe images) to the Graph and create an edge with all the nodes, with the weight of the edge as the correlation between the two images. We then start with one probe image, and then look at the edge with highest weight. We now contract the two nodes into one, and in this processs recompute the correlation taking the maximum of the two correlations. Then we repeat the process. The termination step is not exactly defined and for now we terminate based on the existing knowledge of the number of matches that should have occured (using the ground truth data). We then simply repeat this process for the rest of the probe images (initializing the Graph as well).
+For this we use a graph based approach. All graphs are made using networkx \cite{hagberg-2008-exploring}. We first create a graph G with all the probe images as the node. Then we add all the images in the world (discarding the probe images) to the Graph and create an edge with all the nodes, with the weight of the edge as the correlation between the two images. We then start with one probe image, and then look at the edge with highest weight. We now contract the two nodes into one, and in this processs recompute the correlation taking the maximum of the two correlations. Then we repeat the process. The termination step is not exactly defined and for now we terminate based on the existing knowledge of the number of matches that should have occured (using the ground truth data). We then simply repeat this process for the rest of the probe images (initializing the Graph as well).
 
 We use both Alexnet trained on Places365 as well as ImageNet. This method is henceforth referred to as recurrent base detection.
 
@@ -289,12 +291,57 @@ The first set of rows define the number of probe image with correct matches. We 
 
 It is quite interesting to note that the AlexNet trained on ImageNet outperforms the AlexNet trained on Places365. This is probably because the manipulations in the Nimble Dataset 2017 Dev 3 Beta 1 involved small manipulations.
 
+\subsubsection{Self Generated Images with more Manipulations}
+This was done mostly as an experiment to understand if it was possible to extend the use simple NCC to bigger manipulations, which involved more than 25\% of the base image being covered by another image. For this we use scikit-image \cite{scikit-image}. We pick any two images at random one being the base other being the donor, choose an angle of rotation at random, get a portion of the donor image (or the whole donor image) with both width and height half of that of the base image, then rotate it and place it on the base image to get a new image. We create 100 such images for using images from  each of the dataset NC2017 Dev 1 and Dev 3. Now we use NCC to find the correct matches. There were few errors in processing a few of them hence the reduced number of total images.
 
+\begin{table}[H]
+\centering
+\caption{NCC on NC2017 Dev 1 Beta 4}
+\label{sg_dev1}
+\begin{tabular}{|l|l|l|l|}
+\hline
+      Dev 1                         & Top1         & Top5         & Top10        \\ \hline
+Places 365                     & 37/89        & 61/89        & 71/89        \\ \hline
+                               & 0.4157303371 & 0.6853932584 & 0.797752809  \\ \hline
+Places 365 (with 0.95 cut off) & 50/89        & 72/89        & 76/89        \\ \hline
+                               & 0.5617977528 & 0.808988764  & 0.8539325843 \\ \hline
+                               &              &              &              \\ \hline
+bvlc AlexNet                           & 29/89        & 44/89        & 51/89        \\ \hline
+                               & 0.3258426966 & 0.4943820225 & 0.5730337079 \\ \hline
+bvlc AlexNet(with 0.95 cut off)       & 34/89        & 47/89        & 54/89        \\ \hline
+                               & 0.3820224719 & 0.5280898876 & 0.606741573  \\ \hline
+\end{tabular}
+\end{table}
 
-\subsection{Donor Detection}
+\begin{table}[H]
+\centering
+\caption{NCC on NC2017 Dev 3 Beta 1}
+\label{sg_dev3}
+\begin{tabular}{|l|l|l|l|}
+\hline
+Dev 3                          & Top1         & Top5         & Top10        \\ \hline
+Places 365                     & 10/92        & 28/92        & 46/92        \\ \hline
+                               & 0.1086956522 & 0.3043478261 & 0.5          \\ \hline
+Places 365 (with 0.95 cut off) & 50/92        & 63/92        & 66/92        \\ \hline
+                               & 0.5434782609 & 0.6847826087 & 0.7173913043 \\ \hline
+                               &              &              &              \\ \hline
+bvlc AlexNet                           & 3/92         & 17/92        & 29/92        \\ \hline
+                               & 0.0326086957 & 0.1847826087 & 0.3152173913 \\ \hline
+                               &              &              &              \\ \hline
+bvlc AlexNet (with 0.95 cut off)       & 31/92        & 42/92        & 46/92        \\ \hline
+                               & 0.3369565217 & 0.4565217391 & 0.5          \\ \hline
+\end{tabular}
+\end{table}
 
-\section{Troublesome Cases}
-Here are some cases, for which we are clueless as to why the correlation is low.
+In both the tables, the top-k denotes if the actual base image is found within the top k results. Since the datasets had many similar images (images with small manipulations), we have assumed that if the image predicted and the actual image have a correlation greater 0.95 then it can be said to be a correct match.
+
+It is quite interesting to note that Places365 does significantly better than the ImageNet. This is presumably because the Places365 inherently tries to capture the scene information rather than the object information. While it is difficult to identify an object given a small part of it, it is much easier to identify the scene even if a significant portion of it is occluded. In this sense Places365 definitely proves to be a much better candidate than the ImageNet for cases with significant amount of manipulations.
+
+\subsubsection{ROC and CMC curves}
+\subsection{Protest Dataset}
+\subsubsection{Text Detection}
+% \section{}
+% Here are some cases, for which we are clueless as to why the correlation is low.
 
 \bibliography{./ref.bib}
 \bibliographystyle{ieeetr}
