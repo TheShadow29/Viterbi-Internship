@@ -40,7 +40,7 @@ def worker_task(img_top_dir,transformer,slice_id):
             # time.sleep(backoff)
             count = q2.get()
             img_folder_num = img_dirs[count]
-            # count[0] += 1            
+            # count[0] += 1
             img1_path, img2_path = img_paths(img_folder_num, img_top_dir)
             img1 = caffe.io.load_image(img1_path)
             # img1 = caffe.io.resize(img1,(227,227,3))
@@ -49,25 +49,25 @@ def worker_task(img_top_dir,transformer,slice_id):
 
             img1_s1, img1_s2 = slice_img(img1,slice_id)
             img2_s1, img2_s2 = slice_img(img2,slice_id)
-            
+
             im1_s1 = transformer.preprocess('data', img1_s1)
             im1_s2 = transformer.preprocess('data', img1_s2)
             im2_s1 = transformer.preprocess('data', img2_s1)
             im2_s2 = transformer.preprocess('data', img2_s2)
-            
+
             q1.put(((im1_s1,im2_s1),(im1_s2,im2_s2),img_folder_num))
                 # q1.put(())
                 # except Exception as e:
                 # print 'img_folder_num ' + str(img_folder_num)
                 # raise e
-            
+
                 # pdb.set_trace()
                 # raise e
                 # pass
         else:
             backoff *= 2
             # time.sleep(backoff)
-            
+
 def get_cmp(fv1,fv2):
     are_same0 = two_imgs_eff.cmp_fv( fv1, fv2, metric='ssd' )#sum of squared distance
     are_same1 = two_imgs_eff.cmp_fv( fv1, fv2, metric='sad' )#sum of absolute distance
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     start_time = time.time()
     img_path_name = lambda x : '../../data/nimble_data/NC2016_' + str(x) + '.jpg'
     img_path_orig = lambda x,y : '/arka_data/NC2016_Test0613/' + str(x) + '/NC2016_' + '%04d' %y + '.jpg'
-    img_path_1 = lambda x : '../../data/nimble_data/manipulated/' + str(x)
+    img_path_1 = lambda x : '../../data/nimble17_data/manipulated/' + str(x)
     caffe_model_dir = '../../data/caffe_model/alexnet365/'
     descriptor_path = caffe_model_dir + 'deploy_alexnet_places365.prototxt'
     weights_path = caffe_model_dir + 'alexnet_places365.caffemodel'
@@ -107,7 +107,7 @@ if __name__ == '__main__':
     for subdir in img_dirs:
         if img_paths(subdir, img_top_dir) == -1:
             img_dirs.remove(subdir)
-            
+
     num_process = mp.cpu_count() - 1
     # count = [0]
     for i in range(len(img_dirs)):
@@ -128,7 +128,7 @@ if __name__ == '__main__':
             net.blobs['data'].data[1,:,:,:] = im_tuple1[1]
             net.blobs['data'].data[2,:,:,:] = im_tuple2[0]
             net.blobs['data'].data[3,:,:,:] = im_tuple2[1]
-            
+
             out = net.forward()
             # layer = 'prob'
             # layer = 'fc7'
@@ -157,8 +157,8 @@ if __name__ == '__main__':
         total_num += 1
         print ('Total Num Completed: ' + str(total_num) + ' img_dir_num ' + str(im_f_n) +' ' + str(to_pr[3]['pear_ncc']) + ' ' +
                str(to_pr2[3]['pear_ncc']))
-            
-    g = open('../../data/nimble_data/results/pb_comp_' + layer + '_slice' +str(slice_id) + '.txt','w')
+
+    g = open('../../data/nimble17_data/results/pb_comp_' + layer + '_slice' +str(slice_id) + '.txt','w')
     g.write(res)
     g.close()
     print("--- %s seconds ---" % (time.time() - start_time))

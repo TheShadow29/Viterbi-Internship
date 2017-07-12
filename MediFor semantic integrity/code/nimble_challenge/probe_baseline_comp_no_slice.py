@@ -56,13 +56,13 @@ if __name__ == '__main__':
     img_path_orig = lambda x,y : '/arka_data/NC2016_Test0613/' + str(x) + '/NC2016_' + '%04d' %y + '.jpg'
     img_path_1 = lambda x : '../../data/nimble_data/manipulated/' + str(x)
 
-    # caffe_model_dir = '../../data/caffe_model/alexnet365/'
-    # descriptor_path = caffe_model_dir + 'deploy_alexnet_places365.prototxt'
-    # weights_path = caffe_model_dir + 'alexnet_places365.caffemodel'
+    caffe_model_dir = '../../data/caffe_model/alexnet365/'
+    descriptor_path = caffe_model_dir + 'deploy_alexnet_places365.prototxt'
+    weights_path = caffe_model_dir + 'alexnet_places365.caffemodel'
 
-    caffe_model_dir = '/home/arka_s/Caffe/caffe/models/bvlc_alexnet/'
-    descriptor_path = caffe_model_dir + 'deploy.prototxt'
-    weights_path = caffe_model_dir + 'bvlc_alexnet.caffemodel'
+    # caffe_model_dir = '/home/arka_s/Caffe/caffe/models/bvlc_alexnet/'
+    # descriptor_path = caffe_model_dir + 'deploy.prototxt'
+    # weights_path = caffe_model_dir + 'bvlc_alexnet.caffemodel'
 
 
     ilsvrc_mean_path = '/home/arka_s/Caffe/caffe/python/caffe/imagenet/ilsvrc_2012_mean.npy'
@@ -104,7 +104,8 @@ if __name__ == '__main__':
             net.blobs['data'].data[0,:,:,:] = im1
             net.blobs['data'].data[1,:,:,:] = im2
             out = net.forward()
-            layer = 'prob'
+            # layer = 'prob'
+            layer = 'fc8'
             fv1 = net.blobs[layer].data[0].flatten()
             fv2 = net.blobs[layer].data[1].flatten()
             are_same0 = two_imgs_eff.cmp_fv( fv1, fv2, metric='ssd' )#sum of squared distance
@@ -157,7 +158,8 @@ if __name__ == '__main__':
     #             res += str(subdir) + str(to_print[3]['pear_ncc']) + '\n'
     #         i += 1
     #         print ('Iter: ' + str(i) +  ' Counter ' + str(subdir))
-    g = open('../../data/nimble17_data/pb_comp.txt','w')
+    # g = open('../../data/nimble17_data/pb_comp.txt','w')
+    g = open('../../data/nimble17_data/results/pb_comp_' + layer + '_no_slice' + '.txt', 'w')
     g.write(res)
     g.close()
     print("--- %s seconds ---" % (time.time() - start_time))

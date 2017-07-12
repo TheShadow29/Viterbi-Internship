@@ -6,6 +6,10 @@
 \usepackage{pdflscape}
 \usepackage{listings}
 \usepackage{hyperref}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+
 % \usepackage{titlesec}
 
 \newcommand{\ra}{$\rightarrow$}
@@ -73,7 +77,7 @@ In this work we are concerned only with semantic integrity.
 Base detection problem is essentially finding the underlying base image given a probe image. Here we make the assumption that the base image exists in the world set. The next problem is to get all the manipulated images derived from the base image. And beyond this is to create a provenance graph of the collected manipulated images. The last problem is not addressed in this work.
 
 \subsubsection{Neural Networks used}
-We use two pre-trained caffe \cite{jia2014caffe} models in this work. AlexNet\cite{NIPS2012_4824} trained on Places365\cite{zhou2017places} and AlexNet trained on ImageNet. The reason for using AlexNet instead of VGG16 or any of the later models is that we wanted to work with a simplest model and test our performances without compromising memory and time. Places365 is a scene-centric dataset while ImageNet is object centric dataset. And as such we expect there should be a difference in their base detection capability.
+We use two pre-trained caffe \cite{jia2014caffe} models in this work. AlexNet\cite{NIPS2012_4824} trained on Places365\cite{zhou2017places} and AlexNet trained on ImageNet. The reason for using AlexNet instead of VGG16 or any other models is that we wanted to work with a simplest model and test our performances without compromising memory and time. Places365 is a scene-centric dataset while ImageNet is object centric dataset. And as such we expect there should be a difference in their base detection capability.
 \begin{table}[]
 \centering
 \caption{Places365 Validation}
@@ -96,10 +100,122 @@ We use two pre-trained caffe \cite{jia2014caffe} models in this work. AlexNet\ci
 \end{tabular}
 \end{table}
 
+In this work we use the AlexNet trained on Places-365 everywhere unless explicitly mentioned that the AlexNet trained on ImageNet is used.
+
+\subsubsection{Which layer and metric to choose?}
+To find the baseline image, we employ the following method. We use the Nx1 dimensional vector produced by the network. As we go deeper into the layers, we expect more semantic features to be captured. The features are represented in the form of a vector and is known as a feature vector. In the AlexNet architecture we specifically compare three layers fc7, fc8, and prob layer which is the output after the operation of softmax function.
+
+So we intend to find a way such that given the feature vectors from the probe image, we want to be find the base image. We use a simple approach for this. We find the feature vectors of the base image as well, and then compare the feature vectors using different metrics. For a metric to be good we would ideally want for a probe base pair it should give a high value and for unrelated images it should return a very low value. Also we would prefer a substantial difference between related and unrelated images. For this work we tried the following metrics :
+\begin{itemize}
+\item SSD : Sum of Squared Distances
+\item SAD : Sum of Absolute Distances
+\item NCC : Pearson's correlation coefficient
+\end{itemize}
+
+It turned out that NCC gave the most desirable results.
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[scale=0.1]{images/nc17_d1b4/pb11}
+  \end{subfigure}
+  % ~
+  \begin{subfigure}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[scale=0.1]{images/nc17_d1b4/pb12}
+  \end{subfigure}
+  \caption{Probe Base Pair taken from Nimble Dataset 2017 Dev 1 Beta 4}
+  \label{fig:ncc_res}
+\end{figure}
+
+For example in the image pair \ref{fig:ncc_res} the metrics for the prob layers were as follows :
+
+\begin{table}[H]
+\centering
+\caption{Prob Layer Metrics}
+\label{pb_metrics}
+\begin{tabular}{|l|l|}
+  \hline
+  & Prob layer          \\
+  \hline
+  SSD & 0.072518922         \\
+  SAD & 0.29026049          \\
+  NCC & 0.98303729249860383 \\
+  \hline
+\end{tabular}
+\end{table}
+
+Clearly SAD is not desirable since it gives a medium score to a matching pair. Both SSD and NCC give good results in this case, but emperically it was found that NCC is not only easier for comparison (need not invert the high and low score), but is also more robust, that is gives high score even in cases where the images have been manipulated to larger degree and SSD isn't able to caputre the similarity. As a result, NCC has been the prime candidate for the rest of the work.
+
+Another important part was to choose a layer. It was found that for many cases that using the last layer (prob) gave a very low score for a matching pair.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.5\textwidth}
+    \centering
+    \includegraphics[scale=0.05]{images/nc17_d1b4/pb21}
+  \end{subfigure}
+  % ~
+  \begin{subfigure}[t]{0.45\textwidth}
+    \centering
+    \includegraphics[scale=0.05]{images/nc17_d1b4/pb22}
+  \end{subfigure}
+  \caption{Probe Base Pair taken from Nimble Dataset 2017 Dev 1 Beta 4}
+  \label{fig:fc8_good}
+\end{figure}
+
+For example the image pair \ref{fig:fc8_good} returns the following NCC scores for the three layers.
+\begin{table}[H]
+\centering
+\caption{NCC scores for different layers}
+\label{my-label}
+\begin{tabular}{|l|l|}
+  \hline
+  & NCC                 \\
+  \hline
+  fc7  & 0.75791334934860821 \\
+  fc8  & 0.87673938938958917 \\
+  prob & 0.35012885670990512 \\
+  \hline
+\end{tabular}
+\end{table}
+
+Clearly fc8 gives the most desirable result, but it is interesting to theorize the reason why prob gives such a low score. We hypothesize that the SoftMax layer in some sense disturbs the features because it gives the probability of closeness to a particular scene. So if a scene is not present in the Places365 database, this would give a weird output. Also going by the emperical knowledge that the deeper layers tend to extract out more semantic features, fc8 should give the best result and this intuition follows our finding. fc8 gives consistently higher score than fc7 and fc6 for probe base pair and lower score for unrelated images.
+
+Here is a small table comparing the different methods
+
+\begin{table}[H]
+\centering
+\caption{Layers and Correlation threshold}
+\label{lct}
+\begin{tabular}{|l|l|l|l|l|ll|}
+  \hline
+  Tot Images = 320 & \multicolumn{2}{|l|}{Prob} & \multicolumn{2}{|l|}{fc8} & \multicolumn{2}{|l|}{fc7} \\
+  \hline
+  \multicolumn{1}{|l|}{Threshold} & correct    & \%correct   & correct   & \%correct   & correct   & \%correct   \\
+  \hline
+  0.95             & 203        & 0.634375    & 271       & 0.846875    & 175       & 0.546875    \\
+  0.9              & 243        & 0.759375    & 288       & 0.9         & 243       & 0.759375    \\
+  0.8              & 264        & 0.825       & 312       & 0.975       & 287       & 0.896875    \\
+  0.5              & 295        & 0.921875    & 316       & 0.9875      & 313       & 0.978125    \\
+  0.4              & 302        & 0.94375     & 320       & 1           & 316       & 0.9875      \\
+  \hline
+
+\end{tabular}
+\end{table}
+
+\subsubsection{Speeding up the Feature Extraction Process}
+
+
+\subsubsection{Image Slicing}
+A general observation in the datasets was that the manipulation existed in only a part of the probe image. For this reason, we use the method of image slicing, that is cutting the image into two halves horizontally or vertically, even getting four quadrants as well. This gives a very easy boost to the accuracy but at the same time demands more computational resources or time.
+
 
 
 \subsection{Donor Detection}
 
+\section{Troublesome Cases}
+Here are some cases, for which we are clueless as to why the correlation is low.
 
 \bibliography{./ref.bib}
 \bibliographystyle{ieeetr}
