@@ -73,7 +73,7 @@ In this work we are concerned only with semantic integrity.
 % ----------To Be Filled Later --------------- %
 
 % \subsection{Datasets Used} ------- Can be included in Appendix kinda
-\subsection{Base Detection}
+\subsection{Base Detection and Provenance}
 Base detection problem is essentially finding the underlying base image given a probe image. Here we make the assumption that the base image exists in the world set. The next problem is to get all the manipulated images derived from the base image. And beyond this is to create a provenance graph of the collected manipulated images. The last problem is not addressed in this work.
 
 \subsubsection{Neural Networks used}
@@ -186,7 +186,7 @@ Here is a small table comparing the different methods
 
 \begin{table}[H]
 \centering
-\caption{Layers and Correlation threshold}
+\caption{Layers and Correlation threshold on the Nimble 2016 dataset which were known to be manipulated}
 \label{lct}
 \begin{tabular}{|l|l|l|l|l|ll|}
   \hline
@@ -205,10 +205,89 @@ Here is a small table comparing the different methods
 \end{table}
 
 \subsubsection{Speeding up the Feature Extraction Process}
-
+% Add a few lines about the multiprocessing library
 
 \subsubsection{Image Slicing}
-A general observation in the datasets was that the manipulation existed in only a part of the probe image. For this reason, we use the method of image slicing, that is cutting the image into two halves horizontally or vertically, even getting four quadrants as well. This gives a very easy boost to the accuracy but at the same time demands more computational resources or time.
+A general observation in the datasets was that the manipulation existed in only a part of the probe image. For this reason, we use the method of image slicing, that is cutting the image into two halves horizontally or vertically, even getting four quadrants as well. Then we match each slice with the corresponding slice in the other image. This gives a very easy boost to the accuracy but at the same time demands more computational resources or time.
+
+Here is the table for layer fc8 with horizontal slicing:
+
+\begin{table}[H]
+\centering
+\caption{Increase in accuracy using slicing}
+\label{slicing}
+\begin{tabular}{|l|l|l|}
+  \hline
+  Tot Images = 320 & \multicolumn{2}{|l|}{fc8 sliced} \\
+  \hline
+  Threshold        & correct       & \%correct      \\
+  \hline
+  0.95             & 203           & 0.634375       \\
+  0.9              & 243           & 0.759375       \\
+  0.8              & 264           & 0.825          \\
+  0.5              & 295           & 0.921875       \\
+  0.4              & 302           & 0.94375 \\
+  \hline
+\end{tabular}
+\end{table}
+
+Some problems with this method include that it is not able to identify if the image has been rotated. This also fails miserably if the donor image occupies a significant (more than 70\%) of the whole image.
+
+\subsubsection{Clustering using K-means}
+A detour atttempt was made to check how far the correlation matching could take us. We simply tried using the feature vectors derived from all the probe image which were known to be manipulated and all the world images from the Nimble 2017 Dev 1 Beta 4 dataset and tried to use a k-means clustering implemented in scikit-learn \cite{scikit-learn}. In the dataset there were 65 probe images which were known to be manipulated, and hence k in k-means was chosen to be 65. The number of iterations was kept to 100 but changing to 1000 or even higher didn't change the actual result. This table summarizes the findings :
+
+\begin{table}[H]
+\centering
+\caption{Clustering observation}
+\label{my-label}
+\begin{tabular}{|l|l|}
+  \hline
+  Cluster observed    & Number of clusters \\
+  \hline
+  Very good              & 37                 \\
+  one bad             & 10                 \\
+  two bad             & 3                  \\
+  two cluster overlap & 6                  \\
+  bad cases           & 9                 \\
+  \hline
+\end{tabular}
+\end{table}
+Very good implies no false positives or negatives, whereas one bad and two bad imply that there is one or two false positive. Two cluster overlap implies two clusters overlapped and couldn't form distinct clusters and a possible reason this happened would be because of less number cluster centres available. Bad cases include all other cases which includes random images together, three clusters, more than two bad images etc. Here is one very good cluster
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.35]{images/cluster_1}
+  \caption{Cluster 1 form NC2017 Dev 1 Beta 4 dataset}
+  \label{fig:cluster}
+\end{figure}
+
+% A significant difficulty with this approach is that
+\subsubsection{Getting all the Base Images}
+The Nimble Dataset 2017 Dev 3 Beta 1 had a lot more probe and world images, specifically 2157 manipulated probe images and 4098 world images. The world set not only consisted of the base image, but also of the probe image as well as the intermediate manipulated images. This essentially means that there is one particular base image and then subsequent manipulations on the top of that base image gives us the probe image. We aim to find all the manipulated images along with the base image.
+
+For this we use a graph based approach. All graphs are made using networkx. We first create a graph G with all the probe images as the node. Then we add all the images in the world (discarding the probe images) to the Graph and create an edge with all the nodes, with the weight of the edge as the correlation between the two images. We then start with one probe image, and then look at the edge with highest weight. We now contract the two nodes into one, and in this processs recompute the correlation taking the maximum of the two correlations. Then we repeat the process. The termination step is not exactly defined and for now we terminate based on the existing knowledge of the number of matches that should have occured (using the ground truth data). We then simply repeat this process for the rest of the probe images (initializing the Graph as well).
+
+We use both Alexnet trained on Places365 as well as ImageNet. This method is henceforth referred to as recurrent base detection.
+
+\begin{table}[H]
+\centering
+\caption{Recurrent Base Detection}
+\label{recbd}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+                                                                                                 & \multicolumn{2}{l|}{Alexnet on Places} & \multicolumn{2}{l|}{Alexnet on ImageNet} \\ \hline
+No. of probe images                                                                              & 2157              &                    & 2157               &                     \\ \hline
+\begin{tabular}[c]{@{}l@{}}No. of probe images \\ with all baseline\\ correct match\end{tabular} & 1120              &                    & 1357               &                     \\ \hline
+                                                                                                 & 1120/2157         & 0.5192396847       & 1357/2157          & 0.6291145109        \\ \hline
+Total no. of base images                                                                         & 56223             &                    & 56223              &                     \\ \hline
+\begin{tabular}[c]{@{}l@{}}No. of base images \\ correctly identified\end{tabular}               & 48732             &                    & 49974              &                     \\ \hline
+                                                                                                 & 48732/56223       & 0.8667627128       & 49974/56223        & 0.8888533163        \\ \hline
+\end{tabular}
+\end{table}
+
+The first set of rows define the number of probe image with correct matches. We define a probe to be correctly matched if and only if all the manipulations were successfully captured. As can be seen this number is on the lower side. The second set of rows define the number of base images correctly recognised. That is for a particular probe image it is likely that there 7 correct images identified and 3 incorrect, even though this would make the probe image be an incorrect match, it would still be counted as 7 correct matches for the base images. We note that this is moderately on the higher side 85-89\%.
+
+It is quite interesting to note that the AlexNet trained on ImageNet outperforms the AlexNet trained on Places365. This is probably because the manipulations in the Nimble Dataset 2017 Dev 3 Beta 1 involved small manipulations.
 
 
 

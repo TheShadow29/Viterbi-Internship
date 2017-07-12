@@ -96,7 +96,7 @@ if __name__ == '__main__':
     test_img_top_dir_path = '/arka_data/places_data/val_256/'
     # val_ground_truth = '/arka_data/places_data/filelist_places365-standard/places365_val_' + sys.argv[1] + '.txt' #
     # val_ground_truth = '/arka_data/places_data/filelist_places365-standard/places365_val.txt'
-    val_ground_truth = '/arka_data/places_data/filelist_places365-standard/places365_val_1.txt'  
+    val_ground_truth = '/arka_data/places_data/filelist_places365-standard/places365_val_1.txt'
     labels_file = '../../data/labels.pkl'
     ilsvrc_mean_path = '/home/arka_s/Caffe/caffe/python/caffe/imagenet/ilsvrc_2012_mean.npy'
     # print(all_test_imgs(descriptor_path,weights_path,test_img_top_dir_path,labels_file,ilsvrc_mean_path,val_ground_truth))
@@ -128,7 +128,7 @@ if __name__ == '__main__':
     # num_corr_pred = 0
     # total_num = 0;
     # pdb.set_trace()
-    batch_size = 10
+    batch_size = 1
     net.blobs['data'].reshape(batch_size,3,227,227)
     # inputs = []
     # for line_val_file in g:
@@ -153,7 +153,7 @@ if __name__ == '__main__':
         out = net.forward()
         # if (total_num % 100 == 0):
         print ('Iter ' + str(total_num))
-        
+
         # top_k = net.blobs['prob'].data[0].flatten().argsort()[-1:-6:-1]
         for didx in range(batch_size):
             top_k = net.blobs['prob'].data[didx].flatten().argsort()[-1:-6:-1]
