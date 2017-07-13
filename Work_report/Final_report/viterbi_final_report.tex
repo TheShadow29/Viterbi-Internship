@@ -384,7 +384,9 @@ The aim on this dataset is to try to match the donor (and not the base), i.e. do
 
 Again as an experiment, we used the ground truth bounding boxes and cropped out the portion which contained the donor image and tried to find the best match in the world set which consisted of all the protest images. It was quite interesting to note that the comparison using the feature vectors from Places365 were terrible and gave $0/10$ correct matches. Rather the feature vectors from Imagenet gave $7/10$ correct matches.
 
+This in some sense shows the distinction between Places365 and Imagenet. Places365 is trying to capture information about the scene which is in the background, while Imagenet is trying to capture foreground information about the objects, which is the reason that it is able to classify them correctly. An additional step was introduced, in which we do histogram equalization prior to sending them into the net, but that gave no improvement at all.
 \section{Miscellaneous}
+\subsection{Text}
 \subsubsection{Text Detection}
 Since there was no obvious way out, we speculated that perhaps matching text would be easier rather the whole image. Also since we are dealing with protest image, we expect there to be text in the image. For text detection we directly use the code provided by the paper \cite{DBLP:journals/corr/TianHHH016}. We use text detection and not recognition because we are only interested in image matching and not in exactly what is written. The text detection works fairly well \ref{fig:pr_imgs}.
 
@@ -403,8 +405,21 @@ Since there was no obvious way out, we speculated that perhaps matching text wou
 
 But there are obvious problems with this method. There is no guarentee that the same part of the text in both images will be captured. Also this method will fail if there are no text scenes in the donor image. Also if the base image already consists many text scenes (like a city place or a mall) then there will be too many texts to be detected. Also even in the case of only donor image having text, the ordering of the bounding boxes may not be consistent, which will lead us to do a brute force search eventually.
 
-Even then if we try to match two text images there are other problems. The illumination is different in the two images and even if histogram equalization is applied there is no benefit, the correlation more or less remains the same.
+\subsubsection{Text Segmentation}
+Since simple text detection didn't lead to any good results, we tried methods for text segmentation.
 
+We first explored simple segmentation techniques like the popular watershed algorithm (implemented in OpenCV)\cite{opecv}. Unfortunately this didin't return good results. We then tried the Fully convolutional Network for semantic segmentation\cite{Long_2015_CVPR}, but unfortunately all the models were trained on the PASCAL VOC dataset \cite{Everingham10} and it doesn't have a class for text, so segmenting text was not possible.
+
+We then also tried using the algorithm proposed in \cite{Felzenszwalb:2004:EGI:981793.981796} but this too did not give satisfactory results.
+
+We then turned our attention to text recognition methods rather than segmentation. We referred to the MS Coco Text dataset \cite{veit2016cocotext}. This paper cites Text spotter\cite{Gupta16} which returned nice results on the protest dataset, but due to lack of time, no further progress was made in this direction.
+
+
+% \subsection{Invariance Check}
+% Simple experiments were run to check how invariant the features detected by CNN actually are.
+% \subsubsection{Scale Invariance}
+% In this experiment, we simply took one image as fixed and then rescaled this image by different scale factors.
+% \subsubsection{Contrast Invariance}
 
 
 \bibliography{./ref.bib}
