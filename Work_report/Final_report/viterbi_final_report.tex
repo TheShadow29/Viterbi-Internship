@@ -338,10 +338,74 @@ In both the tables, the top-k denotes if the actual base image is found within t
 It is quite interesting to note that Places365 does significantly better than the ImageNet. This is presumably because the Places365 inherently tries to capture the scene information rather than the object information. While it is difficult to identify an object given a small part of it, it is much easier to identify the scene even if a significant portion of it is occluded. In this sense Places365 definitely proves to be a much better candidate than the ImageNet for cases with significant amount of manipulations.
 
 \subsubsection{ROC and CMC curves}
-\subsection{Protest Dataset}
+ROC (Receiver Operation Characteristics) and CMC (Cumulative Match Characteristics) are metrics to evaluate the performance of a system \cite{RC_lec}.
+--------------Need to add a few lines of explaination-----------------------
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[H]{1.0\linewidth}
+    \centering
+    \includegraphics[scale=0.3]{images/roc_cmc/only_base_ref_roc_NC17_dev1}
+    \caption{ROC for NC2017 dev1}
+  \end{subfigure}
+  \begin{subfigure}[H]{1.0\linewidth}
+    \centering
+    \includegraphics[scale=0.3]{images/roc_cmc/only_base_ref_roc_NC17_dev3_take2}
+    \caption{ROC for NC2017 dev3}
+  \end{subfigure}
+  \caption{ROC Plots}
+  \label{fig:roc1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.3]{images/roc_cmc/cmc_dev3}
+  \caption{CMC for NC2017 dev3}
+  \label{fig:cmc1}
+\end{figure}
+
+\subsection{Donor Detection with Protest Dataset}
+This is a dataset (containing about 1971 images) created using the keyword 'Protest' in YFCC (Yahoo Flickr Creative Commons 100 Million (YFCC100m) dataset) \cite{DBLP:journals/corr/ThomeeSFENPBL15}. A few additional scenes were taken and the protest images were carefully cropped and put into the the scenes (with changes to illumination and lighting) to create 10 manipulated images.
+
+Here is an example of the original and manipulated image \ref{fig:pr_imgs}
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[H]{0.4\linewidth}
+    \includegraphics[scale=0.1]{images/protest/pr11}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[H]{0.4\linewidth}
+    \includegraphics[scale=0.25]{images/protest/pr12}
+  \end{subfigure}
+  \caption{Original and Manipulated Images from Protest Dataset}
+  \label{fig:pr_imgs}
+\end{figure}
+
+The aim on this dataset is to try to match the donor (and not the base), i.e. donor detection. For this reason we used\cite{6126456} to get bounding boxes based on the objectness score. We note that the donor image and at least one of the top 20 bounding boxes have $(Intersection of Union)IOU > 0.5$ with probability $0.96$. We also note that if we also insert the condition that the bounding box also needs to circumscribe the donor image (perhaps for better detection) the probability reduces to $0.78$.
+
+Again as an experiment, we used the ground truth bounding boxes and cropped out the portion which contained the donor image and tried to find the best match in the world set which consisted of all the protest images. It was quite interesting to note that the comparison using the feature vectors from Places365 were terrible and gave $0/10$ correct matches. Rather the feature vectors from Imagenet gave $7/10$ correct matches.
+
+\section{Miscellaneous}
 \subsubsection{Text Detection}
-% \section{}
-% Here are some cases, for which we are clueless as to why the correlation is low.
+Since there was no obvious way out, we speculated that perhaps matching text would be easier rather the whole image. Also since we are dealing with protest image, we expect there to be text in the image. For text detection we directly use the code provided by the paper \cite{DBLP:journals/corr/TianHHH016}. We use text detection and not recognition because we are only interested in image matching and not in exactly what is written. The text detection works fairly well \ref{fig:pr_imgs}.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[H]{0.4\linewidth}
+    \includegraphics[scale=0.12]{images/protest/tl21}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[H]{0.4\linewidth}
+    \includegraphics[scale=0.3]{images/protest/tl22}
+  \end{subfigure}
+  \caption{Text Detection in Modified and Original Images}
+  \label{fig:pr_imgs}
+\end{figure}
+
+But there are obvious problems with this method. There is no guarentee that the same part of the text in both images will be captured. Also this method will fail if there are no text scenes in the donor image. Also if the base image already consists many text scenes (like a city place or a mall) then there will be too many texts to be detected. Also even in the case of only donor image having text, the ordering of the bounding boxes may not be consistent, which will lead us to do a brute force search eventually.
+
+Even then if we try to match two text images there are other problems. The illumination is different in the two images and even if histogram equalization is applied there is no benefit, the correlation more or less remains the same.
+
+
 
 \bibliography{./ref.bib}
 \bibliographystyle{ieeetr}
