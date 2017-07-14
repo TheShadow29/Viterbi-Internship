@@ -99,8 +99,7 @@ def plot_roc1(G, dict_probe_world_files, thresholds, pr_nodes, pr_it=False, pr_i
 #     int_np = np.array(int_l)
 #     tot_np = np.array(tot_l)
 #     fp_list = tot_np - int_np
-    
-    
+
 
 def plot_cmc(G, dict_probe_world_files, ranks, pr_nodes):
     tpir_list_for_diff_ranks = np.zeros(len(ranks))
@@ -130,7 +129,7 @@ def plot_cmc(G, dict_probe_world_files, ranks, pr_nodes):
     return tpir_list_for_diff_ranks
     # return fp_list_for_diff_thresh, tp_list_for_diff_thresh
 
-    
+
 if __name__ == '__main__':
     # graph_file = open('../../data/nimble17_data/NC2017_Dev1_Beta4_world_graph_all_corr.pkl', 'rb')
     graph_file = open('../../data/nimble17_data/NC2017_Dev3_Beta1_world_graph_all_corr.pkl', 'rb')

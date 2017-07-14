@@ -69,6 +69,13 @@ There are three technical areas of interest for integrity analytics. \cite{MedF_
 
 In this work we are concerned only with semantic integrity.
 
+\subsection{Datasets Used}
+Most of the datasets used for the MediFor project is from the publicly available Nimble Challenge Dataset \cite{Nimble}. In this work we use NC2016, NC2017 Dev1 Beta4 and NC2017 Dev3 Beta1. There are some differences between the NC2016 and NC2017 datasets, but among the Dev1 and Dev3 there is no other difference other than the size of the dataset.
+
+In the NC2016 dataset, there are two types of images. Nimble-SCI and Nimble-World. The former consists of images of objects in controlled environment, wherease the later consists more natural images taken from Flickr. There are references for manipulations, removal, and splice. In the project only those images which are of the later category as well as are a target of manipulation (not removal or splice) are considered.
+
+In the NC2017 dataset, there are only natural images with intermediate manipulations. There is an additional reference of provenance and its provenance nodes. The former gives a list of one to one matching of a probe image the actual base image, while the latter gives a list of all intermediate manipulations.
+
 \subsection{Contributions of this Work}
 % ----------To Be Filled Later --------------- %
 
@@ -339,7 +346,9 @@ It is quite interesting to note that Places365 does significantly better than th
 
 \subsubsection{ROC and CMC curves}
 ROC (Receiver Operation Characteristics) and CMC (Cumulative Match Characteristics) are metrics to evaluate the performance of a system \cite{RC_lec}.
---------------Need to add a few lines of explaination-----------------------
+% --------------Need to add a few lines of explaination-----------------------
+ROC curve is a plot of True positive (TP) vs False positive (FP) made at different thresholds. Because of the nature of the dataset that the world folder contains all probe images, intermediate manipulations and actual base images, special care was taken to discard irrelevant matching cases. First a graph is generated between each of the probe and world set (without the probe images), with their edges having weight equal to the correlation. Now a threshold for correlation is set and any edge with weight below the threshold is discarded. Now any node of the Graph which is connected to the probe image and is present in the list of intermediate manipulations is not counted. Of the remaining nodes, if the actual base image is present, it leads to increment in the number of true positives, and if it is neither the intermediate manipulations nor the base image, it leads to increment in the number of false positives. For each threshold, this is done for each probe image (which is primarily the reason for high number of False Positives with less number of true positives). ROC curves for the dataset NC2017 Dev 1 and NC2017 Dev 3 are shown in \ref{fig:roc1}
+
 \begin{figure}[H]
   \centering
   \begin{subfigure}[H]{1.0\linewidth}
@@ -355,6 +364,8 @@ ROC (Receiver Operation Characteristics) and CMC (Cumulative Match Characteristi
   \caption{ROC Plots}
   \label{fig:roc1}
 \end{figure}
+
+CMC is a plot between the true positive identification rate which is the probability of observing the ground truth in the top-k rank vs the rank upto which it is considered (here k). Again a Graph is constructed the same way described above. Then for a particular probe images, the edges are sorted in decreasing order and then all intermediate manipulations are discarded. If the ground truth base image is present in the $r^{th}$ position, then all positions upto $r$ have their counter incremented. This is repeated for each probe image. CMC curve for NC2017 Dev 3 is in \ref{fig:cmc1}.
 
 \begin{figure}[H]
   \centering
