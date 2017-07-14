@@ -9,6 +9,8 @@
 \usepackage{float}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{siunitx}
+\sisetup{round-mode=places,round-precision=2}
 
 % \usepackage{titlesec}
 
@@ -33,9 +35,11 @@
 
 \tableofcontents
 \newpage
-
+% \section{Acknowledgement}
+% this work is done as a part of Viterbi-India Program.
 \section{Abstract}
 Media forensics in general involves detection of the tampered media, identification of the tampered portion as well as trying to recover the original media.
+
 
 \section{Introduction}
 The work is done as a part of the MediFor Project. The MediFor project aims at pushing the state of the art research in the field of media forensics which in broad sense deals with the tampering of the media (image, video or audio) and its detection. This work only deals with image forensics. For each manipulated image the MediFor project demands the actual image on which manipulation is done (this is called the baseline image), the kind of manipulation, and in case of splice manipulation where one image is spliced onto another image it also demands the donor image. This work focuses only on the first part, where the aim is to find the baseline image. It is assumed that the world set contains the true baseline image. All experiments are done on Nimble Dataset which is publicly available for use.
@@ -60,7 +64,7 @@ The MediFor project broadly has two main categories Video and Image. For any kin
 
 There are three technical areas of interest for integrity analytics. \cite{MedF_dw}
 \newline
-----May need to add a few more lines here---------
+% ----May need to add a few more lines here---------
 \begin{itemize}
 \item Digital Integrity : This is related to the noise modelling and statistics and its consistency.
 \item Physical Integrity : This is related to shadow consistency.
@@ -72,24 +76,26 @@ In this work we are concerned only with semantic integrity.
 \subsection{Datasets Used}
 Most of the datasets used for the MediFor project is from the publicly available Nimble Challenge Dataset \cite{Nimble}. In this work we use NC2016, NC2017 Dev1 Beta4 and NC2017 Dev3 Beta1. There are some differences between the NC2016 and NC2017 datasets, but among the Dev1 and Dev3 there is no other difference other than the size of the dataset.
 
-In the NC2016 dataset, there are two types of images. Nimble-SCI and Nimble-World. The former consists of images of objects in controlled environment, wherease the later consists more natural images taken from Flickr. There are references for manipulations, removal, and splice. In the project only those images which are of the later category as well as are a target of manipulation (not removal or splice) are considered.
+In the NC2016 dataset, there are two types of images. Nimble-SCI and Nimble-World. The former consists of images of objects in controlled environment, whereas the later consists more natural images taken from Flickr. There are references for manipulations, removal, and splice. In the project only those images which are of the later category as well as are a target of manipulation (not removal or splice) are considered.
 
 In the NC2017 dataset, there are only natural images with intermediate manipulations. There is an additional reference of provenance and its provenance nodes. The former gives a list of one to one matching of a probe image the actual base image, while the latter gives a list of all intermediate manipulations.
 
-\subsection{Contributions of this Work}
+% \subsection{Contributions of this Work}
 % ----------To Be Filled Later --------------- %
+% The work shows that for simple image matching
 
 % \subsection{Datasets Used} ------- Can be included in Appendix kinda
 \subsection{Base Detection and Provenance}
 Base detection problem is essentially finding the underlying base image given a probe image. Here we make the assumption that the base image exists in the world set. The next problem is to get all the manipulated images derived from the base image. And beyond this is to create a provenance graph of the collected manipulated images. The last problem is not addressed in this work.
 
 \subsubsection{Neural Networks used}
-We use two pre-trained caffe \cite{jia2014caffe} models in this work. AlexNet\cite{NIPS2012_4824} trained on Places365\cite{zhou2017places} and AlexNet trained on ImageNet. The reason for using AlexNet instead of VGG16 or any other models is that we wanted to work with a simplest model and test our performances without compromising memory and time. Places365 is a scene-centric dataset while ImageNet is object centric dataset. And as such we expect there should be a difference in their base detection capability.
+We use two pre-trained caffe \cite{jia2014caffe} models in this work. AlexNet\cite{NIPS2012_4824} trained on Places365\cite{zhou2017places} and AlexNet trained on ImageNet. The reason for using AlexNet instead of VGG16 or any other models is that we wanted to work with a simplest model and test our performances without compromising memory and time. Places365 is a scene-centric dataset while ImageNet is object centric dataset. And as such we expect there should be a difference in their base detection capability. Table \ref{p365_val} shows the top5 accuracy.
 \begin{table}[]
 \centering
 \caption{Places365 Validation}
 \label{p365_val}
-\begin{tabular}{|l|l|ll|}
+\sisetup{round-mode=places}
+\begin{tabular}{|l|l|S[round-precision=2]l|}
   \hline
   Correct Matches & Total Images & Accuracy  &\\
   \hline
@@ -135,15 +141,16 @@ It turned out that NCC gave the most desirable results.
   \label{fig:ncc_res}
 \end{figure}
 
-For example in the image pair \ref{fig:ncc_res} the metrics for the prob layers were as follows :
+For example in the image pair Figure \ref{fig:ncc_res} the metrics for the prob layers using the AlexNet trained on Places365 are shown in Table \ref{pb_metrics}.
 
 \begin{table}[H]
-\centering
+  \centering
+  \sisetup{round-mode=places}
 \caption{Prob Layer Metrics}
 \label{pb_metrics}
-\begin{tabular}{|l|l|}
+\begin{tabular}{|l|S[round-precision=2]|}
   \hline
-  & Prob layer          \\
+  & \text{Prob layer (Places 365)}\\
   \hline
   SSD & 0.072518922         \\
   SAD & 0.29026049          \\
@@ -152,7 +159,7 @@ For example in the image pair \ref{fig:ncc_res} the metrics for the prob layers 
 \end{tabular}
 \end{table}
 
-Clearly SAD is not desirable since it gives a medium score to a matching pair. Both SSD and NCC give good results in this case, but emperically it was found that NCC is not only easier for comparison (need not invert the high and low score), but is also more robust, that is gives high score even in cases where the images have been manipulated to larger degree and SSD isn't able to caputre the similarity. As a result, NCC has been the prime candidate for the rest of the work.
+Clearly SAD is not desirable since it gives a medium score to a matching pair. Both SSD and NCC give good results in this case, but empirically it was found that NCC is not only easier for comparison (need not invert the high and low score), but is also more robust, that is gives high score even in cases where the images have been manipulated to larger degree and SSD isn't able to capture the similarity. As a result, NCC has been the prime candidate for the rest of the work.
 
 Another important part was to choose a layer. It was found that for many cases that using the last layer (prob) gave a very low score for a matching pair.
 
@@ -171,12 +178,13 @@ Another important part was to choose a layer. It was found that for many cases t
   \label{fig:fc8_good}
 \end{figure}
 
-For example the image pair \ref{fig:fc8_good} returns the following NCC scores for the three layers.
+For example the image pair Figure \ref{fig:fc8_good} returns the  NCC scores for the three layers tabulated in Table \ref{ncc_layers}.
 \begin{table}[H]
-\centering
+  \centering
+  \sisetup{round-mode=places}
 \caption{NCC scores for different layers}
-\label{my-label}
-\begin{tabular}{|l|l|}
+\label{ncc_layers}
+\begin{tabular}{|l|S[round-precision=2]|}
   \hline
   & NCC                 \\
   \hline
@@ -187,19 +195,20 @@ For example the image pair \ref{fig:fc8_good} returns the following NCC scores f
 \end{tabular}
 \end{table}
 
-Clearly fc8 gives the most desirable result, but it is interesting to theorize the reason why prob gives such a low score. We hypothesize that the SoftMax layer in some sense disturbs the features because it gives the probability of closeness to a particular scene. So if a scene is not present in the Places365 database, this would give a weird output. Also going by the emperical knowledge that the deeper layers tend to extract out more semantic features, fc8 should give the best result and this intuition follows our finding. fc8 gives consistently higher score than fc7 and fc6 for probe base pair and lower score for unrelated images.
+Clearly fc8 gives the most desirable result, but it is interesting to theorize the reason why prob gives such a low score. We hypothesize that the SoftMax layer in some sense disturbs the features because it gives the probability of closeness to a particular scene. So if a scene is not present in the Places365 database, this would give a weird output. Also going by the empirical knowledge that the deeper layers tend to extract out more semantic features, fc8 should give the best result and this intuition follows our finding. fc8 gives consistently higher score than fc7 and fc6 for probe base pair and lower score for unrelated images.
 
-Here is a small table comparing the different methods
+Different layers are compared in Table \ref{lct}
 
 \begin{table}[H]
-\centering
+  \centering
+  \sisetup{round-mode=places}
 \caption{Layers and Correlation threshold on the Nimble 2016 dataset which were known to be manipulated}
 \label{lct}
-\begin{tabular}{|l|l|l|l|l|ll|}
+\begin{tabular}{|l|l|S[round-precision=2]|l|S[round-precision=2]|l|S[round-precision=2]|}
   \hline
   Tot Images = 320 & \multicolumn{2}{|l|}{Prob} & \multicolumn{2}{|l|}{fc8} & \multicolumn{2}{|l|}{fc7} \\
   \hline
-  \multicolumn{1}{|l|}{Threshold} & correct    & \%correct   & correct   & \%correct   & correct   & \%correct   \\
+  \multicolumn{1}{|l|}{Threshold} & correct    & \text{ fraction correct}   & correct   & \text{fraction correct}   & correct   & \text{fraction correct}   \\
   \hline
   0.95             & 203        & 0.634375    & 271       & 0.846875    & 175       & 0.546875    \\
   0.9              & 243        & 0.759375    & 288       & 0.9         & 243       & 0.759375    \\
@@ -219,17 +228,18 @@ The feature extraction process (for all images in the world set) can be time con
 \subsubsection{Image Slicing}
 A general observation in the datasets was that the manipulation existed in only a part of the probe image. For this reason, we use the method of image slicing, that is cutting the image into two halves horizontally or vertically, even getting four quadrants as well. Then we match each slice with the corresponding slice in the other image. This gives a very easy boost to the accuracy but at the same time demands more computational resources or time.
 
-Here is the table for layer fc8 with horizontal slicing:
+% Here is the table for layer fc8 with horizontal slicing:
+The accuracy increase using the fc8 layer and horizontal slicing is tabulated in Table \ref{slicing}
 
 \begin{table}[H]
 \centering
 \caption{Increase in accuracy using slicing}
 \label{slicing}
-\begin{tabular}{|l|l|l|}
+\begin{tabular}{|l|l|S[round-precision=2]|}
   \hline
   Tot Images = 320 & \multicolumn{2}{|l|}{fc8 sliced} \\
   \hline
-  Threshold        & correct       & \%correct      \\
+  Threshold        & correct       & \text{fraction correct}      \\
   \hline
   0.95             & 203           & 0.634375       \\
   0.9              & 243           & 0.759375       \\
@@ -243,12 +253,12 @@ Here is the table for layer fc8 with horizontal slicing:
 Some problems with this method include that it is not able to identify if the image has been rotated. This also fails miserably if the donor image occupies a significant (more than 70\%) of the whole image.
 
 \subsubsection{Clustering using K-means}
-A detour atttempt was made to check how far the correlation matching could take us. We simply tried using the feature vectors derived from all the probe image which were known to be manipulated and all the world images from the Nimble 2017 Dev 1 Beta 4 dataset and tried to use a k-means clustering implemented in scikit-learn \cite{scikit-learn}. In the dataset there were 65 probe images which were known to be manipulated, and hence k in k-means was chosen to be 65. The number of iterations was kept to 100 but changing to 1000 or even higher didn't change the actual result. This table summarizes the findings :
+A detour attempt was made to check how far the correlation matching could take us. We simply tried using the feature vectors derived from all the probe image which were known to be manipulated and all the world images from the Nimble 2017 Dev 1 Beta 4 dataset and tried to use a k-means clustering implemented in scikit-learn \cite{scikit-learn}. In the dataset there were 65 probe images which were known to be manipulated, and hence k in k-means was chosen to be 65. The number of iterations was kept to 100 but changing to 1000 or even higher didn't change the actual result. Table \ref{clust_obs} summarizes the findings :
 
 \begin{table}[H]
 \centering
 \caption{Clustering observation}
-\label{my-label}
+\label{clust_obs}
 \begin{tabular}{|l|l|}
   \hline
   Cluster observed    & Number of clusters \\
@@ -261,7 +271,7 @@ A detour atttempt was made to check how far the correlation matching could take 
   \hline
 \end{tabular}
 \end{table}
-Very good implies no false positives or negatives, whereas one bad and two bad imply that there is one or two false positive. Two cluster overlap implies two clusters overlapped and couldn't form distinct clusters and a possible reason this happened would be because of less number cluster centres available. Bad cases include all other cases which includes random images together, three clusters, more than two bad images etc. Here is one very good cluster
+Very good implies no false positives or negatives, whereas one bad and two bad imply that there is one or two false positive. Two cluster overlap implies two clusters overlapped and couldn't form distinct clusters and a possible reason this happened would be because of less number cluster centres available. Bad cases include all other cases which includes random images together, three clusters, more than two bad images etc. One cluster is shown in Figure \ref{fig:cluster}.
 
 \begin{figure}[H]
   \centering
@@ -274,15 +284,16 @@ Very good implies no false positives or negatives, whereas one bad and two bad i
 \subsubsection{Getting all the Base Images}
 The Nimble Dataset 2017 Dev 3 Beta 1 had a lot more probe and world images, specifically 2157 manipulated probe images and 4098 world images. The world set not only consisted of the base image, but also of the probe image as well as the intermediate manipulated images. This essentially means that there is one particular base image and then subsequent manipulations on the top of that base image gives us the probe image. We aim to find all the manipulated images along with the base image.
 
-For this we use a graph based approach. All graphs are made using networkx \cite{hagberg-2008-exploring}. We first create a graph G with all the probe images as the node. Then we add all the images in the world (discarding the probe images) to the Graph and create an edge with all the nodes, with the weight of the edge as the correlation between the two images. We then start with one probe image, and then look at the edge with highest weight. We now contract the two nodes into one, and in this processs recompute the correlation taking the maximum of the two correlations. Then we repeat the process. The termination step is not exactly defined and for now we terminate based on the existing knowledge of the number of matches that should have occured (using the ground truth data). We then simply repeat this process for the rest of the probe images (initializing the Graph as well).
+For this we use a graph based approach. All graphs are made using networkx \cite{hagberg-2008-exploring}. We first create a graph G with all the probe images as the node. Then we add all the images in the world (discarding the probe images) to the Graph and create an edge with all the nodes, with the weight of the edge as the correlation between the two images. We then start with one probe image, and then look at the edge with highest weight. We now contract the two nodes into one, and in this process recompute the correlation taking the maximum of the two correlations. Then we repeat the process. The termination step is not exactly defined and for now we terminate based on the existing knowledge of the number of matches that should have occurred (using the ground truth data). We then simply repeat this process for the rest of the probe images (initializing the Graph as well).
 
 We use both Alexnet trained on Places365 as well as ImageNet. This method is henceforth referred to as recurrent base detection.
+
 
 \begin{table}[H]
 \centering
 \caption{Recurrent Base Detection}
 \label{recbd}
-\begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|l|l|S[round-precision=2]|l|S[round-precision=2]|}
 \hline
                                                                                                  & \multicolumn{2}{l|}{Alexnet on Places} & \multicolumn{2}{l|}{Alexnet on ImageNet} \\ \hline
 No. of probe images                                                                              & 2157              &                    & 2157               &                     \\ \hline
@@ -294,12 +305,12 @@ Total no. of base images                                                        
 \end{tabular}
 \end{table}
 
-The first set of rows define the number of probe image with correct matches. We define a probe to be correctly matched if and only if all the manipulations were successfully captured. As can be seen this number is on the lower side. The second set of rows define the number of base images correctly recognised. That is for a particular probe image it is likely that there 7 correct images identified and 3 incorrect, even though this would make the probe image be an incorrect match, it would still be counted as 7 correct matches for the base images. We note that this is moderately on the higher side 85-89\%.
+Table \ref{recbd} details the results on using recurrent base detection using both the datasets. The first set of rows define the number of probe image with correct matches. We define a probe to be correctly matched if and only if all the manipulations were successfully captured. As can be seen this number is on the lower side. The second set of rows define the number of base images correctly recognized. That is for a particular probe image it is likely that there 7 correct images identified and 3 incorrect, even though this would make the probe image be an incorrect match, it would still be counted as 7 correct matches for the base images. We note that this is moderately on the higher side 85-89\%.
 
 It is quite interesting to note that the AlexNet trained on ImageNet outperforms the AlexNet trained on Places365. This is probably because the manipulations in the Nimble Dataset 2017 Dev 3 Beta 1 involved small manipulations.
 
 \subsubsection{Self Generated Images with more Manipulations}
-This was done mostly as an experiment to understand if it was possible to extend the use simple NCC to bigger manipulations, which involved more than 25\% of the base image being covered by another image. For this we use scikit-image \cite{scikit-image}. We pick any two images at random one being the base other being the donor, choose an angle of rotation at random, get a portion of the donor image (or the whole donor image) with both width and height half of that of the base image, then rotate it and place it on the base image to get a new image. We create 100 such images for using images from  each of the dataset NC2017 Dev 1 and Dev 3. Now we use NCC to find the correct matches. There were few errors in processing a few of them hence the reduced number of total images. One such image is given in \ref{fig:sg_img}
+This was done mostly as an experiment to understand if it was possible to extend the use simple NCC to bigger manipulations, which involved more than 25\% of the base image being covered by another image. For this we use scikit-image \cite{scikit-image}. We pick any two images at random one being the base other being the donor, choose an angle of rotation at random, get a portion of the donor image (or the whole donor image) with both width and height half of that of the base image, then rotate it and place it on the base image to get a new image. We create 100 such images for using images from  each of the dataset NC2017 Dev 1 and Dev 3. Now we use NCC to find the correct matches. There were few errors in processing a few of them hence the reduced number of total images. One such image is given in Figure \ref{fig:sg_img}
 
 \begin{figure}[H]
   \centering
@@ -312,17 +323,17 @@ This was done mostly as an experiment to understand if it was possible to extend
 \centering
 \caption{NCC on NC2017 Dev 1 Beta 4}
 \label{sg_dev1}
-\begin{tabular}{|l|l|l|l|}
+\begin{tabular}{|l|S[round-precision=2]|S[round-precision=2]|S[round-precision=2]|}
 \hline
       Dev 1                         & Top1         & Top5         & Top10        \\ \hline
-Places 365                     & 37/89        & 61/89        & 71/89        \\ \hline
+Places 365                     & \text{37/89}        & \text{61/89}        & \text{71/89}        \\ \hline
                                & 0.4157303371 & 0.6853932584 & 0.797752809  \\ \hline
-Places 365 (with 0.95 cut off) & 50/89        & 72/89        & 76/89        \\ \hline
+Places 365 (with 0.95 cut off) & \text{50/89}        & \text{72/89}        & \text{76/89}        \\ \hline
                                & 0.5617977528 & 0.808988764  & 0.8539325843 \\ \hline
                                &              &              &              \\ \hline
-bvlc AlexNet                           & 29/89        & 44/89        & 51/89        \\ \hline
+Imagenet                           & \text{29/89}        & \text{44/89}        & \text{51/89}        \\ \hline
                                & 0.3258426966 & 0.4943820225 & 0.5730337079 \\ \hline
-bvlc AlexNet(with 0.95 cut off)       & 34/89        & 47/89        & 54/89        \\ \hline
+Imagenet (with 0.95 cut off)       & \text{34/89}        & \text{47/89}        & \text{54/89}        \\ \hline
                                & 0.3820224719 & 0.5280898876 & 0.606741573  \\ \hline
 \end{tabular}
 \end{table}
@@ -331,28 +342,30 @@ bvlc AlexNet(with 0.95 cut off)       & 34/89        & 47/89        & 54/89     
 \centering
 \caption{NCC on NC2017 Dev 3 Beta 1}
 \label{sg_dev3}
-\begin{tabular}{|l|l|l|l|}
+\begin{tabular}{|l|S[round-precision=2]|S[round-precision=2]|S[round-precision=2]|}
 \hline
 Dev 3                          & Top1         & Top5         & Top10        \\ \hline
-Places 365                     & 10/92        & 28/92        & 46/92        \\ \hline
+Places 365                     & \text{10/92}        & \text{28/92}        & \text{46/92}        \\ \hline
                                & 0.1086956522 & 0.3043478261 & 0.5          \\ \hline
-Places 365 (with 0.95 cut off) & 50/92        & 63/92        & 66/92        \\ \hline
+Places 365 (with 0.95 cut off) & \text{50/92}        & \text{63/92}        & \text{66/92}        \\ \hline
                                & 0.5434782609 & 0.6847826087 & 0.7173913043 \\ \hline
                                &              &              &              \\ \hline
-bvlc AlexNet                           & 3/92         & 17/92        & 29/92        \\ \hline
+Imagenet                           & \text{3/92}         & \text{17/92}        & \text{29/92}        \\ \hline
                                & 0.0326086957 & 0.1847826087 & 0.3152173913 \\ \hline
                                &              &              &              \\ \hline
-bvlc AlexNet (with 0.95 cut off)       & 31/92        & 42/92        & 46/92        \\ \hline
+Imagenet (with 0.95 cut off)       & \text{31/92}        & \text{42/92}        & \text{46/92}        \\ \hline
                                & 0.3369565217 & 0.4565217391 & 0.5          \\ \hline
 \end{tabular}
 \end{table}
 
-In both the tables, the top-k denotes if the actual base image is found within the top k results. Since the datasets had many similar images (images with small manipulations), we have assumed that if the image predicted and the actual image have a correlation greater 0.95 then it can be said to be a correct match.
+In both Table \ref{sg_dev1} and Table \ref{sg_dev3}, the top-k denotes if the actual base image is found within the top k results. Since the datasets had many similar images (images with small manipulations), we have assumed that if the image predicted and the actual image have a correlation greater 0.95 then it can be said to be a correct match.
 
 It is quite interesting to note that Places365 does significantly better than the ImageNet. This is presumably because the Places365 inherently tries to capture the scene information rather than the object information. While it is difficult to identify an object given a small part of it, it is much easier to identify the scene even if a significant portion of it is occluded. In this sense Places365 definitely proves to be a much better candidate than the ImageNet for cases with significant amount of manipulations.
 
-\subsubsection{ROC and CMC curves}
-ROC (Receiver Operation Characteristics) and CMC (Cumulative Match Characteristics) are metrics to evaluate the performance of a system \cite{RC_lec}.
+The low accuracy seen in Tables \ref{sg_dev1} and \ref{sg_dev3} is a point of worry. The most likely problem associated is that the manipulations are not natural, which means that manipulations are not smooth, and hence the features extracted by the net (Places365) are not able to capture the background features correctly.
+
+\subsubsection{ROC curves}
+ROC (Receiver Operation Characteristics) is a metric to evaluate the performance of a system \cite{RC_lec}.
 % --------------Need to add a few lines of explaination-----------------------
 ROC curve is a plot of True positive (TP) vs False positive (FP) made at different thresholds. Because of the nature of the dataset that the world folder contains all probe images, intermediate manipulations and actual base images, special care was taken to discard irrelevant matching cases. First a graph is generated between each of the probe and world set (without the probe images), with their edges having weight equal to the correlation. Now a threshold for correlation is set and any edge with weight below the threshold is discarded. Now any node of the Graph which is connected to the probe image and is present in the list of intermediate manipulations is not counted. Of the remaining nodes, if the actual base image is present, it leads to increment in the number of true positives, and if it is neither the intermediate manipulations nor the base image, it leads to increment in the number of false positives. For each threshold, this is done for each probe image (which is primarily the reason for high number of False Positives with less number of true positives). ROC curves for the dataset NC2017 Dev 1 and NC2017 Dev 3 are shown in \ref{fig:roc1}
 
@@ -372,14 +385,14 @@ ROC curve is a plot of True positive (TP) vs False positive (FP) made at differe
   \label{fig:roc1}
 \end{figure}
 
-CMC is a plot between the true positive identification rate which is the probability of observing the ground truth in the top-k rank vs the rank upto which it is considered (here k). Again a Graph is constructed the same way described above. Then for a particular probe images, the edges are sorted in decreasing order and then all intermediate manipulations are discarded. If the ground truth base image is present in the $r^{th}$ position, then all positions upto $r$ have their counter incremented. This is repeated for each probe image. CMC curve for NC2017 Dev 3 is in \ref{fig:cmc1}.
+% CMC is a plot between the true positive identification rate which is the probability of observing the ground truth in the top-k rank vs the rank upto which it is considered (here k). Again a Graph is constructed the same way described above. Then for a particular probe images, the edges are sorted in decreasing order and then all intermediate manipulations are discarded. If the ground truth base image is present in the $r^{th}$ position, then all positions upto $r$ have their counter incremented. This is repeated for each probe image. CMC curve for NC2017 Dev 3 is in \ref{fig:cmc1}.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[scale=0.3]{images/roc_cmc/cmc_dev3}
-  \caption{CMC for NC2017 dev3}
-  \label{fig:cmc1}
-\end{figure}
+% \begin{figure}[H]
+%   \centering
+%   \includegraphics[scale=0.3]{images/roc_cmc/cmc_dev3}
+%   \caption{CMC for NC2017 dev3}
+%   \label{fig:cmc1}
+% \end{figure}
 
 \subsection{Donor Detection with Protest Dataset}
 This is a dataset (containing about 1971 images) created using the keyword 'Protest' in YFCC (Yahoo Flickr Creative Commons 100 Million (YFCC100m) dataset) \cite{DBLP:journals/corr/ThomeeSFENPBL15}. A few additional scenes were taken and the protest images were carefully cropped and put into the the scenes (with changes to illumination and lighting) to create 10 manipulated images.
@@ -398,7 +411,7 @@ Here is an example of the original and manipulated image \ref{fig:pr_imgs}
   \label{fig:pr_imgs}
 \end{figure}
 
-The aim on this dataset is to try to match the donor (and not the base), i.e. donor detection. For this reason we used\cite{6126456} to get bounding boxes based on the objectness score. We note that the donor image and at least one of the top 20 bounding boxes have $(Intersection of Union)IOU > 0.5$ with probability $0.96$. We also note that if we also insert the condition that the bounding box also needs to circumscribe the donor image (perhaps for better detection) the probability reduces to $0.78$.
+The aim on this dataset is to try to match the donor (and not the base), i.e. donor detection. For this reason we used\cite{6126456} to get bounding boxes based on the objectness score. We note that the donor image and at least one of the top 20 bounding boxes have $(\text{Intersection of Union})IOU > 0.5$ with probability $0.96$. We also note that if we also insert the condition that the bounding box also needs to circumscribe the donor image (perhaps for better detection) the probability reduces to $0.78$.
 
 Again as an experiment, we used the ground truth bounding boxes and cropped out the portion which contained the donor image and tried to find the best match in the world set which consisted of all the protest images. It was quite interesting to note that the comparison using the feature vectors from Places365 were terrible and gave $0/10$ correct matches. Rather the feature vectors from Imagenet gave $7/10$ correct matches.
 
@@ -406,7 +419,7 @@ This in some sense shows the distinction between Places365 and Imagenet. Places3
 \section{Miscellaneous}
 \subsection{Text}
 \subsubsection{Text Detection}
-Since there was no obvious way out, we speculated that perhaps matching text would be easier rather the whole image. Also since we are dealing with protest image, we expect there to be text in the image. For text detection we directly use the code provided by the paper \cite{DBLP:journals/corr/TianHHH016}. We use text detection and not recognition because we are only interested in image matching and not in exactly what is written. The text detection works fairly well \ref{fig:pr_imgs}.
+Since there was no obvious way out, we speculated that perhaps matching text would be easier rather the whole image. Also since we are dealing with protest image, we expect there to be text in the image. For text detection we directly use the code provided by the paper \cite{DBLP:journals/corr/TianHHH016}. We use text detection and not recognition because we are only interested in image matching and not in exactly what is written. The text detection works fairly well \ref{fig:pr_txt}.
 
 \begin{figure}[H]
   \centering
@@ -418,7 +431,7 @@ Since there was no obvious way out, we speculated that perhaps matching text wou
     \includegraphics[scale=0.3]{images/protest/tl22}
   \end{subfigure}
   \caption{Text Detection in Modified and Original Images}
-  \label{fig:pr_imgs}
+  \label{fig:pr_txt}
 \end{figure}
 
 But there are obvious problems with this method. There is no guarentee that the same part of the text in both images will be captured. Also this method will fail if there are no text scenes in the donor image. Also if the base image already consists many text scenes (like a city place or a mall) then there will be too many texts to be detected. Also even in the case of only donor image having text, the ordering of the bounding boxes may not be consistent, which will lead us to do a brute force search eventually. Even when two images of the same text are cropped out, there are considerable differences. One such example is in \ref{fig:txt_l}. The correlation between \ref{fig:t1} and \ref{fig:t2}
@@ -447,7 +460,7 @@ But there are obvious problems with this method. There is no guarentee that the 
 \end{figure}
 
 \subsubsection{Text Segmentation}
-Since simple text detection didn't lead to any good results, we tried methods for text segmentation.
+Since simple text detection didn't lead to any good results, we tried methods for text segmentation. We initially didn't want to focus on text recognition, because the text may be written in different languages, and should not really matter for the purpose of image matching.
 
 We first explored simple segmentation techniques like the popular watershed algorithm (implemented in OpenCV)\cite{opecv}. Unfortunately this didin't return good results. We then tried the Fully convolutional Network for semantic segmentation\cite{Long_2015_CVPR}, but unfortunately all the models were trained on the PASCAL VOC dataset \cite{Everingham10} and it doesn't have a class for text, so segmenting text was not possible.
 
@@ -455,12 +468,14 @@ We then also tried using the algorithm proposed in \cite{Felzenszwalb:2004:EGI:9
 
 We then turned our attention to text recognition methods rather than segmentation. We referred to the MS Coco Text dataset \cite{veit2016cocotext}. This paper cites Text spotter\cite{Gupta16} which returned nice results on the protest dataset, but due to lack of time, no further progress was made in this direction.
 
+\section{Conclusion}
+This work shows a comparison between the Places365 and the Imagenet dataset, their fundamental differences in being scene-centric and object-centric datasets respectively and the corresponding effect on Image Matching. Both the datasets work quite well in cases where the image manipulations are less and we show empirically that using Pearson's correlation on the output of fc8 layer of the AlexNet is a good metric for image matching. In our experience AlexNet trained on Imagenet outperforms Alexnet trained on Places365 in such cases by a small margin.
 
-% \subsection{Invariance Check}
-% Simple experiments were run to check how invariant the features detected by CNN actually are.
-% \subsubsection{Scale Invariance}
-% In this experiment, we simply took one image as fixed and then rescaled this image by different scale factors.
-% \subsubsection{Contrast Invariance}
+In cases of non-sensical manipulations like in Figure \ref{fig:sg_img} both neural nets show a significant drop in performance, but in different proportions. It is seen that Places365 results are much better than the ImageNet results. This is attributed to the ability of Places365 to detect features relating to the scene rather than the object. But at the same time it also shows that there remains a lot to be done for the scene detection, because a small portion of the scene should be enough to identify the actual scene and the neural net should not be fooled by the manipulation. In short the neural net should be able to distinguish a foreground object from the background object.
+
+Another stark example is the case of protest dataset \ref{fig:pr_imgs} where the Places365 doesn't give any useful information, so in a way this does prove that Places365 indeed detects features which are related to the background.
+
+One of the easiest improvements to the base detection approach is to use a different net than AlexNet (like VGG16 or ResNet) for comparison. Perhaps a better approach could be to use semantic segmentation to identify the different objects and their relation to each other in an image. An approach could be to use all the relations in natural (non-manipulated images) and train a neural network on the relations obtained from the images to get a binary classifier whether the relation is semantically correct or not. In the process of obtaining relations the cases of text detection and recognition might need to be given certain emphasis and this might turn out to be fruitful direction for the future.
 
 
 \bibliography{./ref.bib}
