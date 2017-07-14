@@ -37,3 +37,15 @@ protest_dataset/
 * two_imgs_matcher : functions for comparing two images
 * two_img_text_matcher : brute force search for all text match
 * txt_data_storer : stores the information about txt bounding boxes for all files into a pkl file
+
+Data/
+=====
+contains folders for storing pkl files
+
+Eval/
+=====
+I forgot why this exists. 
+
+Results/
+========
+The excel sheet contains all my findings. Also there are some plots as well.
