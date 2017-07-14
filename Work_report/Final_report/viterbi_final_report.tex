@@ -299,7 +299,14 @@ The first set of rows define the number of probe image with correct matches. We 
 It is quite interesting to note that the AlexNet trained on ImageNet outperforms the AlexNet trained on Places365. This is probably because the manipulations in the Nimble Dataset 2017 Dev 3 Beta 1 involved small manipulations.
 
 \subsubsection{Self Generated Images with more Manipulations}
-This was done mostly as an experiment to understand if it was possible to extend the use simple NCC to bigger manipulations, which involved more than 25\% of the base image being covered by another image. For this we use scikit-image \cite{scikit-image}. We pick any two images at random one being the base other being the donor, choose an angle of rotation at random, get a portion of the donor image (or the whole donor image) with both width and height half of that of the base image, then rotate it and place it on the base image to get a new image. We create 100 such images for using images from  each of the dataset NC2017 Dev 1 and Dev 3. Now we use NCC to find the correct matches. There were few errors in processing a few of them hence the reduced number of total images.
+This was done mostly as an experiment to understand if it was possible to extend the use simple NCC to bigger manipulations, which involved more than 25\% of the base image being covered by another image. For this we use scikit-image \cite{scikit-image}. We pick any two images at random one being the base other being the donor, choose an angle of rotation at random, get a portion of the donor image (or the whole donor image) with both width and height half of that of the base image, then rotate it and place it on the base image to get a new image. We create 100 such images for using images from  each of the dataset NC2017 Dev 1 and Dev 3. Now we use NCC to find the correct matches. There were few errors in processing a few of them hence the reduced number of total images. One such image is given in \ref{fig:sg_img}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.4]{images/self_gen/test_img}
+  \caption{Self Gen Manipulated Image}
+  \label{fig:sg_img}
+\end{figure}
 
 \begin{table}[H]
 \centering
@@ -414,7 +421,30 @@ Since there was no obvious way out, we speculated that perhaps matching text wou
   \label{fig:pr_imgs}
 \end{figure}
 
-But there are obvious problems with this method. There is no guarentee that the same part of the text in both images will be captured. Also this method will fail if there are no text scenes in the donor image. Also if the base image already consists many text scenes (like a city place or a mall) then there will be too many texts to be detected. Also even in the case of only donor image having text, the ordering of the bounding boxes may not be consistent, which will lead us to do a brute force search eventually.
+But there are obvious problems with this method. There is no guarentee that the same part of the text in both images will be captured. Also this method will fail if there are no text scenes in the donor image. Also if the base image already consists many text scenes (like a city place or a mall) then there will be too many texts to be detected. Also even in the case of only donor image having text, the ordering of the bounding boxes may not be consistent, which will lead us to do a brute force search eventually. Even when two images of the same text are cropped out, there are considerable differences. One such example is in \ref{fig:txt_l}. The correlation between \ref{fig:t1} and \ref{fig:t2}
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[H]{0.1\linewidth}
+    \includegraphics[scale=1]{images/txt_crop/t1}
+    \caption{}
+    \label{fig:t1}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[H]{0.1\linewidth}
+    \includegraphics[scale=1]{images/txt_crop/t2}
+    \caption{}
+    \label{fig:t2}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[H]{0.1\linewidth}
+    \includegraphics[scale=1]{images/txt_crop/t3}
+    \caption{}
+    \label{fig:t3}
+  \end{subfigure}
+  \caption{Text cropped out}
+  \label{fig:txt_l}
+\end{figure}
 
 \subsubsection{Text Segmentation}
 Since simple text detection didn't lead to any good results, we tried methods for text segmentation.
