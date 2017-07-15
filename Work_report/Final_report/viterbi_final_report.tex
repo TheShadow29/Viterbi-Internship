@@ -38,7 +38,7 @@
 % \section{Acknowledgement}
 % this work is done as a part of Viterbi-India Program.
 \section{Abstract}
-Media forensics in general involves detection of the tampered media, identification of the tampered portion as well as trying to recover the original media.
+Media forensics in general involves detection of the tampered media, identification of the tampered portion as well as trying to recover the original media. This work mainly aims at detecting the base image given a probe image. Some additional experiments augmenting the base detection have also been carried out. Finally an attempt has been made towards extending the ideas to donor image as well.
 
 
 \section{Introduction}
@@ -434,7 +434,7 @@ Since there was no obvious way out, we speculated that perhaps matching text wou
   \label{fig:pr_txt}
 \end{figure}
 
-But there are obvious problems with this method. There is no guarentee that the same part of the text in both images will be captured. Also this method will fail if there are no text scenes in the donor image. Also if the base image already consists many text scenes (like a city place or a mall) then there will be too many texts to be detected. Also even in the case of only donor image having text, the ordering of the bounding boxes may not be consistent, which will lead us to do a brute force search eventually. Even when two images of the same text are cropped out, there are considerable differences. One such example is in \ref{fig:txt_l}. The correlation between \ref{fig:t1} and \ref{fig:t2}
+But there are obvious problems with this method. There is no guarentee that the same part of the text in both images will be captured. Also this method will fail if there are no text scenes in the donor image. Also if the base image already consists many text scenes (like a city place or a mall) then there will be too many texts to be detected. Also even in the case of only donor image having text, the ordering of the bounding boxes may not be consistent, which will lead us to do a brute force search eventually. Even when two images of the same text are cropped out, there are considerable differences. One such example is in \ref{fig:txt_l}. The correlation between \ref{fig:t1} and \ref{fig:t2} is $0.84$ while the correlation between \ref{fig:t1} and \ref{fig:t3} is $0.86$ when using the AlexNet trained on Imagenet. We have been unable to identify the cause for such large correlation between two completely different text. This is most likely due to the same object being shown, that is even the ImageNet is not able to identify fine grained features like the text in the image. Rather it is detecting something on the higher level like the placard which is the cause for similar score in the two images.
 
 \begin{figure}[H]
   \centering

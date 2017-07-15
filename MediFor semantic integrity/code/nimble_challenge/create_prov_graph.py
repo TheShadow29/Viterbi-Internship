@@ -73,7 +73,7 @@ def contracted_nodes(G, u, v, self_loops=True):
                 if w not in nodes_u:
                     new_edges.append((u, w, d))
                 else:
-                    max_d = max(d, G[u][w])
+                    max_d = max(d['weight'], G[u][w]['weight'])
                     new_edges.append((u, w, max_d))
     v_data = H.node[v]
     pdb.set_trace()
